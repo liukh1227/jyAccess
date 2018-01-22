@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.DeliveryOrderMapper">
+	<resultMap id="BaseResultMap" type="com.jy.entity.po.DeliveryOrder">
+		<id column="deliveryOrder_Id" jdbcType="VARCHAR" property="deliveryOrder_Id" />
+		<result column="contractOrderId" jdbcType="VARCHAR" property="contractOrderId" />
+		<result column="consignorId" jdbcType="VARCHAR" property="consignorId" />
+		<result column="consignorName" jdbcType="VARCHAR" property="consignorName" />
+		<result column="consignorAddress" jdbcType="VARCHAR" property="consignorAddress" />
+		<result column="consignorPhone" jdbcType="VARCHAR" property="consignorPhone" />
+		<result column="buyerId" jdbcType="VARCHAR" property="buyerId" />
+		<result column="buyerName" jdbcType="VARCHAR" property="buyerName" />
+		<result column="buyerAddress" jdbcType="VARCHAR" property="buyerAddress" />
+		<result column="buyerPhone" jdbcType="VARCHAR" property="buyerPhone" />
+		<result column="superintendent" jdbcType="VARCHAR" property="superintendent" />
+		<result column="superintendentPhone" jdbcType="VARCHAR"
+			property="superintendentPhone" />
+		<result column="operators" jdbcType="VARCHAR" property="operators" />
+		<result column="deliveryType" jdbcType="VARCHAR" property="deliveryType" />
+		<result column="sentTime" jdbcType="TIMESTAMP" property="sentTime" />
+		<result column="receiveTime" jdbcType="TIMESTAMP" property="receiveTime" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+	</resultMap>
+	<resultMap id="DeliveryOrderVoResultMap" type="com.jy.entity.vo.DeliveryOrderVo" extends="BaseResultMap">
+	   <result column="contractOrderNum" jdbcType="VARCHAR" property="contractOrderNum" />
+	   <result column="operatorsUserName" jdbcType="VARCHAR" property="operatorsUserName" />
+		<result column="creatorUserName" jdbcType="VARCHAR" property="creatorUserName" />
+	</resultMap>
+	<resultMap id="DeliveryOrderBoResultMap" type="com.jy.entity.bo.DeliveryOrderBo"
+		extends="DeliveryOrderVoResultMap">
+
+		<collection property="deliveryCarLists" column="deliveryOrder_Id"
+			select="selectDeliveryCars">
+			<id column="deliveryCar_Id" jdbcType="VARCHAR" property="deliveryCar_Id" />
+			<result column="deliveryOrderId" jdbcType="VARCHAR" property="deliveryOrderId" />
+			<result column="plateNumber" jdbcType="VARCHAR" property="plateNumber" />
+			<result column="driver" jdbcType="VARCHAR" property="driver" />
+			<result column="deriverPhone" jdbcType="VARCHAR" property="deriverPhone" />
+			<result column="doorkeeper" jdbcType="VARCHAR" property="doorkeeper" />
+		</collection>
+		<collection property="deliveryDeviceLists" column="deliveryOrder_Id"
+			select="selectDeliveryDevices">
+			<id column="deliveryDevice_Id" jdbcType="VARCHAR" property="deliveryDevice_Id" />
+			<result column="deliveryOrderId" jdbcType="VARCHAR" property="deliveryOrderId" />
+			<result column="deviceId" jdbcType="VARCHAR" property="deviceId" />
+			<result column="typeName" jdbcType="VARCHAR" property="typeName" />
+			<result column="modelName" jdbcType="VARCHAR" property="modelName" />
+			<result column="deviceNum" jdbcType="VARCHAR" property="deviceNum" />
+			<result column="sequenceNum" jdbcType="VARCHAR" property="sequenceNum" />
+			<result column="remark" jdbcType="VARCHAR" property="remark" />
+		</collection>
+
+	</resultMap>
+	<sql id="Base_Column_List">
+		deliveryOrder_Id, contractOrderId, consignorId, consignorName, consignorAddress,
+		consignorPhone, buyerId, buyerName, buyerAddress, buyerPhone,
+		superintendent, superintendentPhone,
+		operators, deliveryType, sentTime, receiveTime,createTime, creator,status
+	</sql>
+
+	<select id="selectDeliveryCars" resultType="com.jy.entity.po.DeliveryCar">
+		select * from t_deliverycar
+		where deliveryOrderId = #{deliveryOrder_Id,jdbcType=VARCHAR}
+	</select>
+	<select id="selectDeliveryDevices" resultType="com.jy.entity.vo.DeliveryDeviceVo">
+		select deliverydevice.* ,device.deviceNum as deviceNum,device.sequenceNum as
+		sequenceNum,dModel.modelName as modelName,dType.typeName as typeName
+		from t_deliverydevice deliverydevice
+		LEFT JOIN d_device device on deliverydevice.deviceId = device.device_Id
+		LEFT JOIN b_devicemodel dModel on device.deviceModelId =
+		dModel.deviceModel_Id
+		LEFT JOIN b_devicetype dType on dModel.deviceTypeId = dType.deviceType_Id
+		where deliverydevice.deliveryOrderId =
+		#{deliveryOrder_Id,jdbcType=VARCHAR}
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="DeliveryOrderBoResultMap">
+		select
+		 dOrder.*,contractorder.contractOrderNum as contractOrderNum ,creatorUser.userName as creatorUserName,
+        operatorsUser.userName as operatorsUserName
+        from t_deliveryorder dOrder 
+        LEFT JOIN t_contractorder  contractorder on contractorder.contractOrder_Id = dOrder.contractOrderId
+        LEFT JOIN sys_useraccount creatorUser on dOrder.creator = creatorUser.userAccount_Id
+        LEFT JOIN sys_useraccount operatorsUser on operatorsUser.userAccount_Id = dOrder.operators
+		where dOrder.deliveryOrder_Id = #{deliveryOrder_Id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_deliveryorder
+		where deliveryOrder_Id = #{deliveryOrder_Id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.jy.entity.po.DeliveryOrder">
+		insert into t_deliveryorder (deliveryOrder_Id, contractOrderId,
+		consignorId, consignorName, consignorAddress,
+		consignorPhone, buyerId, buyerName,
+		buyerAddress, buyerPhone, superintendent,
+		superintendentPhone, operators, deliveryType,
+		sentTime,receiveTime, createTime, creator,status
+		)
+		values (#{deliveryOrder_Id,jdbcType=VARCHAR},
+		#{contractOrderId,jdbcType=VARCHAR},
+		#{consignorId,jdbcType=VARCHAR}, #{consignorName,jdbcType=VARCHAR},
+		#{consignorAddress,jdbcType=VARCHAR},
+		#{consignorPhone,jdbcType=VARCHAR}, #{buyerId,jdbcType=VARCHAR},
+		#{buyerName,jdbcType=VARCHAR},
+		#{buyerAddress,jdbcType=VARCHAR}, #{buyerPhone,jdbcType=VARCHAR}, #{superintendent,jdbcType=VARCHAR},
+		#{superintendentPhone,jdbcType=VARCHAR},
+		#{operators,jdbcType=VARCHAR}, #{deliveryType,jdbcType=VARCHAR},
+		#{sentTime,jdbcType=TIMESTAMP}, #{receiveTime,jdbcType=TIMESTAMP},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{creator,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.jy.entity.po.DeliveryOrder"
+		keyProperty="deliveryOrder_Id">
+		<selectKey keyProperty="deliveryOrder_Id" resultType="String"
+			order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into t_deliveryorder
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="deliveryOrder_Id != null">
+				deliveryOrder_Id,
+			</if>
+			<if test="contractOrderId != null">
+				contractOrderId,
+			</if>
+			<if test="consignorId != null">
+				consignorId,
+			</if>
+			<if test="consignorName != null">
+				consignorName,
+			</if>
+			<if test="consignorAddress != null">
+				consignorAddress,
+			</if>
+			<if test="consignorPhone != null">
+				consignorPhone,
+			</if>
+			<if test="buyerId != null">
+				buyerId,
+			</if>
+			<if test="buyerName != null">
+				buyerName,
+			</if>
+			<if test="buyerAddress != null">
+				buyerAddress,
+			</if>
+			<if test="buyerPhone != null">
+				buyerPhone,
+			</if>
+			<if test="superintendent != null">
+				superintendent,
+			</if>
+			<if test="superintendentPhone != null">
+				superintendentPhone,
+			</if>
+			<if test="operators != null">
+				operators,
+			</if>
+			<if test="deliveryType != null">
+				deliveryType,
+			</if>
+			<if test="sentTime != null">
+				sentTime,
+			</if>
+			<if test="receiveTime != null">
+				receiveTime,
+			</if>
+			<if test="createTime != null">
+				createTime,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="deliveryOrder_Id != null">
+				#{deliveryOrder_Id,jdbcType=VARCHAR},
+			</if>
+			<if test="contractOrderId != null">
+				#{contractOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="consignorId != null">
+				#{consignorId,jdbcType=VARCHAR},
+			</if>
+			<if test="consignorName != null">
+				#{consignorName,jdbcType=VARCHAR},
+			</if>
+			<if test="consignorAddress != null">
+				#{consignorAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="consignorPhone != null">
+				#{consignorPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="buyerId != null">
+				#{buyerId,jdbcType=VARCHAR},
+			</if>
+			<if test="buyerName != null">
+				#{buyerName,jdbcType=VARCHAR},
+			</if>
+			<if test="buyerAddress != null">
+				#{buyerAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="buyerPhone != null">
+				#{buyerPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="superintendent != null">
+				#{superintendent,jdbcType=VARCHAR},
+			</if>
+			<if test="superintendentPhone != null">
+				#{superintendentPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="operators != null">
+				#{operators,jdbcType=VARCHAR},
+			</if>
+			<if test="deliveryType != null">
+				#{deliveryType,jdbcType=VARCHAR},
+			</if>
+			<if test="sentTime != null">
+				#{sentTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="receiveTime != null">
+				#{receiveTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.DeliveryOrder">
+		update t_deliveryorder
+		<set>
+			<if test="contractOrderId != null">
+				contractOrderId = #{contractOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="consignorId != null">
+				consignorId = #{consignorId,jdbcType=VARCHAR},
+			</if>
+			<if test="consignorName != null">
+				consignorName = #{consignorName,jdbcType=VARCHAR},
+			</if>
+			<if test="consignorAddress != null">
+				consignorAddress = #{consignorAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="consignorPhone != null">
+				consignorPhone = #{consignorPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="buyerId != null">
+				buyerId = #{buyerId,jdbcType=VARCHAR},
+			</if>
+			<if test="buyerName != null">
+				buyerName = #{buyerName,jdbcType=VARCHAR},
+			</if>
+			<if test="buyerAddress != null">
+				buyerAddress = #{buyerAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="buyerPhone != null">
+				buyerPhone = #{buyerPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="superintendent != null">
+				superintendent = #{superintendent,jdbcType=VARCHAR},
+			</if>
+			<if test="superintendentPhone != null">
+				superintendentPhone = #{superintendentPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="operators != null">
+				operators = #{operators,jdbcType=VARCHAR},
+			</if>
+			<if test="deliveryType != null">
+				deliveryType = #{deliveryType,jdbcType=VARCHAR},
+			</if>
+			<if test="sentTime != null">
+				sentTime = #{sentTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="receiveTime != null">
+				receiveTime = #{receiveTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				createTime = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where deliveryOrder_Id = #{deliveryOrder_Id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.jy.entity.po.DeliveryOrder">
+		update t_deliveryorder
+		set contractOrderId = #{contractOrderId,jdbcType=VARCHAR},
+		consignorId = #{consignorId,jdbcType=VARCHAR},
+		consignorName = #{consignorName,jdbcType=VARCHAR},
+		consignorAddress = #{consignorAddress,jdbcType=VARCHAR},
+		consignorPhone = #{consignorPhone,jdbcType=VARCHAR},
+		buyerId = #{buyerId,jdbcType=VARCHAR},
+		buyerName = #{buyerName,jdbcType=VARCHAR},
+		buyerAddress = #{buyerAddress,jdbcType=VARCHAR},
+		buyerPhone = #{buyerPhone,jdbcType=VARCHAR},
+		superintendent = #{superintendent,jdbcType=VARCHAR},
+		superintendentPhone = #{superintendentPhone,jdbcType=VARCHAR},
+		operators = #{operators,jdbcType=VARCHAR},
+		deliveryType = #{deliveryType,jdbcType=VARCHAR},
+		sentTime = #{sentTime,jdbcType=TIMESTAMP},
+		receiveTime = #{receiveTime,jdbcType=TIMESTAMP},
+		createTime = #{createTime,jdbcType=TIMESTAMP},
+		creator = #{creator,jdbcType=VARCHAR},
+		status = #{status,jdbcType=VARCHAR}
+		where deliveryOrder_Id = #{deliveryOrder_Id,jdbcType=VARCHAR}
+	</update>
+	<select id="getDeliveryOrderPageList" parameterType="com.jy.entity.form.DeliveryOrderQueryForm"
+		resultMap="DeliveryOrderVoResultMap">
+	   	select
+		 dOrder.* ,creatorUser.userName as creatorUserName,
+        operatorsUser.userName as operatorsUserName
+        from t_deliveryorder dOrder 
+        LEFT JOIN sys_useraccount creatorUser on dOrder.creator = creatorUser.userAccount_Id
+        LEFT JOIN sys_useraccount operatorsUser on operatorsUser.userAccount_Id = dOrder.operators
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="contractOrderId!= null">
+				AND dOrder.contractOrderId = #{contractOrderId}
+			</if>
+			<if test="deliveryType!=null">
+				AND dOrder.deliveryType = #{deliveryType}
+			</if>
+			<if test="statusArray!=null and statusArray.length>0">
+				AND dOrder.status IN
+				<foreach collection="statusArray" item="item" index="index"
+					open="(" close=")" separator=",">
+					'${item}'
+				</foreach>
+			</if>
+		</trim>
+	</select>
+	<select id="getAllDeliveryOrderList" parameterType="com.jy.entity.form.DeliveryOrderQueryForm"
+		resultMap="DeliveryOrderVoResultMap">
+			select
+		 dOrder.* ,creatorUser.userName as creatorUserName,
+        operatorsUser.userName as operatorsUserName
+        from t_deliveryorder dOrder 
+        LEFT JOIN sys_useraccount creatorUser on dOrder.creator = creatorUser.userAccount_Id
+        LEFT JOIN sys_useraccount operatorsUser on operatorsUser.userAccount_Id = dOrder.operators
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="contractOrderId!= null">
+				AND dOrder.contractOrderId = #{contractOrderId}
+			</if>
+			<if test="deliveryType!=null">
+				AND dOrder.deliveryType = #{deliveryType}
+			</if>
+			<if test="statusArray!=null and statusArray.length>0">
+				AND dOrder.status IN
+				<foreach collection="statusArray" item="item" index="index"
+					open="(" close=")" separator=",">
+					'${item}'
+				</foreach>
+			</if>
+		</trim>
+	</select>
+
+</mapper>

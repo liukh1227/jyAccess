@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd ">
+	<!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+<dubbo:application name="app-consumer"></dubbo:application>
+
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+   <dubbo:registry address="zookeeper://127.0.0.1:2181"></dubbo:registry> 
+	<!-- 生成远程服务代理，可以像使用本地bean一样使用demoService -->
+     <dubbo:reference id="initService" interface="com.jy.access.service.IInitService"  timeout="20000" group="jy"></dubbo:reference>
+     <dubbo:reference id="smsService" interface="com.jy.access.service.ISmsService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="deviceBrandService" interface="com.jy.access.service.DeviceBrandService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="bankAccountService" interface="com.jy.access.service.BankAccountService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="companyDeviceModelService" interface="com.jy.access.service.CompanyDeviceModelService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="companyService" interface="com.jy.access.service.CompanyService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="customerService" interface="com.jy.access.service.CustomerService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="deviceModelService" interface="com.jy.access.service.DeviceModelService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="deviceService" interface="com.jy.access.service.DeviceService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="deviceSpecificationService" interface="com.jy.access.service.DeviceSpecificationService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="deviceTypeService" interface="com.jy.access.service.DeviceTypeService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="dmAttributevalueService" interface="com.jy.access.service.DmAttributevalueService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="dtKeyAttributespecificationService" interface="com.jy.access.service.DtKeyAttributespecificationService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="dtKeyAttributevalueServie" interface="com.jy.access.service.DtKeyAttributevalueServie" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="dtypeSpecificationService" interface="com.jy.access.service.DtypeSpecificationService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="quotationService" interface="com.jy.access.service.QuotationService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="quotationDeviceService" interface="com.jy.access.service.QuotationDeviceService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="userAccountServie" interface="com.jy.access.service.UserAccountServie" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="contractOrderService" interface="com.jy.access.service.ContractOrderService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="contractDeviceModelService" interface="com.jy.access.service.ContractDeviceModelService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="deliveryOrderService" interface="com.jy.access.service.DeliveryOrderService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="deliveryDeviceService" interface="com.jy.access.service.DeliveryDeviceService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="deliveryCarService" interface="com.jy.access.service.DeliveryCarService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="deviceInMakesureOrderService" interface="com.jy.access.service.DeviceInMakesureOrderService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="deviceOutMakesureOrderService" interface="com.jy.access.service.DeviceOutMakesureOrderService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="repairsOrderService" interface="com.jy.access.service.RepairsOrderService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="stopOrderService" interface="com.jy.access.service.StopOrderService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="deviceWorktraceService" interface="com.jy.access.service.DeviceWorktraceService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="changeContractDeviceOrderService" interface="com.jy.access.service.ChangeContractDeviceOrderService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="permissionService" interface="com.jy.access.service.RoleService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="roleService" interface="com.jy.access.service.PermissionService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="rolePermissionsService" interface="com.jy.access.service.RolePermissionsService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="userPermissionsService" interface="com.jy.access.service.UserPermissionsService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="userRolesService" interface="com.jy.access.service.UserRolesService" timeout="20000" group="jy"></dubbo:reference>
+	<dubbo:reference id="districtService" interface="com.jy.access.service.DistrictService" timeout="20000" group="jy"></dubbo:reference>
+	
+</beans>  

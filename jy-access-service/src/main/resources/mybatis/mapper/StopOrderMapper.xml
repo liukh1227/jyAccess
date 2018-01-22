@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.StopOrderMapper">
+	<resultMap id="BaseResultMap" type="com.jy.entity.po.StopOrder">
+		<id column="stopOrder_Id" jdbcType="VARCHAR" property="stopOrder_Id" />
+		<result column="contractOrderId" jdbcType="VARCHAR" property="contractOrderId" />
+		<result column="customerId" jdbcType="VARCHAR" property="customerId" />
+		<result column="customerName" jdbcType="VARCHAR" property="customerName" />
+		<result column="workSite" jdbcType="VARCHAR" property="workSite" />
+		<result column="leaserPhone" jdbcType="VARCHAR" property="leaserPhone" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="salesMan" jdbcType="VARCHAR" property="salesMan" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="lessorId" jdbcType="VARCHAR" property="lessorId" />
+		<result column="deviceId" jdbcType="VARCHAR" property="deviceId" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="stopStartTime" jdbcType="TIMESTAMP" property="stopStartTime" />
+		<result column="stopEndTime" jdbcType="TIMESTAMP" property="stopEndTime" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="stopStatus" jdbcType="VARCHAR" property="stopStatus" />
+	</resultMap>
+	<resultMap id="StopOrderVoResultMap" extends="BaseResultMap"
+		type="com.jy.entity.vo.StopOrderVo">
+		<result column="contractOrderNum" jdbcType="VARCHAR" property="contractOrderNum" />
+		<result column="salesManUserName" jdbcType="VARCHAR" property="salesManUserName" />
+		<result column="creatorUserName" jdbcType="VARCHAR" property="creatorUserName" />
+		<result column="typeName" jdbcType="VARCHAR" property="typeName" />
+		<result column="modelName" jdbcType="VARCHAR" property="modelName" />
+		<result column="deviceNum" jdbcType="VARCHAR" property="deviceNum" />
+		<result column="sequenceNum" jdbcType="VARCHAR" property="sequenceNum" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		stopOrder_Id, contractOrderId, customerId, customerName,
+		workSite, leaserPhone,
+		remark,
+		salesMan, creator, lessorId, deviceId,
+		createTime, stopStartTime, stopEndTime,
+		status,stopStatus
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="StopOrderVoResultMap">
+		select stoporder.*,contractorder.contractOrderNum as contractOrderNum ,dmodel.modelName as modelName,dtype.typeName as
+		typeName,device.deviceNum as deviceNum,device.sequenceNum as
+		sequenceNum,creatorUser.userName as
+		creatorUserName,salesManUser.userName as salesManUserName
+		from
+		t_stoporder stoporder
+		LEFT JOIN t_contractorder  contractorder on contractorder.contractOrder_Id = stoporder.contractOrderId
+		LEFT JOIN d_device device on device.device_Id =
+		stoporder.deviceId
+		LEFT JOIN b_devicemodel dmodel on
+		dmodel.deviceModel_Id =
+		device.deviceModelId
+		LEFT JOIN b_devicetype
+		dtype on dtype.deviceType_Id = dmodel.deviceTypeId
+		LEFT JOIN sys_useraccount creatorUser on stoporder.creator =
+		creatorUser.userAccount_Id
+		LEFT JOIN sys_useraccount salesManUser on salesManUser.userAccount_Id =
+		stoporder.salesMan
+		where stoporder.stopOrder_Id =
+		#{stopOrder_Id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		t_stoporder
+		where stopOrder_Id = #{stopOrder_Id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.jy.entity.po.StopOrder">
+		insert into t_stoporder
+		(stopOrder_Id, contractOrderId, customerId,
+		customerName, workSite,
+		leaserPhone,
+		remark, salesMan, creator,
+		lessorId, deviceId, createTime,
+		stopStartTime, stopEndTime, status,stopStatus
+		)
+		values
+		(#{stopOrder_Id,jdbcType=VARCHAR},
+		#{contractOrderId,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR},
+		#{customerName,jdbcType=VARCHAR}, #{workSite,jdbcType=VARCHAR},
+		#{leaserPhone,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR},
+		#{salesMan,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR},
+		#{lessorId,jdbcType=VARCHAR}, #{deviceId,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{stopStartTime,jdbcType=TIMESTAMP},
+		#{stopEndTime,jdbcType=TIMESTAMP},
+		#{status,jdbcType=VARCHAR},#{stopStatus,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.jy.entity.po.StopOrder"
+		keyProperty="stopOrder_Id">
+		<selectKey keyProperty="stopOrder_Id" resultType="String"
+			order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into t_stoporder
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="stopOrder_Id != null">
+				stopOrder_Id,
+			</if>
+			<if test="contractOrderId != null">
+				contractOrderId,
+			</if>
+			<if test="customerId != null">
+				customerId,
+			</if>
+			<if test="customerName != null">
+				customerName,
+			</if>
+			<if test="workSite != null">
+				workSite,
+			</if>
+			<if test="leaserPhone != null">
+				leaserPhone,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="salesMan != null">
+				salesMan,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="lessorId != null">
+				lessorId,
+			</if>
+			<if test="deviceId != null">
+				deviceId,
+			</if>
+			<if test="createTime != null">
+				createTime,
+			</if>
+			<if test="stopStartTime != null">
+				stopStartTime,
+			</if>
+			<if test="stopEndTime != null">
+				stopEndTime,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="stopStatus != null">
+				stopStatus,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="stopOrder_Id != null">
+				#{stopOrder_Id,jdbcType=VARCHAR},
+			</if>
+			<if test="contractOrderId != null">
+				#{contractOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="customerId != null">
+				#{customerId,jdbcType=VARCHAR},
+			</if>
+			<if test="customerName != null">
+				#{customerName,jdbcType=VARCHAR},
+			</if>
+			<if test="workSite != null">
+				#{workSite,jdbcType=VARCHAR},
+			</if>
+			<if test="leaserPhone != null">
+				#{leaserPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="salesMan != null">
+				#{salesMan,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="lessorId != null">
+				#{lessorId,jdbcType=VARCHAR},
+			</if>
+			<if test="deviceId != null">
+				#{deviceId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="stopStartTime != null">
+				#{stopStartTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="stopEndTime != null">
+				#{stopEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="stopStatus != null">
+				#{stopStatus,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.StopOrder">
+		update t_stoporder
+		<set>
+			<if test="contractOrderId != null">
+				contractOrderId = #{contractOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="customerId != null">
+				customerId = #{customerId,jdbcType=VARCHAR},
+			</if>
+			<if test="customerName != null">
+				customerName = #{customerName,jdbcType=VARCHAR},
+			</if>
+			<if test="workSite != null">
+				workSite = #{workSite,jdbcType=VARCHAR},
+			</if>
+			<if test="leaserPhone != null">
+				leaserPhone = #{leaserPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="salesMan != null">
+				salesMan = #{salesMan,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="lessorId != null">
+				lessorId = #{lessorId,jdbcType=VARCHAR},
+			</if>
+			<if test="deviceId != null">
+				deviceId = #{deviceId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				createTime = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="stopStartTime != null">
+				stopStartTime = #{stopStartTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="stopEndTime != null">
+				stopEndTime = #{stopEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="stopStatus != null">
+				stopStatus = #{stopStatus,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where stopOrder_Id = #{stopOrder_Id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.jy.entity.po.StopOrder">
+		update t_stoporder
+		set contractOrderId = #{contractOrderId,jdbcType=VARCHAR},
+		customerId =
+		#{customerId,jdbcType=VARCHAR},
+		customerName =
+		#{customerName,jdbcType=VARCHAR},
+		workSite =
+		#{workSite,jdbcType=VARCHAR},
+		leaserPhone =
+		#{leaserPhone,jdbcType=VARCHAR},
+		remark = #{remark,jdbcType=VARCHAR},
+		salesMan = #{salesMan,jdbcType=VARCHAR},
+		creator =
+		#{creator,jdbcType=VARCHAR},
+		lessorId = #{lessorId,jdbcType=VARCHAR},
+		deviceId = #{deviceId,jdbcType=VARCHAR},
+		createTime =
+		#{createTime,jdbcType=TIMESTAMP},
+		stopStartTime =
+		#{stopStartTime,jdbcType=TIMESTAMP},
+		stopEndTime =
+		#{stopEndTime,jdbcType=TIMESTAMP},
+		status = #{status,jdbcType=VARCHAR},
+		stopStatus = #{stopStatus,jdbcType=VARCHAR}
+		where stopOrder_Id =
+		#{stopOrder_Id,jdbcType=VARCHAR}
+	</update>
+	<select id="getStopOrderPageList" parameterType="com.jy.entity.form.StopOrderQueryForm"
+		resultMap="StopOrderVoResultMap">
+		select stoporder.* ,creatorUser.userName as
+		creatorUserName,salesManUser.userName as salesManUserName
+		from
+		t_stoporder stoporder
+		LEFT JOIN sys_useraccount creatorUser on stoporder.creator =
+		creatorUser.userAccount_Id
+		LEFT JOIN sys_useraccount salesManUser on salesManUser.userAccount_Id =
+		stoporder.salesMan
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="contractOrderId!=null">
+				AND stoporder.contractOrderId = #{contractOrderId}
+			</if>
+			<if test="status!=null">
+				AND stoporder.status = #{status}
+			</if>
+			<if test="stopStatus!=null">
+				AND stoporder.stopStatus = #{stopStatus}
+			</if>
+			<if test="salesMan!=null">
+				AND stoporder.salesMan = #{salesMan}
+			</if>
+			<if test="creator!=null">
+				AND stoporder.creator = #{creator}
+			</if>
+			<if test="contractOrderNum!=null">
+				AND stoporder.contractOrderId in (select contractOrder_Id from t_contractorder where contractOrderNum like CONCAT('%', '${contractOrderNum}', '%'))
+			</if>
+			<if test="lessorIdArray!=null and lessorIdArray.length>0">
+		      AND stoporder.contractOrderId in (select contractOrder_Id from t_contractorder where lessorId IN
+		       <foreach collection="lessorIdArray" item="item" index="index"  open="(" close=")" separator=",">
+		          '${item}'
+		        </foreach>
+		        )
+			</if>
+			<if test="customerName!=null">
+				AND stoporder.customerName like CONCAT('%', '${customerName}', '%')
+			</if>
+		</trim>
+	</select>
+	<select id="getAllStopOrderList" parameterType="com.jy.entity.form.StopOrderQueryForm"
+		resultMap="StopOrderVoResultMap">
+		select stoporder.* ,creatorUser.userName as
+		creatorUserName,salesManUser.userName as salesManUserName
+		from
+		t_stoporder stoporder
+		LEFT JOIN sys_useraccount creatorUser on stoporder.creator =
+		creatorUser.userAccount_Id
+		LEFT JOIN sys_useraccount salesManUser on salesManUser.userAccount_Id =
+		stoporder.salesMan
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+
+			<if test="contractOrderId!=null">
+				AND stoporder.contractOrderId = #{contractOrderId}
+			</if>
+			<if test="status!=null">
+				AND stoporder.status = #{status}
+			</if>
+			<if test="stopStatus!=null">
+				AND stoporder.stopStatus = #{stopStatus}
+			</if>
+			<if test="salesMan!=null">
+				AND stoporder.salesMan = #{salesMan}
+			</if>
+			<if test="creator!=null">
+				AND stoporder.creator = #{creator}
+			</if>
+			<if test="contractOrderNum!=null">
+				AND stoporder.contractOrderId in (select contractOrder_Id from t_contractorder where contractOrderNum like CONCAT('%', '${contractOrderNum}', '%'))
+			</if>
+			<if test="lessorIdArray!=null and lessorIdArray.length>0">
+		      AND stoporder.contractOrderId in (select contractOrder_Id from t_contractorder where lessorId IN
+		       <foreach collection="lessorIdArray" item="item" index="index"  open="(" close=")" separator=",">
+		          '${item}'
+		        </foreach>
+		        )
+			</if>
+			<if test="customerName!=null">
+				AND stoporder.customerName like CONCAT('%', '${customerName}', '%')
+			</if>
+			
+		</trim>
+	</select>
+</mapper>

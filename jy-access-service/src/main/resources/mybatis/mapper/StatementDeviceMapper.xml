@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.StatementDeviceMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.StatementDevice">
+    <id column="staDevice_Id" jdbcType="VARCHAR" property="staDevice_Id" />
+    <result column="staAccountId" jdbcType="VARCHAR" property="staAccountId" />
+    <result column="deviceId" jdbcType="VARCHAR" property="deviceId" />
+    <result column="billingType" jdbcType="VARCHAR" property="billingType" />
+    <result column="leaseTerm" jdbcType="VARCHAR" property="leaseTerm" />
+    <result column="unitPrice" jdbcType="DECIMAL" property="unitPrice" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    staDevice_Id, staAccountId, deviceId, billingType, leaseTerm, unitPrice, createTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from f_statementdevice
+    where staDevice_Id = #{staDevice_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from f_statementdevice
+    where staDevice_Id = #{staDevice_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.StatementDevice">
+    insert into f_statementdevice (staDevice_Id, staAccountId, deviceId, 
+      billingType, leaseTerm, unitPrice, 
+      createTime)
+    values (#{staDevice_Id,jdbcType=VARCHAR}, #{staAccountId,jdbcType=VARCHAR}, #{deviceId,jdbcType=VARCHAR}, 
+      #{billingType,jdbcType=VARCHAR}, #{leaseTerm,jdbcType=VARCHAR}, #{unitPrice,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.StatementDevice"  keyProperty="staDevice_Id">
+		<selectKey keyProperty="staDevice_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into f_statementdevice
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="staDevice_Id != null">
+        staDevice_Id,
+      </if>
+      <if test="staAccountId != null">
+        staAccountId,
+      </if>
+      <if test="deviceId != null">
+        deviceId,
+      </if>
+      <if test="billingType != null">
+        billingType,
+      </if>
+      <if test="leaseTerm != null">
+        leaseTerm,
+      </if>
+      <if test="unitPrice != null">
+        unitPrice,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="staDevice_Id != null">
+        #{staDevice_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="staAccountId != null">
+        #{staAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="billingType != null">
+        #{billingType,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseTerm != null">
+        #{leaseTerm,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null">
+        #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.StatementDevice">
+    update f_statementdevice
+    <set>
+      <if test="staAccountId != null">
+        staAccountId = #{staAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        deviceId = #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="billingType != null">
+        billingType = #{billingType,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseTerm != null">
+        leaseTerm = #{leaseTerm,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null">
+        unitPrice = #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where staDevice_Id = #{staDevice_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.StatementDevice">
+    update f_statementdevice
+    set staAccountId = #{staAccountId,jdbcType=VARCHAR},
+      deviceId = #{deviceId,jdbcType=VARCHAR},
+      billingType = #{billingType,jdbcType=VARCHAR},
+      leaseTerm = #{leaseTerm,jdbcType=VARCHAR},
+      unitPrice = #{unitPrice,jdbcType=DECIMAL},
+      createTime = #{createTime,jdbcType=TIMESTAMP}
+    where staDevice_Id = #{staDevice_Id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.StatementAccountMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.StatementAccount">
+    <id column="staAccount_Id" jdbcType="VARCHAR" property="staAccount_Id" />
+    <result column="billId" jdbcType="VARCHAR" property="billId" />
+    <result column="staAccountName" jdbcType="VARCHAR" property="staAccountName" />
+    <result column="staAmount" jdbcType="DECIMAL" property="staAmount" />
+    <result column="staReceivedAmount" jdbcType="DECIMAL" property="staReceivedAmount" />
+    <result column="lessorId" jdbcType="VARCHAR" property="lessorId" />
+    <result column="customerId" jdbcType="VARCHAR" property="customerId" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="staStartTime" jdbcType="TIMESTAMP" property="staStartTime" />
+    <result column="staEndTime" jdbcType="TIMESTAMP" property="staEndTime" />
+    <result column="salesMan" jdbcType="VARCHAR" property="salesMan" />
+    <result column="checker" jdbcType="VARCHAR" property="checker" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="statementType" jdbcType="VARCHAR" property="statementType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    staAccount_Id, billId, staAccountName, staAmount, staReceivedAmount, lessorId, customerId, 
+    creator, createTime, staStartTime, staEndTime, salesMan, checker, status, remark, 
+    statementType
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from f_statementaccount
+    where staAccount_Id = #{staAccount_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from f_statementaccount
+    where staAccount_Id = #{staAccount_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.StatementAccount">
+    insert into f_statementaccount (staAccount_Id, billId, staAccountName, 
+      staAmount, staReceivedAmount, lessorId, 
+      customerId, creator, createTime, 
+      staStartTime, staEndTime, salesMan, 
+      checker, status, remark, 
+      statementType)
+    values (#{staAccount_Id,jdbcType=VARCHAR}, #{billId,jdbcType=VARCHAR}, #{staAccountName,jdbcType=VARCHAR}, 
+      #{staAmount,jdbcType=DECIMAL}, #{staReceivedAmount,jdbcType=DECIMAL}, #{lessorId,jdbcType=VARCHAR}, 
+      #{customerId,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{staStartTime,jdbcType=TIMESTAMP}, #{staEndTime,jdbcType=TIMESTAMP}, #{salesMan,jdbcType=VARCHAR}, 
+      #{checker,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{statementType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.StatementAccount" keyProperty="staAccount_Id">
+		<selectKey keyProperty="staAccount_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into f_statementaccount
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="staAccount_Id != null">
+        staAccount_Id,
+      </if>
+      <if test="billId != null">
+        billId,
+      </if>
+      <if test="staAccountName != null">
+        staAccountName,
+      </if>
+      <if test="staAmount != null">
+        staAmount,
+      </if>
+      <if test="staReceivedAmount != null">
+        staReceivedAmount,
+      </if>
+      <if test="lessorId != null">
+        lessorId,
+      </if>
+      <if test="customerId != null">
+        customerId,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="staStartTime != null">
+        staStartTime,
+      </if>
+      <if test="staEndTime != null">
+        staEndTime,
+      </if>
+      <if test="salesMan != null">
+        salesMan,
+      </if>
+      <if test="checker != null">
+        checker,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="statementType != null">
+        statementType,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="staAccount_Id != null">
+        #{staAccount_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="billId != null">
+        #{billId,jdbcType=VARCHAR},
+      </if>
+      <if test="staAccountName != null">
+        #{staAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="staAmount != null">
+        #{staAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="staReceivedAmount != null">
+        #{staReceivedAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="lessorId != null">
+        #{lessorId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staStartTime != null">
+        #{staStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staEndTime != null">
+        #{staEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="salesMan != null">
+        #{salesMan,jdbcType=VARCHAR},
+      </if>
+      <if test="checker != null">
+        #{checker,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="statementType != null">
+        #{statementType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.StatementAccount">
+    update f_statementaccount
+    <set>
+      <if test="billId != null">
+        billId = #{billId,jdbcType=VARCHAR},
+      </if>
+      <if test="staAccountName != null">
+        staAccountName = #{staAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="staAmount != null">
+        staAmount = #{staAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="staReceivedAmount != null">
+        staReceivedAmount = #{staReceivedAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="lessorId != null">
+        lessorId = #{lessorId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        customerId = #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staStartTime != null">
+        staStartTime = #{staStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staEndTime != null">
+        staEndTime = #{staEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="salesMan != null">
+        salesMan = #{salesMan,jdbcType=VARCHAR},
+      </if>
+      <if test="checker != null">
+        checker = #{checker,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="statementType != null">
+        statementType = #{statementType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where staAccount_Id = #{staAccount_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.StatementAccount">
+    update f_statementaccount
+    set billId = #{billId,jdbcType=VARCHAR},
+      staAccountName = #{staAccountName,jdbcType=VARCHAR},
+      staAmount = #{staAmount,jdbcType=DECIMAL},
+      staReceivedAmount = #{staReceivedAmount,jdbcType=DECIMAL},
+      lessorId = #{lessorId,jdbcType=VARCHAR},
+      customerId = #{customerId,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      staStartTime = #{staStartTime,jdbcType=TIMESTAMP},
+      staEndTime = #{staEndTime,jdbcType=TIMESTAMP},
+      salesMan = #{salesMan,jdbcType=VARCHAR},
+      checker = #{checker,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      statementType = #{statementType,jdbcType=VARCHAR}
+    where staAccount_Id = #{staAccount_Id,jdbcType=VARCHAR}
+  </update>
+</mapper>

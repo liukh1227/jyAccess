@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.ReceivableAccountAdjustMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.ReceivableAccountAdjust">
+    <id column="receableAdjust_Id" jdbcType="VARCHAR" property="receableAdjust_Id" />
+    <result column="receableAccountId" jdbcType="VARCHAR" property="receableAccountId" />
+    <result column="originalAmount" jdbcType="DECIMAL" property="originalAmount" />
+    <result column="adjustAmount" jdbcType="DECIMAL" property="adjustAmount" />
+    <result column="adjustRemark" jdbcType="VARCHAR" property="adjustRemark" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    receableAdjust_Id, receableAccountId, originalAmount, adjustAmount, adjustRemark, 
+    creator, createTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from f_receivableaccountadjust
+    where receableAdjust_Id = #{receableAdjust_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from f_receivableaccountadjust
+    where receableAdjust_Id = #{receableAdjust_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.ReceivableAccountAdjust">
+    insert into f_receivableaccountadjust (receableAdjust_Id, receableAccountId, 
+      originalAmount, adjustAmount, adjustRemark, 
+      creator, createTime)
+    values (#{receableAdjust_Id,jdbcType=VARCHAR}, #{receableAccountId,jdbcType=VARCHAR}, 
+      #{originalAmount,jdbcType=DECIMAL}, #{adjustAmount,jdbcType=DECIMAL}, #{adjustRemark,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.ReceivableAccountAdjust" keyProperty="receableAdjust_Id">
+		<selectKey keyProperty="receableAdjust_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into f_receivableaccountadjust
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="receableAdjust_Id != null">
+        receableAdjust_Id,
+      </if>
+      <if test="receableAccountId != null">
+        receableAccountId,
+      </if>
+      <if test="originalAmount != null">
+        originalAmount,
+      </if>
+      <if test="adjustAmount != null">
+        adjustAmount,
+      </if>
+      <if test="adjustRemark != null">
+        adjustRemark,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="receableAdjust_Id != null">
+        #{receableAdjust_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="receableAccountId != null">
+        #{receableAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="originalAmount != null">
+        #{originalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustAmount != null">
+        #{adjustAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustRemark != null">
+        #{adjustRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.ReceivableAccountAdjust">
+    update f_receivableaccountadjust
+    <set>
+      <if test="receableAccountId != null">
+        receableAccountId = #{receableAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="originalAmount != null">
+        originalAmount = #{originalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustAmount != null">
+        adjustAmount = #{adjustAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="adjustRemark != null">
+        adjustRemark = #{adjustRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where receableAdjust_Id = #{receableAdjust_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.ReceivableAccountAdjust">
+    update f_receivableaccountadjust
+    set receableAccountId = #{receableAccountId,jdbcType=VARCHAR},
+      originalAmount = #{originalAmount,jdbcType=DECIMAL},
+      adjustAmount = #{adjustAmount,jdbcType=DECIMAL},
+      adjustRemark = #{adjustRemark,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP}
+    where receableAdjust_Id = #{receableAdjust_Id,jdbcType=VARCHAR}
+  </update>
+</mapper>

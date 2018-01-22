@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.OperateLogMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.OperateLog">
+    <id column="operateLog_Id" jdbcType="VARCHAR" property="operateLog_Id" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="logDate" jdbcType="TIMESTAMP" property="logDate" />
+    <result column="logType" jdbcType="VARCHAR" property="logType" />
+    <result column="objectName" jdbcType="VARCHAR" property="objectName" />
+    <result column="objectId" jdbcType="VARCHAR" property="objectId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    operateLog_Id, creator, logDate, logType, objectName, objectId
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_operatelog
+    where operateLog_Id = #{operateLog_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from sys_operatelog
+    where operateLog_Id = #{operateLog_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.OperateLog">
+    insert into sys_operatelog (operateLog_Id, creator, logDate, 
+      logType, objectName, objectId
+      )
+    values (#{operateLog_Id,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{logDate,jdbcType=TIMESTAMP}, 
+      #{logType,jdbcType=VARCHAR}, #{objectName,jdbcType=VARCHAR}, #{objectId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.OperateLog" keyProperty="operateLog_Id">
+		<selectKey keyProperty="operateLog_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into sys_operatelog
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="operateLog_Id != null">
+        operateLog_Id,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="logDate != null">
+        logDate,
+      </if>
+      <if test="logType != null">
+        logType,
+      </if>
+      <if test="objectName != null">
+        objectName,
+      </if>
+      <if test="objectId != null">
+        objectId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="operateLog_Id != null">
+        #{operateLog_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="logDate != null">
+        #{logDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logType != null">
+        #{logType,jdbcType=VARCHAR},
+      </if>
+      <if test="objectName != null">
+        #{objectName,jdbcType=VARCHAR},
+      </if>
+      <if test="objectId != null">
+        #{objectId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.OperateLog">
+    update sys_operatelog
+    <set>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="logDate != null">
+        logDate = #{logDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logType != null">
+        logType = #{logType,jdbcType=VARCHAR},
+      </if>
+      <if test="objectName != null">
+        objectName = #{objectName,jdbcType=VARCHAR},
+      </if>
+      <if test="objectId != null">
+        objectId = #{objectId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where operateLog_Id = #{operateLog_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.OperateLog">
+    update sys_operatelog
+    set creator = #{creator,jdbcType=VARCHAR},
+      logDate = #{logDate,jdbcType=TIMESTAMP},
+      logType = #{logType,jdbcType=VARCHAR},
+      objectName = #{objectName,jdbcType=VARCHAR},
+      objectId = #{objectId,jdbcType=VARCHAR}
+    where operateLog_Id = #{operateLog_Id,jdbcType=VARCHAR}
+  </update>
+</mapper>

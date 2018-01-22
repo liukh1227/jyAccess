@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.BankAccountMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.BankAccount">
+    <id column="bankAccount_Id" jdbcType="VARCHAR" property="bankAccount_Id" />
+    <result column="companyId" jdbcType="VARCHAR" property="companyId" />
+    <result column="customerId" jdbcType="VARCHAR" property="customerId" />
+    <result column="bankName" jdbcType="VARCHAR" property="bankName" />
+    <result column="bankAccountNum" jdbcType="VARCHAR" property="bankAccountNum" />
+    <result column="bankAccountName" jdbcType="VARCHAR" property="bankAccountName" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="isDefault" jdbcType="BIT" property="isDefault" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    bankAccount_Id, companyId, customerId, bankName, bankAccountNum, bankAccountName, 
+    status, creator, createTime, isDefault
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from u_bankaccount
+    where bankAccount_Id = #{bankAccount_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from u_bankaccount
+    where bankAccount_Id = #{bankAccount_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.BankAccount">
+    insert into u_bankaccount (bankAccount_Id, companyId, customerId, 
+      bankName, bankAccountNum, bankAccountName, 
+      status, creator, createTime, 
+      isDefault)
+    values (#{bankAccount_Id,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR}, 
+      #{bankName,jdbcType=VARCHAR}, #{bankAccountNum,jdbcType=VARCHAR}, #{bankAccountName,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{isDefault,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.BankAccount" keyProperty="bankAccount_Id">
+		<selectKey keyProperty="bankAccount_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into u_bankaccount
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bankAccount_Id != null">
+        bankAccount_Id,
+      </if>
+      <if test="companyId != null">
+        companyId,
+      </if>
+      <if test="customerId != null">
+        customerId,
+      </if>
+      <if test="bankName != null">
+        bankName,
+      </if>
+      <if test="bankAccountNum != null">
+        bankAccountNum,
+      </if>
+      <if test="bankAccountName != null">
+        bankAccountName,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="isDefault != null">
+        isDefault,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bankAccount_Id != null">
+        #{bankAccount_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountNum != null">
+        #{bankAccountNum,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountName != null">
+        #{bankAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDefault != null">
+        #{isDefault,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.BankAccount">
+    update u_bankaccount
+    <set>
+      <if test="companyId != null">
+        companyId = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        customerId = #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        bankName = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountNum != null">
+        bankAccountNum = #{bankAccountNum,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountName != null">
+        bankAccountName = #{bankAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDefault != null">
+        isDefault = #{isDefault,jdbcType=BIT},
+      </if>
+    </set>
+    where bankAccount_Id = #{bankAccount_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.BankAccount">
+    update u_bankaccount
+    set companyId = #{companyId,jdbcType=VARCHAR},
+      customerId = #{customerId,jdbcType=VARCHAR},
+      bankName = #{bankName,jdbcType=VARCHAR},
+      bankAccountNum = #{bankAccountNum,jdbcType=VARCHAR},
+      bankAccountName = #{bankAccountName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      isDefault = #{isDefault,jdbcType=BIT}
+    where bankAccount_Id = #{bankAccount_Id,jdbcType=VARCHAR}
+  </update>
+      <select id="getBankAccountPageList" parameterType="com.jy.entity.form.BankAccountQueryForm"
+		resultMap="BaseResultMap">
+		   select 
+          <include refid="Base_Column_List" />
+           from u_bankaccount
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="companyId!=null">
+				AND companyId = #{companyId}
+			</if>
+			<if test="customerId!=null">
+				AND customerId = #{customerId}
+			</if>
+			<if test="bankName!=null">
+				AND bankName like CONCAT('%', '${bankName}', '%')
+			</if>
+			<if test="bankAccountNum!=null">
+				AND bankAccountNum = #{bankAccountNum}
+			</if>
+			<if test="bankAccountName!=null">
+				AND bankAccountName like CONCAT('%', '${bankAccountName}', '%')
+			</if>
+			<if test="status!=null">
+				AND status = #{status}
+			</if>
+			<if test="isDefault!=null">
+				AND isDefault = #{isDefault}
+			</if>
+		</trim>
+	</select>
+	<select id="getAllBankAccountList" parameterType="com.jy.entity.form.BankAccountQueryForm"
+		resultMap="BaseResultMap">
+		   select 
+          <include refid="Base_Column_List" />
+           from u_bankaccount
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="companyId!=null">
+				AND companyId = #{companyId}
+			</if>
+			<if test="customerId!=null">
+				AND customerId = #{customerId}
+			</if>
+			<if test="bankName!=null">
+				AND bankName like CONCAT('%', '${bankName}', '%')
+			</if>
+			<if test="bankAccountNum!=null">
+				AND bankAccountNum = #{bankAccountNum}
+			</if>
+			<if test="bankAccountName!=null">
+				AND bankAccountName like CONCAT('%', '${bankAccountName}', '%')
+			</if>
+			<if test="status!=null">
+				AND status = #{status}
+			</if>
+			<if test="isDefault!=null">
+				AND isDefault = #{isDefault}
+			</if>
+		</trim>
+	</select>
+</mapper>

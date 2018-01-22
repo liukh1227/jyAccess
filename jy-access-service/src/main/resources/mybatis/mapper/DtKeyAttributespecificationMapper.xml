@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.DtKeyAttributespecificationMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.DtKeyAttributespecification">
+    <id column="dTKeyAttributeSpec_Id" jdbcType="VARCHAR" property="dTKeyAttributeSpec_Id" />
+    <result column="dTKeyAttributeSpecName" jdbcType="VARCHAR" property="dTKeyAttributeSpecName" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="orderSeq" jdbcType="INTEGER" property="orderSeq" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="deviceTypeId" jdbcType="VARCHAR" property="deviceTypeId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    dTKeyAttributeSpec_Id, dTKeyAttributeSpecName, unit, status, orderSeq, creator, createTime, 
+    deviceTypeId
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from b_dtkeyattributespecification
+    where dTKeyAttributeSpec_Id = #{dTKeyAttributeSpec_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from b_dtkeyattributespecification
+    where dTKeyAttributeSpec_Id = #{dTKeyAttributeSpec_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.DtKeyAttributespecification">
+    insert into b_dtkeyattributespecification (dTKeyAttributeSpec_Id, dTKeyAttributeSpecName, 
+      unit, status, orderSeq, 
+      creator, createTime, deviceTypeId
+      )
+    values (#{dTKeyAttributeSpec_Id,jdbcType=VARCHAR}, #{dTKeyAttributeSpecName,jdbcType=VARCHAR}, 
+      #{unit,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{orderSeq,jdbcType=INTEGER}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{deviceTypeId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.DtKeyAttributespecification" keyProperty="dTKeyAttributeSpec_Id">
+		<selectKey keyProperty="dTKeyAttributeSpec_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into b_dtkeyattributespecification
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dTKeyAttributeSpec_Id != null">
+        dTKeyAttributeSpec_Id,
+      </if>
+      <if test="dTKeyAttributeSpecName != null">
+        dTKeyAttributeSpecName,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="orderSeq != null">
+        orderSeq,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="deviceTypeId != null">
+        deviceTypeId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dTKeyAttributeSpec_Id != null">
+        #{dTKeyAttributeSpec_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="dTKeyAttributeSpecName != null">
+        #{dTKeyAttributeSpecName,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSeq != null">
+        #{orderSeq,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceTypeId != null">
+        #{deviceTypeId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.DtKeyAttributespecification">
+    update b_dtkeyattributespecification
+    <set>
+      <if test="dTKeyAttributeSpecName != null">
+        dTKeyAttributeSpecName = #{dTKeyAttributeSpecName,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSeq != null">
+        orderSeq = #{orderSeq,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceTypeId != null">
+        deviceTypeId = #{deviceTypeId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where dTKeyAttributeSpec_Id = #{dTKeyAttributeSpec_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.DtKeyAttributespecification">
+    update b_dtkeyattributespecification
+    set dTKeyAttributeSpecName = #{dTKeyAttributeSpecName,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      orderSeq = #{orderSeq,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      deviceTypeId = #{deviceTypeId,jdbcType=VARCHAR}
+    where dTKeyAttributeSpec_Id = #{dTKeyAttributeSpec_Id,jdbcType=VARCHAR}
+  </update>
+  
+   <select id="getDtKeyAttributespecificationPageList" parameterType="com.jy.entity.form.DtKeyAttributeSpecificationQueryForm"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from b_dtkeyattributespecification
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="status!=null">
+				AND status = #{status}
+			</if>
+		</trim>
+	</select>
+   <select id="getAllDtKeyAttributespecificationList" parameterType="com.jy.entity.form.DtKeyAttributeSpecificationQueryForm"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from b_dtkeyattributespecification
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="status!=null">
+				AND status = #{status}
+			</if>
+		</trim>
+	</select>
+</mapper>

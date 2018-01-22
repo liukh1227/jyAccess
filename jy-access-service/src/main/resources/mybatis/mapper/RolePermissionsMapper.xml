@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.RolePermissionsMapper">
+	<resultMap id="BaseResultMap" type="com.jy.entity.po.RolePermissions">
+		<id column="rolePermissions_Id" jdbcType="VARCHAR" property="rolePermissions_Id" />
+		<id column="roleId" jdbcType="INTEGER" property="roleId" />
+		<id column="permissionId" jdbcType="INTEGER" property="permissionId" />
+	</resultMap>
+	<resultMap type="com.jy.entity.vo.RolePermissionsVo" id="RolePermissionsVoResultMap"
+		extends="BaseResultMap">
+		<id column="roleName" jdbcType="VARCHAR" property="roleName" />
+		<id column="permissionName" jdbcType="VARCHAR" property="permissionName" />
+		<id column="resourceUrl" jdbcType="VARCHAR" property="resourceUrl" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		rolePermissions_Id, roleId, permissionId
+	</sql>
+	<sql id="RolePermissionsVo_Column_List">
+		rolePermissions_Id, roleId, permissionId,roleName,permissionName,resourceUrl
+	</sql>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from sys_rolepermissions
+		where rolePermissions_Id = #{rolePermissions_Id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.jy.entity.po.RolePermissions">
+		insert into sys_rolepermissions (rolePermissions_Id,roleId, permissionId)
+		values
+		(#{rolePermissions_Id,jdbcType=VARCHAR},#{roleId,jdbcType=INTEGER},
+		#{permissionId,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="com.jy.entity.po.RolePermissions"
+		keyProperty="rolePermissions_Id">
+		<selectKey keyProperty="rolePermissions_Id" resultType="String"
+			order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into sys_rolepermissions
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="rolePermissions_Id != null">
+				rolePermissions_Id,
+			</if>
+			<if test="roleId != null">
+				roleId,
+			</if>
+			<if test="permissionId != null">
+				permissionId,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="rolePermissions_Id != null">
+				#{rolePermissions_Id,jdbcType=INTEGER},
+			</if>
+			<if test="roleId != null">
+				#{roleId,jdbcType=INTEGER},
+			</if>
+			<if test="permissionId != null">
+				#{permissionId,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<select id="getRolePermissionsPageList" parameterType="com.jy.entity.form.RolePermissionsQueryForm"
+		resultMap="RolePermissionsVoResultMap">
+		select
+		<include refid="RolePermissionsVo_Column_List" />
+		from sys_rolepermissions rolepermissions
+		LEFT JOIN sys_role role on rolepermissions.roleId = role.role_Id
+		LEFT JOIN sys_permission permission on rolepermissions.permissionId =
+		permission.permission_Id
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="permissionId!=null">
+				AND rolepermissions.permissionId = #{permissionId}
+			</if>
+			<if test="roleId!=null">
+				AND rolepermissions.roleId = #{roleId}
+			</if>
+		</trim>
+	</select>
+	<select id="getAllRolePermissionsList" parameterType="com.jy.entity.form.RolePermissionsQueryForm"
+		resultMap="RolePermissionsVoResultMap">
+		select
+		<include refid="RolePermissionsVo_Column_List" />
+		from sys_rolepermissions rolepermissions
+		LEFT JOIN sys_role role on rolepermissions.roleId = role.role_Id
+		LEFT JOIN sys_permission permission on rolepermissions.permissionId =
+		permission.permission_Id
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="permissionId!=null">
+				AND rolepermissions.permissionId = #{permissionId}
+			</if>
+			<if test="roleId!=null">
+				AND rolepermissions.roleId = #{roleId}
+			</if>
+		</trim>
+	</select>
+</mapper>

@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.DeviceMapper">
+	<resultMap id="BaseResultMap" type="com.jy.entity.po.Device">
+		<id column="device_Id" jdbcType="VARCHAR" property="device_Id" />
+		<result column="companyId" jdbcType="VARCHAR" property="companyId" />
+		<result column="deviceModelId" jdbcType="VARCHAR" property="deviceModelId" />
+		<result column="deviceNum" jdbcType="VARCHAR" property="deviceNum" />
+		<result column="sequenceNum" jdbcType="VARCHAR" property="sequenceNum" />
+		<result column="plateNumber" jdbcType="VARCHAR" property="plateNumber" />
+		<result column="manufactureYear" jdbcType="VARCHAR" property="manufactureYear" />
+		<result column="isImported" jdbcType="BIT" property="isImported" />
+		<result column="workingTime" jdbcType="VARCHAR" property="workingTime" />
+		<result column="devicePicture" jdbcType="VARCHAR" property="devicePicture" />
+		<result column="isRealDevice" jdbcType="BIT" property="isRealDevice" />
+		<result column="gPSCode" jdbcType="VARCHAR" property="gPSCode" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+	</resultMap>
+	<resultMap id="DeviceVoResultMap" type="com.jy.entity.vo.DeviceVo"
+		extends="BaseResultMap">
+		<result column="brandName" jdbcType="VARCHAR" property="brandName" />
+		<result column="typeName" jdbcType="VARCHAR" property="typeName" />
+		<result column="modelName" jdbcType="VARCHAR" property="modelName" />
+		<result column="companyName" jdbcType="VARCHAR" property="companyName" />
+	</resultMap>
+	<resultMap id="DeviceAmountVoResultMap" type="com.jy.entity.vo.DeviceAmountVo"
+		extends="BaseResultMap">
+		<result column="amount" jdbcType="INTEGER" property="amount" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		device_Id, companyId, deviceModelId, deviceNum, sequenceNum, plateNumber,
+		manufactureYear,
+		isImported, workingTime, devicePicture, isRealDevice, gPSCode, status, creator,
+		createTime
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="DeviceVoResultMap">
+		select device.* ,company.companyName as companyName,dModel.modelName as
+		modelName,dBrand.brandName as brandName,dType.typeName as typeName
+		from d_device device
+		LEFT JOIN u_company company on device.companyId = company.company_Id
+		LEFT JOIN b_devicemodel dModel on device.deviceModelId =
+		dModel.deviceModel_Id
+		LEFT JOIN b_devicetype dType on dModel.deviceTypeId = dType.deviceType_Id
+		LEFT JOIN b_devicebrand dBrand on dModel.deviceBrandId =
+		dBrand.deviceBrand_Id
+		where device.device_Id = #{device_Id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from d_device
+		where device_Id = #{device_Id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.jy.entity.po.Device">
+		insert into d_device (device_Id, companyId, deviceModelId,
+		deviceNum, sequenceNum, plateNumber,
+		manufactureYear, isImported, workingTime,
+		devicePicture, isRealDevice, gPSCode,
+		status, creator, createTime
+		)
+		values (#{device_Id,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR},
+		#{deviceModelId,jdbcType=VARCHAR},
+		#{deviceNum,jdbcType=VARCHAR}, #{sequenceNum,jdbcType=VARCHAR}, #{plateNumber,jdbcType=VARCHAR},
+		#{manufactureYear,jdbcType=VARCHAR}, #{isImported,jdbcType=BIT},
+		#{workingTime,jdbcType=VARCHAR},
+		#{devicePicture,jdbcType=VARCHAR}, #{isRealDevice,jdbcType=BIT}, #{gPSCode,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.jy.entity.po.Device"
+		keyProperty="device_Id">
+		<selectKey keyProperty="device_Id" resultType="String"
+			order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into d_device
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="device_Id != null">
+				device_Id,
+			</if>
+			<if test="companyId != null">
+				companyId,
+			</if>
+			<if test="deviceModelId != null">
+				deviceModelId,
+			</if>
+			<if test="deviceNum != null">
+				deviceNum,
+			</if>
+			<if test="sequenceNum != null">
+				sequenceNum,
+			</if>
+			<if test="plateNumber != null">
+				plateNumber,
+			</if>
+			<if test="manufactureYear != null">
+				manufactureYear,
+			</if>
+			<if test="isImported != null">
+				isImported,
+			</if>
+			<if test="workingTime != null">
+				workingTime,
+			</if>
+			<if test="devicePicture != null">
+				devicePicture,
+			</if>
+			<if test="isRealDevice != null">
+				isRealDevice,
+			</if>
+			<if test="gPSCode != null">
+				gPSCode,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="createTime != null">
+				createTime,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="device_Id != null">
+				#{device_Id,jdbcType=VARCHAR},
+			</if>
+			<if test="companyId != null">
+				#{companyId,jdbcType=VARCHAR},
+			</if>
+			<if test="deviceModelId != null">
+				#{deviceModelId,jdbcType=VARCHAR},
+			</if>
+			<if test="deviceNum != null">
+				#{deviceNum,jdbcType=VARCHAR},
+			</if>
+			<if test="sequenceNum != null">
+				#{sequenceNum,jdbcType=VARCHAR},
+			</if>
+			<if test="plateNumber != null">
+				#{plateNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="manufactureYear != null">
+				#{manufactureYear,jdbcType=VARCHAR},
+			</if>
+			<if test="isImported != null">
+				#{isImported,jdbcType=BIT},
+			</if>
+			<if test="workingTime != null">
+				#{workingTime,jdbcType=VARCHAR},
+			</if>
+			<if test="devicePicture != null">
+				#{devicePicture,jdbcType=VARCHAR},
+			</if>
+			<if test="isRealDevice != null">
+				#{isRealDevice,jdbcType=BIT},
+			</if>
+			<if test="gPSCode != null">
+				#{gPSCode,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.Device">
+		update d_device
+		<set>
+			<if test="companyId != null">
+				companyId = #{companyId,jdbcType=VARCHAR},
+			</if>
+			<if test="deviceModelId != null">
+				deviceModelId = #{deviceModelId,jdbcType=VARCHAR},
+			</if>
+			<if test="deviceNum != null">
+				deviceNum = #{deviceNum,jdbcType=VARCHAR},
+			</if>
+			<if test="sequenceNum != null">
+				sequenceNum = #{sequenceNum,jdbcType=VARCHAR},
+			</if>
+			<if test="plateNumber != null">
+				plateNumber = #{plateNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="manufactureYear != null">
+				manufactureYear = #{manufactureYear,jdbcType=VARCHAR},
+			</if>
+			<if test="isImported != null">
+				isImported = #{isImported,jdbcType=BIT},
+			</if>
+			<if test="workingTime != null">
+				workingTime = #{workingTime,jdbcType=VARCHAR},
+			</if>
+			<if test="devicePicture != null">
+				devicePicture = #{devicePicture,jdbcType=VARCHAR},
+			</if>
+			<if test="isRealDevice != null">
+				isRealDevice = #{isRealDevice,jdbcType=BIT},
+			</if>
+			<if test="gPSCode != null">
+				gPSCode = #{gPSCode,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				createTime = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where device_Id = #{device_Id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.jy.entity.po.Device">
+		update d_device
+		set companyId = #{companyId,jdbcType=VARCHAR},
+		deviceModelId = #{deviceModelId,jdbcType=VARCHAR},
+		deviceNum = #{deviceNum,jdbcType=VARCHAR},
+		sequenceNum = #{sequenceNum,jdbcType=VARCHAR},
+		plateNumber = #{plateNumber,jdbcType=VARCHAR},
+		manufactureYear = #{manufactureYear,jdbcType=VARCHAR},
+		isImported = #{isImported,jdbcType=BIT},
+		workingTime = #{workingTime,jdbcType=VARCHAR},
+		devicePicture = #{devicePicture,jdbcType=VARCHAR},
+		isRealDevice = #{isRealDevice,jdbcType=BIT},
+		gPSCode = #{gPSCode,jdbcType=VARCHAR},
+		status = #{status,jdbcType=VARCHAR},
+		creator = #{creator,jdbcType=VARCHAR},
+		createTime = #{createTime,jdbcType=TIMESTAMP}
+		where device_Id = #{device_Id,jdbcType=VARCHAR}
+	</update>
+	<select id="getDevicePageList" parameterType="com.jy.entity.form.DeviceQueryForm"
+		resultMap="DeviceVoResultMap">
+		select device.* ,company.companyName as companyName,dModel.modelName
+		as modelName,dBrand.brandName as brandName,dType.typeName as typeName
+		from d_device device
+		LEFT JOIN u_company company on device.companyId = company.company_Id
+		LEFT JOIN b_devicemodel dModel on device.deviceModelId =
+		dModel.deviceModel_Id
+		LEFT JOIN b_devicetype dType on dModel.deviceTypeId = dType.deviceType_Id
+		LEFT JOIN b_devicebrand dBrand on dModel.deviceBrandId =
+		dBrand.deviceBrand_Id
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="companyIdArray!=null and companyIdArray.length>0">
+				AND device.companyId IN
+				<foreach collection="companyIdArray" item="item" index="index"
+					open="(" close=")" separator=",">
+					'${item}'
+				</foreach>
+			</if>
+			<if test="deviceModelId!=null">
+				AND device.deviceModelId = #{deviceModelId}
+			</if>
+			<if test="deviceNum!=null">
+				AND device.deviceNum like CONCAT('%', '${deviceNum}',
+				'%')
+			</if>
+			<if test="sequenceNum!=null">
+				AND device.sequenceNum like CONCAT('%', '${sequenceNum}',
+				'%')
+			</if>
+			<if test="plateNumber!=null">
+				AND device.plateNumber like CONCAT('%', '${plateNumber}',
+				'%')
+			</if>
+			<if test="manufactureYear!=null">
+				AND device.manufactureYear like CONCAT('%',
+				'${manufactureYear}', '%')
+			</if>
+			<if test="isImported!=null">
+				AND device.isImported = #{isImported}
+			</if>
+			<if test="isRealDevice!=null">
+				AND device.isRealDevice = #{isRealDevice}
+			</if>
+			<if test="gPSCode!=null">
+				AND device.gPSCode like CONCAT('%', '${gPSCode}', '%')
+			</if>
+			<if test="status!=null">
+				AND device.status = #{status}
+			</if>
+			<if test="deviceTypeId!=null">
+				AND dModel.deviceTypeId = #{deviceTypeId}
+			</if>
+			<if test="deviceBrandId!=null">
+				AND dModel.deviceBrandId = #{deviceBrandId}
+			</if>
+			<if test="contractOrderId!=null">
+				AND device.deviceModelId in (select deviceModelId from
+				t_contractdevicemodel where contractOrderId = #{contractOrderId} )
+				AND device.device_Id not in (select deviceId from t_deviceinmakesureorder where status = '1' and  contractOrderId= #{contractOrderId} )
+				
+			</if>
+		</trim>
+	</select>
+	<select id="getAllDeviceList" parameterType="com.jy.entity.form.DeviceQueryForm"
+		resultMap="DeviceVoResultMap">
+		select device.* ,company.companyName as companyName,dModel.modelName
+		as modelName,dBrand.brandName as brandName,dType.typeName as typeName
+		from d_device device
+		LEFT JOIN u_company company on device.companyId = company.company_Id
+		LEFT JOIN b_devicemodel dModel on device.deviceModelId =
+		dModel.deviceModel_Id
+		LEFT JOIN b_devicetype dType on dModel.deviceTypeId = dType.deviceType_Id
+		LEFT JOIN b_devicebrand dBrand on dModel.deviceBrandId =
+		dBrand.deviceBrand_Id
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="companyIdArray!=null and companyIdArray.length>0">
+				AND device.companyId IN
+				<foreach collection="companyIdArray" item="item" index="index"
+					open="(" close=")" separator=",">
+					'${item}'
+				</foreach>
+			</if>
+			<if test="deviceModelId!=null">
+				AND device.deviceModelId = #{deviceModelId}
+			</if>
+			<if test="deviceNum!=null">
+				AND device.deviceNum like CONCAT('%', '${deviceNum}',
+				'%')
+			</if>
+			<if test="sequenceNum!=null">
+				AND device.sequenceNum like CONCAT('%', '${sequenceNum}',
+				'%')
+			</if>
+			<if test="plateNumber!=null">
+				AND device.plateNumber like CONCAT('%', '${plateNumber}',
+				'%')
+			</if>
+			<if test="manufactureYear!=null">
+				AND device.manufactureYear like CONCAT('%',
+				'${manufactureYear}', '%')
+			</if>
+			<if test="isImported!=null">
+				AND device.isImported = #{isImported}
+			</if>
+			<if test="isRealDevice!=null">
+				AND device.isRealDevice = #{isRealDevice}
+			</if>
+			<if test="gPSCode!=null">
+				AND device.gPSCode like CONCAT('%', '${gPSCode}', '%')
+			</if>
+			<if test="status!=null">
+				AND device.status = #{status}
+			</if>
+			<if test="deviceTypeId!=null">
+				AND dModel.deviceTypeId = #{deviceTypeId}
+			</if>
+			<if test="deviceBrandId!=null">
+				AND dModel.deviceBrandId = #{deviceBrandId}
+			</if>
+			<if test="contractOrderId!=null">
+				AND device.deviceModelId in (select deviceModelId from
+				t_contractdevicemodel where contractOrderId = #{contractOrderId} )
+				AND device.device_Id not in (select deviceId from t_deviceinmakesureorder where status = '1' and  contractOrderId= #{contractOrderId} )
+			</if>
+		</trim>
+	</select>
+	<select id="getDeviceStatisticsList" parameterType="com.jy.entity.form.DeviceQueryForm"
+		resultMap="DeviceAmountVoResultMap">
+		select count(device_Id) as amount,status from d_device
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="companyIdArray!=null and companyIdArray.length>0">
+				AND companyId IN
+				<foreach collection="companyIdArray" item="item" index="index"
+					open="(" close=")" separator=",">
+					'${item}'
+				</foreach>
+			</if>
+		</trim>
+		GROUP BY status
+	</select>
+	<select id="getDeviceGroupByCompanyStatisticsList"
+		parameterType="com.jy.entity.form.DeviceQueryForm" resultMap="DeviceAmountVoResultMap">
+		select companyId, (select companyName from u_company where company_Id
+		= companyId) as companyName,status,count(device_Id) as amount from
+		d_device
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="companyIdArray!=null and companyIdArray.length>0">
+				AND companyId IN
+				<foreach collection="companyIdArray" item="item" index="index"
+					open="(" close=")" separator=",">
+					'${item}'
+				</foreach>
+			</if>
+			<if test="deviceTypeId!=null">
+				AND deviceModelId in (select deviceModel_Id from
+				b_devicemodel where deviceTypeId = #{deviceTypeId})
+			</if>
+			<if test="deviceModelId!=null">
+				AND deviceModelId = #{deviceModelId}
+			</if>
+		</trim>
+		GROUP BY companyId,status
+	</select>
+</mapper>

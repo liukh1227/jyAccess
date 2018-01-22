@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.ReceivedAccountMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.ReceivedAccount">
+    <id column="receedAccount_Id" jdbcType="VARCHAR" property="receedAccount_Id" />
+    <result column="receableAccountId" jdbcType="VARCHAR" property="receableAccountId" />
+    <result column="receedAmount" jdbcType="DECIMAL" property="receedAmount" />
+    <result column="operatorTime" jdbcType="TIMESTAMP" property="operatorTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    receedAccount_Id, receableAccountId, receedAmount, operatorTime, creator, status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from f_receivedaccount
+    where receedAccount_Id = #{receedAccount_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from f_receivedaccount
+    where receedAccount_Id = #{receedAccount_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.ReceivedAccount">
+    insert into f_receivedaccount (receedAccount_Id, receableAccountId, 
+      receedAmount, operatorTime, creator, 
+      status)
+    values (#{receedAccount_Id,jdbcType=VARCHAR}, #{receableAccountId,jdbcType=VARCHAR}, 
+      #{receedAmount,jdbcType=DECIMAL}, #{operatorTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.ReceivedAccount"  keyProperty="receedAccount_Id">
+		<selectKey keyProperty="receedAccount_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into f_receivedaccount
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="receedAccount_Id != null">
+        receedAccount_Id,
+      </if>
+      <if test="receableAccountId != null">
+        receableAccountId,
+      </if>
+      <if test="receedAmount != null">
+        receedAmount,
+      </if>
+      <if test="operatorTime != null">
+        operatorTime,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="receedAccount_Id != null">
+        #{receedAccount_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="receableAccountId != null">
+        #{receableAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="receedAmount != null">
+        #{receedAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="operatorTime != null">
+        #{operatorTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.ReceivedAccount">
+    update f_receivedaccount
+    <set>
+      <if test="receableAccountId != null">
+        receableAccountId = #{receableAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="receedAmount != null">
+        receedAmount = #{receedAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="operatorTime != null">
+        operatorTime = #{operatorTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where receedAccount_Id = #{receedAccount_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.ReceivedAccount">
+    update f_receivedaccount
+    set receableAccountId = #{receableAccountId,jdbcType=VARCHAR},
+      receedAmount = #{receedAmount,jdbcType=DECIMAL},
+      operatorTime = #{operatorTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where receedAccount_Id = #{receedAccount_Id,jdbcType=VARCHAR}
+  </update>
+</mapper>

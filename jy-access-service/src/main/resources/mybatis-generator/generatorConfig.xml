@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <!DOCTYPE generatorConfiguration
+          PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+          "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<properties resource="mybatis-generator/generator.properties"/>
+	<classPathEntry location="${classPath}" />
+	<context id="my" targetRuntime="MyBatis3">
+		<!-- pojo对象是否增加序列化接口 -->
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin">
+			<property name="suppressJavaInterface" value="false"/>
+		</plugin>
+		<plugin type="org.mybatis.generator.plugins.MapperConfigPlugin">
+			<property name="fileName" value="mybatis-mapper.xml"/>
+			<property name="targetPackage" value="mybatis"/>
+			<property name="targetProject" value="src/main/resources"/>
+		</plugin>
+		<!-- pojo生成toString -->
+		<plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+		<commentGenerator>
+			<property name="suppressDate" value="false" />
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+
+		<jdbcConnection driverClass="${driverClass}"
+			connectionURL="${connectionURL}" userId="${userId}"
+			password="${password}" />
+
+		<javaModelGenerator targetPackage="com.jy.entity.po"
+			targetProject="src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator  targetPackage="mybatis.mapper"
+			targetProject="src/main/resources">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+
+		<javaClientGenerator targetPackage="com.jy.access.mapper" 
+			targetProject="src/main/java" type="XMLMAPPER">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+<!-- 
+		<table tableName="b_devicebrand" domainObjectName="DeviceBrand"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="b_devicemodel" domainObjectName="DeviceModel"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="b_devicespecification" domainObjectName="DeviceSpecification"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="b_devicetype" domainObjectName="DeviceType"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="b_dmattributevalue" domainObjectName="Dmattributevalue"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="b_dtkeyattributespecification" domainObjectName="DtKeyAttributespecification"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="b_dtkeyattributevalue" domainObjectName="DtKeyAttributevalue"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="b_dtypespecification" domainObjectName="DtypeSpecification"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="d_device" domainObjectName="Device"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="d_deviceworktrace" domainObjectName="DeviceWorktrace"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="f_bill" domainObjectName="Bill"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="f_financeaccount" domainObjectName="FinanceAccount"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="f_receivableaccount" domainObjectName="ReceivableAccount"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="f_receivableaccountadjust" domainObjectName="ReceivableAccountAdjust"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="f_receivedaccount" domainObjectName="ReceivedAccount"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="f_receivedaccountadjust" domainObjectName="ReceivedAccountAdjust"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="f_statementaccount" domainObjectName="StatementAccount"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="f_statementdevice" domainObjectName="StatementDevice"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="p_project" domainObjectName="Project"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="sys_datamapping" domainObjectName="Datamapping"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="sys_district" domainObjectName="District"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="sys_operatelog" domainObjectName="OperateLog"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="sys_permission" domainObjectName="Permission"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="sys_role" domainObjectName="Role"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="sys_rolepermissions" domainObjectName="RolePermissions"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="sys_useraccount" domainObjectName="UserAccount"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="sys_userpermissions" domainObjectName="UserPermissions"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="sys_userroles" domainObjectName="UserRoles"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="t_contractorder" domainObjectName="ContractOrder"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="t_contractdevicemodel" domainObjectName="ContractDeviceModel"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="t_deliverycar" domainObjectName="DeliveryCar"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="t_deliverydevice" domainObjectName="DeliveryDevice"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="t_deliveryorder" domainObjectName="DeliveryOrder"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="t_deviceinmakesureorder" domainObjectName="DeviceInMakesureOrder"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="t_deviceoutmakesureorder" domainObjectName="DeviceOutMakesureOrder"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="t_quotation" domainObjectName="Quotation"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="t_quotationdevice" domainObjectName="QuotationDevice"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="t_repairsorder" domainObjectName="RepairsOrder"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="t_stoporder" domainObjectName="StopOrder"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="u_company" domainObjectName="Company"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="u_customer" domainObjectName="Customer"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="u_bankaccount" domainObjectName="BankAccount"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+		<table tableName="d_companydevicemodel" domainObjectName="CompanyDeviceModel"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
+	
+		-->
+	</context>
+</generatorConfiguration>

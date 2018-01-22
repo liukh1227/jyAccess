@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.RoleMapper">
+	<resultMap id="BaseResultMap" type="com.jy.entity.po.Role">
+		<id column="role_Id" jdbcType="INTEGER" property="role_Id" />
+		<result column="roleName" jdbcType="VARCHAR" property="roleName" />
+		<result column="scopes" jdbcType="VARCHAR" property="scopes" />
+		<result column="roleType" jdbcType="VARCHAR" property="roleType" />
+	</resultMap>
+	<resultMap type="com.jy.entity.vo.RoleVo" id="RoleVoResultMap"
+		extends="BaseResultMap">
+		<result column="amount" jdbcType="INTEGER" property="amount" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		role_Id, roleName, scopes, roleType
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_role
+		where role_Id = #{role_Id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		sys_role
+		where role_Id = #{role_Id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.jy.entity.po.Role">
+		insert into sys_role (role_Id,
+		roleName, scopes,
+		roleType)
+		values (#{role_Id,jdbcType=INTEGER},
+		#{roleName,jdbcType=VARCHAR},
+		#{scopes,jdbcType=VARCHAR},
+		#{roleType,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.jy.entity.po.Role"
+		keyProperty="role_Id">
+		<selectKey keyProperty="role_Id" resultType="java.lang.Integer"
+			order="AFTER">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into sys_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleName != null">
+				roleName,
+			</if>
+			<if test="scopes != null">
+				scopes,
+			</if>
+			<if test="roleType != null">
+				roleType,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="role_Id != null">
+				#{role_Id,jdbcType=INTEGER},
+			</if>
+			<if test="roleName != null">
+				#{roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="scopes != null">
+				#{scopes,jdbcType=VARCHAR},
+			</if>
+			<if test="roleType != null">
+				#{roleType,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.Role">
+		update sys_role
+		<set>
+			<if test="roleName != null">
+				roleName = #{roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="scopes != null">
+				scopes = #{scopes,jdbcType=VARCHAR},
+			</if>
+			<if test="roleType != null">
+				roleType = #{roleType,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where role_Id = #{role_Id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.jy.entity.po.Role">
+		update sys_role
+		set roleName = #{roleName,jdbcType=VARCHAR},
+		scopes =
+		#{scopes,jdbcType=VARCHAR},
+		roleType = #{roleType,jdbcType=VARCHAR}
+		where role_Id = #{role_Id,jdbcType=INTEGER}
+	</update>
+
+	<select id="getRolePageList" parameterType="com.jy.entity.form.RoleQueryForm"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_role
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="roleName!=null">
+				AND roleName like CONCAT('%', '${roleName}', '%')
+			</if>
+			<if test="roleType!=null">
+				AND roleType = #{roleType}
+			</if>
+		</trim>
+	</select>
+	<select id="getAllRoleList" parameterType="com.jy.entity.form.RoleQueryForm"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_role
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="roleName!=null">
+				AND roleName like CONCAT('%', '${roleName}', '%')
+			</if>
+			<if test="roleType!=null">
+				AND roleType = #{roleType}
+			</if>
+		</trim>
+	</select>
+
+	<select id="getRoleConfigPageList" parameterType="com.jy.entity.form.RoleQueryForm"
+		resultMap="RoleVoResultMap">
+		select role_Id,roleName,
+		(select count(*) from sys_role countRole
+		LEFT JOIN sys_userroles userroles on
+		countRole.role_Id = userroles.roleId
+		LEFT JOIN sys_useraccount useraccount on userroles.userAccountId=
+		useraccount.userAccount_Id
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="companyId!=null">
+				AND useraccount.companyId = #{companyId}
+				AND
+				countRole.role_Id= role.role_Id
+			</if>
+		</trim>
+		) as amount
+		from sys_role role
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="roleName!=null">
+				AND role.roleName like CONCAT('%', '${roleName}', '%')
+			</if>
+			<if test="roleType!=null">
+				AND role.roleType = #{roleType}
+			</if>
+		</trim>
+	</select>
+	<select id="getAllRoleConfigList" parameterType="com.jy.entity.form.RoleQueryForm"
+		resultMap="RoleVoResultMap">
+			select role_Id,roleName,
+		(select count(*) from sys_role countRole
+		LEFT JOIN sys_userroles userroles on
+		countRole.role_Id = userroles.roleId
+		LEFT JOIN sys_useraccount useraccount on userroles.userAccountId=
+		useraccount.userAccount_Id
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="companyId!=null">
+				AND useraccount.companyId = #{companyId}
+				AND
+				countRole.role_Id= role.role_Id
+			</if>
+		</trim>
+		) as amount
+		from sys_role role
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="roleName!=null">
+				AND role.roleName like CONCAT('%', '${roleName}', '%')
+			</if>
+			<if test="roleType!=null">
+				AND role.roleType = #{roleType}
+			</if>
+		</trim>
+	</select>
+</mapper>

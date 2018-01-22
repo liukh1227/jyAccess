@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.ChangeContractDeviceOrderMapper">
+	<resultMap id="BaseResultMap" type="com.jy.entity.po.ChangeContractDeviceOrder">
+		<id column="changeOrder_Id" jdbcType="VARCHAR" property="changeOrder_Id" />
+		<result column="contractDeviceId" jdbcType="VARCHAR" property="contractDeviceId" />
+		<result column="contractOrderId" jdbcType="VARCHAR" property="contractOrderId" />
+		<result column="dInMakeSureId" jdbcType="VARCHAR" property="dInMakeSureId" />
+		<result column="quantity" jdbcType="INTEGER" property="quantity" />
+		<result column="billingType" jdbcType="VARCHAR" property="billingType" />
+		<result column="leaseTerm" jdbcType="VARCHAR" property="leaseTerm" />
+		<result column="factBillingType" jdbcType="VARCHAR" property="factBillingType" />
+		<result column="factLeaseTerm" jdbcType="VARCHAR" property="factLeaseTerm" />
+		<result column="planStartTime" jdbcType="TIMESTAMP" property="planStartTime" />
+		<result column="factStartTime" jdbcType="TIMESTAMP" property="factStartTime" />
+		<result column="planEndTime" jdbcType="TIMESTAMP" property="planEndTime" />
+		<result column="factEndTime" jdbcType="TIMESTAMP" property="factEndTime" />
+		<result column="changeType" jdbcType="VARCHAR" property="changeType" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+	</resultMap>
+	<resultMap id="ChangeContractDeviceOrderVoResultMap" type="com.jy.entity.vo.ChangeContractDeviceOrderVo"
+		extends="BaseResultMap">
+		<result column="contractOrderNum" jdbcType="VARCHAR" property="contractOrderNum" />
+		<result column="creatorUserName" jdbcType="VARCHAR" property="creatorUserName" />
+		<result column="typeName" jdbcType="VARCHAR" property="typeName" />
+		<result column="modelName" jdbcType="VARCHAR" property="modelName" />
+		<result column="deviceNum" jdbcType="VARCHAR" property="deviceNum" />
+		<result column="sequenceNum" jdbcType="VARCHAR" property="sequenceNum" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		changeOrder_Id, contractDeviceId, contractOrderId, dInMakeSureId, quantity,
+		billingType, leaseTerm, factBillingType, factLeaseTerm, planStartTime,
+		factStartTime,
+		planEndTime, factEndTime, changeType, status,creator,createTime,remark
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="ChangeContractDeviceOrderVoResultMap">
+		select
+	    changeOrder.*,contractorder.contractOrderNum as contractOrderNum,useraccount.userName as creatorUserName,dtype.typeName as typeName,dmodel.modelName as modelName,
+	    device.deviceNum as deviceNum,device.sequenceNum as sequenceNum
+       from t_changecontractdeviceorder changeOrder
+       LEFT JOIN t_contractorder  contractorder on contractorder.contractOrder_Id = changeOrder.contractOrderId
+       LEFT JOIN sys_useraccount useraccount on changeOrder.creator = useraccount.userAccount_Id
+       LEFT JOIN d_device device on device.device_Id = changeOrder.contractDeviceId
+       LEFT JOIN b_devicemodel dmodel on dmodel.deviceModel_Id = device.deviceModelId
+       LEFT JOIN b_devicetype dtype on dtype.deviceType_Id = dmodel.deviceTypeId
+		where changeOrder.changeOrder_Id = #{changeOrder_Id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_changecontractdeviceorder
+		where changeOrder_Id = #{changeOrder_Id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.jy.entity.po.ChangeContractDeviceOrder">
+		insert into t_changecontractdeviceorder (changeOrder_Id, contractDeviceId,
+		contractOrderId, dInMakeSureId, quantity,
+		billingType, leaseTerm, factBillingType,
+		factLeaseTerm, planStartTime, factStartTime,
+		planEndTime, factEndTime, changeType,
+		status,creator,createTime,remark)
+		values (#{changeOrder_Id,jdbcType=VARCHAR},
+		#{contractDeviceId,jdbcType=VARCHAR},
+		#{contractOrderId,jdbcType=VARCHAR},
+		#{dInMakeSureId,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER},
+		#{billingType,jdbcType=VARCHAR}, #{leaseTerm,jdbcType=VARCHAR},
+		#{factBillingType,jdbcType=VARCHAR},
+		#{factLeaseTerm,jdbcType=VARCHAR},
+		#{planStartTime,jdbcType=TIMESTAMP},
+		#{factStartTime,jdbcType=TIMESTAMP},
+		#{planEndTime,jdbcType=TIMESTAMP}, #{factEndTime,jdbcType=TIMESTAMP},
+		#{changeType,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},
+		#{creator,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{remark,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.jy.entity.po.ChangeContractDeviceOrder"
+		keyProperty="changeOrder_Id">
+		<selectKey keyProperty="changeOrder_Id" resultType="String"
+			order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into t_changecontractdeviceorder
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="changeOrder_Id != null">
+				changeOrder_Id,
+			</if>
+			<if test="contractDeviceId != null">
+				contractDeviceId,
+			</if>
+			<if test="contractOrderId != null">
+				contractOrderId,
+			</if>
+			<if test="dInMakeSureId != null">
+				dInMakeSureId,
+			</if>
+			<if test="quantity != null">
+				quantity,
+			</if>
+			<if test="billingType != null">
+				billingType,
+			</if>
+			<if test="leaseTerm != null">
+				leaseTerm,
+			</if>
+			<if test="factBillingType != null">
+				factBillingType,
+			</if>
+			<if test="factLeaseTerm != null">
+				factLeaseTerm,
+			</if>
+			<if test="planStartTime != null">
+				planStartTime,
+			</if>
+			<if test="factStartTime != null">
+				factStartTime,
+			</if>
+			<if test="planEndTime != null">
+				planEndTime,
+			</if>
+			<if test="factEndTime != null">
+				factEndTime,
+			</if>
+			<if test="changeType != null">
+				changeType,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="createTime != null">
+				createTime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="changeOrder_Id != null">
+				#{changeOrder_Id,jdbcType=VARCHAR},
+			</if>
+			<if test="contractDeviceId != null">
+				#{contractDeviceId,jdbcType=VARCHAR},
+			</if>
+			<if test="contractOrderId != null">
+				#{contractOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="dInMakeSureId != null">
+				#{dInMakeSureId,jdbcType=VARCHAR},
+			</if>
+			<if test="quantity != null">
+				#{quantity,jdbcType=INTEGER},
+			</if>
+			<if test="billingType != null">
+				#{billingType,jdbcType=VARCHAR},
+			</if>
+			<if test="leaseTerm != null">
+				#{leaseTerm,jdbcType=VARCHAR},
+			</if>
+			<if test="factBillingType != null">
+				#{factBillingType,jdbcType=VARCHAR},
+			</if>
+			<if test="factLeaseTerm != null">
+				#{factLeaseTerm,jdbcType=VARCHAR},
+			</if>
+			<if test="planStartTime != null">
+				#{planStartTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="factStartTime != null">
+				#{factStartTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="planEndTime != null">
+				#{planEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="factEndTime != null">
+				#{factEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="changeType != null">
+				#{changeType,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.ChangeContractDeviceOrder">
+		update t_changecontractdeviceorder
+		<set>
+			<if test="contractDeviceId != null">
+				contractDeviceId = #{contractDeviceId,jdbcType=VARCHAR},
+			</if>
+			<if test="contractOrderId != null">
+				contractOrderId = #{contractOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="dInMakeSureId != null">
+				dInMakeSureId = #{dInMakeSureId,jdbcType=VARCHAR},
+			</if>
+			<if test="quantity != null">
+				quantity = #{quantity,jdbcType=INTEGER},
+			</if>
+			<if test="billingType != null">
+				billingType = #{billingType,jdbcType=VARCHAR},
+			</if>
+			<if test="leaseTerm != null">
+				leaseTerm = #{leaseTerm,jdbcType=VARCHAR},
+			</if>
+			<if test="factBillingType != null">
+				factBillingType = #{factBillingType,jdbcType=VARCHAR},
+			</if>
+			<if test="factLeaseTerm != null">
+				factLeaseTerm = #{factLeaseTerm,jdbcType=VARCHAR},
+			</if>
+			<if test="planStartTime != null">
+				planStartTime = #{planStartTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="factStartTime != null">
+				factStartTime = #{factStartTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="planEndTime != null">
+				planEndTime = #{planEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="factEndTime != null">
+				factEndTime = #{factEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="changeType != null">
+				changeType = #{changeType,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				createTime = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where changeOrder_Id = #{changeOrder_Id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.jy.entity.po.ChangeContractDeviceOrder">
+		update t_changecontractdeviceorder
+		set contractDeviceId = #{contractDeviceId,jdbcType=VARCHAR},
+		contractOrderId = #{contractOrderId,jdbcType=VARCHAR},
+		dInMakeSureId = #{dInMakeSureId,jdbcType=VARCHAR},
+		quantity = #{quantity,jdbcType=INTEGER},
+		billingType = #{billingType,jdbcType=VARCHAR},
+		leaseTerm = #{leaseTerm,jdbcType=VARCHAR},
+		factBillingType = #{factBillingType,jdbcType=VARCHAR},
+		factLeaseTerm = #{factLeaseTerm,jdbcType=VARCHAR},
+		planStartTime = #{planStartTime,jdbcType=TIMESTAMP},
+		factStartTime = #{factStartTime,jdbcType=TIMESTAMP},
+		planEndTime = #{planEndTime,jdbcType=TIMESTAMP},
+		factEndTime = #{factEndTime,jdbcType=TIMESTAMP},
+		changeType = #{changeType,jdbcType=VARCHAR},
+		status = #{status,jdbcType=VARCHAR},
+		creator = #{creator,jdbcType=VARCHAR},
+		createTime = #{createTime,jdbcType=TIMESTAMP},
+		remark = #{remark,jdbcType=VARCHAR}
+		where changeOrder_Id = #{changeOrder_Id,jdbcType=VARCHAR}
+	</update>
+	<select id="getChangeContractDeviceOrderPageList"
+		parameterType="com.jy.entity.form.ChangeContractDeviceOrderQueryForm"
+		resultMap="ChangeContractDeviceOrderVoResultMap">
+		select
+	    changeOrder.*,useraccount.userName as creatorUserName,dtype.typeName as typeName,dmodel.modelName as modelName,
+	    device.deviceNum as deviceNum,device.sequenceNum as sequenceNum
+       from t_changecontractdeviceorder changeOrder
+       LEFT JOIN sys_useraccount useraccount on changeOrder.creator = useraccount.userAccount_Id
+       LEFT JOIN d_device device on device.device_Id = changeOrder.contractDeviceId
+       LEFT JOIN b_devicemodel dmodel on dmodel.deviceModel_Id = device.deviceModelId
+       LEFT JOIN b_devicetype dtype on dtype.deviceType_Id = dmodel.deviceTypeId
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="contractDeviceId!=null">
+				AND changeOrder.contractDeviceId = #{contractDeviceId}
+			</if>
+			<if test="contractOrderId!=null">
+				AND changeOrder.contractOrderId = #{contractOrderId}
+			</if>
+			<if test="dInMakeSureId!=null">
+				AND changeOrder.dInMakeSureId = #{dInMakeSureId}
+			</if>
+			<if test="changeType!=null">
+				AND changeOrder.changeType = #{changeType}
+			</if>
+			<if test="status!=null">
+				AND changeOrder.status = #{status}
+			</if>
+			<if test="creator!=null">
+				AND changeOrder.creator = #{creator}
+			</if>
+		</trim>
+	</select>
+
+	<select id="getAllChangeContractDeviceOrderList"
+		parameterType="com.jy.entity.form.ChangeContractDeviceOrderQueryForm"
+		resultMap="ChangeContractDeviceOrderVoResultMap">
+			select
+	    changeOrder.*,useraccount.userName as creatorUserName,dtype.typeName as typeName,dmodel.modelName as modelName,
+	    device.deviceNum as deviceNum,device.sequenceNum as sequenceNum
+       from t_changecontractdeviceorder changeOrder
+       LEFT JOIN sys_useraccount useraccount on changeOrder.creator = useraccount.userAccount_Id
+       LEFT JOIN d_device device on device.device_Id = changeOrder.contractDeviceId
+       LEFT JOIN b_devicemodel dmodel on dmodel.deviceModel_Id = device.deviceModelId
+       LEFT JOIN b_devicetype dtype on dtype.deviceType_Id = dmodel.deviceTypeId
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="contractDeviceId!=null">
+				AND changeOrder.contractDeviceId = #{contractDeviceId}
+			</if>
+			<if test="contractOrderId!=null">
+				AND changeOrder.contractOrderId = #{contractOrderId}
+			</if>
+			<if test="dInMakeSureId!=null">
+				AND changeOrder.dInMakeSureId = #{dInMakeSureId}
+			</if>
+			<if test="changeType!=null">
+				AND changeOrder.changeType = #{changeType}
+			</if>
+			<if test="status!=null">
+				AND changeOrder.status = #{status}
+			</if>
+			<if test="creator!=null">
+				AND changeOrder.creator = #{creator}
+			</if>
+		</trim>
+	</select>
+</mapper>

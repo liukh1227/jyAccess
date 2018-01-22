@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.ProjectMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.Project">
+    <id column="project_Id" jdbcType="VARCHAR" property="project_Id" />
+    <result column="theme" jdbcType="VARCHAR" property="theme" />
+    <result column="projectName" jdbcType="VARCHAR" property="projectName" />
+    <result column="workSite" jdbcType="VARCHAR" property="workSite" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jy.entity.po.Project">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    project_Id, theme, projectName, workSite, creator, createTime, status
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from p_project
+    where project_Id = #{project_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from p_project
+    where project_Id = #{project_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.Project">
+    insert into p_project (project_Id, theme, projectName, 
+      workSite, creator, createTime, 
+      status, content)
+    values (#{project_Id,jdbcType=VARCHAR}, #{theme,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, 
+      #{workSite,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.Project"  keyProperty="project_Id">
+		<selectKey keyProperty="project_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into p_project
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="project_Id != null">
+        project_Id,
+      </if>
+      <if test="theme != null">
+        theme,
+      </if>
+      <if test="projectName != null">
+        projectName,
+      </if>
+      <if test="workSite != null">
+        workSite,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="project_Id != null">
+        #{project_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="theme != null">
+        #{theme,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="workSite != null">
+        #{workSite,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.Project">
+    update p_project
+    <set>
+      <if test="theme != null">
+        theme = #{theme,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        projectName = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="workSite != null">
+        workSite = #{workSite,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where project_Id = #{project_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jy.entity.po.Project">
+    update p_project
+    set theme = #{theme,jdbcType=VARCHAR},
+      projectName = #{projectName,jdbcType=VARCHAR},
+      workSite = #{workSite,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where project_Id = #{project_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.Project">
+    update p_project
+    set theme = #{theme,jdbcType=VARCHAR},
+      projectName = #{projectName,jdbcType=VARCHAR},
+      workSite = #{workSite,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR}
+    where project_Id = #{project_Id,jdbcType=VARCHAR}
+  </update>
+</mapper>

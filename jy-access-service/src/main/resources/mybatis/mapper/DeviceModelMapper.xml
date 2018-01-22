@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.DeviceModelMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.DeviceModel">
+    <id column="deviceModel_Id" jdbcType="VARCHAR" property="deviceModel_Id" />
+    <result column="deviceBrandId" jdbcType="VARCHAR" property="deviceBrandId" />
+    <result column="deviceTypeId" jdbcType="VARCHAR" property="deviceTypeId" />
+    <result column="keyAttributeValueId" jdbcType="VARCHAR" property="keyAttributeValueId" />
+    <result column="modelName" jdbcType="VARCHAR" property="modelName" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modelPicture" jdbcType="VARCHAR" property="modelPicture" />
+    <result column="isDisplay" jdbcType="BIT" property="isDisplay" />
+  </resultMap>
+  <resultMap type="com.jy.entity.vo.DeviceModelVo" id="DModelVoResultMap" extends="BaseResultMap">
+   <result column="typeName" jdbcType="VARCHAR" property="typeName" />
+   <result column="brandName" jdbcType="VARCHAR" property="brandName" />
+   <result column="dTKeyAttributeSpecName" jdbcType="VARCHAR" property="dTKeyAttributeSpecName" />
+   <result column="unit" jdbcType="VARCHAR" property="unit" />
+   <result column="attributeValue" jdbcType="VARCHAR" property="attributeValue" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    deviceModel_Id, deviceBrandId, deviceTypeId, keyAttributeValueId, modelName, creator, 
+    createTime, modelPicture, isDisplay
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="DModelVoResultMap">
+    select dModel.*,dType.typeName as typeName,dBrand.brandName as brandName,dTkas.dTKeyAttributeSpecName as dTKeyAttributeSpecName,dTkas.unit as unit,dTkau.attributeValue as attributeValue
+		from b_devicemodel dModel
+		LEFT JOIN b_devicebrand dBrand on dModel.deviceBrandId = dBrand.deviceBrand_Id 
+        LEFT JOIN b_devicetype dType on dModel.deviceTypeId = dType.deviceType_Id
+        LEFT JOIN b_dtkeyattributevalue dTkau on dTkau.dTKeyAttributeValue_Id = dModel.keyAttributeValueId
+        LEFT JOIN b_dtkeyattributespecification dTkas on dTkas.dTKeyAttributeSpec_Id = dTkau.dTKeyAttributeSpecId 
+    where dModel.deviceModel_Id = #{deviceModel_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from b_devicemodel
+    where deviceModel_Id = #{deviceModel_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.DeviceModel">
+    insert into b_devicemodel (deviceModel_Id, deviceBrandId, deviceTypeId, 
+      keyAttributeValueId, modelName, creator, 
+      createTime, modelPicture, isDisplay
+      )
+    values (#{deviceModel_Id,jdbcType=VARCHAR}, #{deviceBrandId,jdbcType=VARCHAR}, #{deviceTypeId,jdbcType=VARCHAR}, 
+      #{keyAttributeValueId,jdbcType=VARCHAR}, #{modelName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modelPicture,jdbcType=VARCHAR}, #{isDisplay,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.DeviceModel" keyProperty="deviceModel_Id">
+		<selectKey keyProperty="deviceModel_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into b_devicemodel
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deviceModel_Id != null">
+        deviceModel_Id,
+      </if>
+      <if test="deviceBrandId != null">
+        deviceBrandId,
+      </if>
+      <if test="deviceTypeId != null">
+        deviceTypeId,
+      </if>
+      <if test="keyAttributeValueId != null">
+        keyAttributeValueId,
+      </if>
+      <if test="modelName != null">
+        modelName,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="modelPicture != null">
+        modelPicture,
+      </if>
+      <if test="isDisplay != null">
+        isDisplay,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deviceModel_Id != null">
+        #{deviceModel_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceBrandId != null">
+        #{deviceBrandId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceTypeId != null">
+        #{deviceTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="keyAttributeValueId != null">
+        #{keyAttributeValueId,jdbcType=VARCHAR},
+      </if>
+      <if test="modelName != null">
+        #{modelName,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modelPicture != null">
+        #{modelPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="isDisplay != null">
+        #{isDisplay,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.DeviceModel">
+    update b_devicemodel
+    <set>
+      <if test="deviceBrandId != null">
+        deviceBrandId = #{deviceBrandId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceTypeId != null">
+        deviceTypeId = #{deviceTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="keyAttributeValueId != null">
+        keyAttributeValueId = #{keyAttributeValueId,jdbcType=VARCHAR},
+      </if>
+      <if test="modelName != null">
+        modelName = #{modelName,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modelPicture != null">
+        modelPicture = #{modelPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="isDisplay != null">
+        isDisplay = #{isDisplay,jdbcType=BIT},
+      </if>
+    </set>
+    where deviceModel_Id = #{deviceModel_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.DeviceModel">
+    update b_devicemodel
+    set deviceBrandId = #{deviceBrandId,jdbcType=VARCHAR},
+      deviceTypeId = #{deviceTypeId,jdbcType=VARCHAR},
+      keyAttributeValueId = #{keyAttributeValueId,jdbcType=VARCHAR},
+      modelName = #{modelName,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      modelPicture = #{modelPicture,jdbcType=VARCHAR},
+      isDisplay = #{isDisplay,jdbcType=BIT}
+    where deviceModel_Id = #{deviceModel_Id,jdbcType=VARCHAR}
+  </update>
+   <select id="getDeviceModelPageList" parameterType="com.jy.entity.form.DeviceModelQueryForm"
+		resultMap="DModelVoResultMap">
+	    select dModel.*,dType.typeName as typeName,dBrand.brandName as brandName,dTkas.dTKeyAttributeSpecName as dTKeyAttributeSpecName,dTkas.unit as unit,dTkau.attributeValue as attributeValue
+		from b_devicemodel dModel
+		LEFT JOIN b_devicebrand dBrand on dModel.deviceBrandId = dBrand.deviceBrand_Id 
+        LEFT JOIN b_devicetype dType on dModel.deviceTypeId = dType.deviceType_Id
+        LEFT JOIN b_dtkeyattributevalue dTkau on dTkau.dTKeyAttributeValue_Id = dModel.keyAttributeValueId
+        LEFT JOIN b_dtkeyattributespecification dTkas on dTkas.dTKeyAttributeSpec_Id = dTkau.dTKeyAttributeSpecId 
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="modelName!=null">
+				AND dModel.modelName like CONCAT('%', '${modelName}', '%')
+			</if>
+			<if test="deviceBrandId!=null">
+				AND dModel.deviceBrandId = #{deviceBrandId}
+			</if>
+			<if test="deviceTypeId!=null">
+				AND dModel.deviceTypeId = #{deviceTypeId}
+			</if>
+			<if test="deviceModeld!=null">
+				AND dModel.deviceModel_Id = #{deviceModeld}
+			</if>
+			<if test="isDisplay!=null">
+				AND dModel.isDisplay = #{isDisplay}
+			</if>
+		</trim>
+	</select>
+	<select id="getAllDeviceModelList" parameterType="com.jy.entity.form.DeviceModelQueryForm"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from b_devicemodel
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+		<if test="modelName!=null">
+				AND modelName like CONCAT('%', '${modelName}', '%')
+			</if>
+		<if test="deviceBrandId!=null">
+				AND deviceBrandId = #{deviceBrandId}
+			</if>
+			<if test="deviceTypeId!=null">
+				AND deviceTypeId = #{deviceTypeId}
+			</if>
+			<if test="isDisplay!=null">
+				AND isDisplay = #{isDisplay}
+			</if>
+		</trim>
+	</select>
+</mapper>

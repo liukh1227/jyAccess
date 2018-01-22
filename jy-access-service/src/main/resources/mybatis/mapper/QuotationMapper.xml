@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.QuotationMapper">
+	<resultMap id="BaseResultMap" type="com.jy.entity.po.Quotation">
+		<id column="quotation_Id" jdbcType="VARCHAR" property="quotation_Id" />
+		<result column="quotationNum" jdbcType="VARCHAR" property="quotationNum" />
+		<result column="busFreeItemId" jdbcType="VARCHAR" property="busFreeItemId" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="salesMan" jdbcType="VARCHAR" property="salesMan" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="lessorId" jdbcType="VARCHAR" property="lessorId" />
+		<result column="lesLinkman" jdbcType="VARCHAR" property="lesLinkman" />
+		<result column="lesTelphone" jdbcType="VARCHAR" property="lesTelphone" />
+		<result column="lesEmail" jdbcType="VARCHAR" property="lesEmail" />
+		<result column="customerId" jdbcType="VARCHAR" property="customerId" />
+		<result column="includeInvoice" jdbcType="BIT" property="includeInvoice" />
+		<result column="includeShippingFee" jdbcType="BIT"
+			property="includeShippingFee" />
+		<result column="shippingFee" jdbcType="DECIMAL" property="shippingFee" />
+		<result column="includeJiShou" jdbcType="BIT" property="includeJiShou" />
+		<result column="includeFue" jdbcType="BIT" property="includeFue" />
+		<result column="includeInsurance" jdbcType="BIT" property="includeInsurance" />
+		<result column="otherExpense" jdbcType="DECIMAL" property="otherExpense" />
+		<result column="otherExpenseComment" jdbcType="VARCHAR"
+			property="otherExpenseComment" />
+		<result column="payMethod" jdbcType="VARCHAR" property="payMethod" />
+		<result column="prepayFee" jdbcType="DECIMAL" property="prepayFee" />
+	</resultMap>
+	<resultMap id="QuotationVoResultMap" type="com.jy.entity.vo.QuotationVo"
+		extends="BaseResultMap">
+		<result column="customerName" jdbcType="VARCHAR" property="customerName" />
+		<result column="cusAddress" jdbcType="VARCHAR" property="cusAddress" />
+		<result column="cusLinkman" jdbcType="VARCHAR" property="cusLinkman" />
+		<result column="cusTelephone" jdbcType="VARCHAR" property="cusTelephone" />
+		<result column="cusEmail" jdbcType="VARCHAR" property="cusEmail" />
+		<result column="companyName" jdbcType="VARCHAR" property="companyName" />
+		<result column="comAddress" jdbcType="VARCHAR" property="comAddress" />
+		<result column="salesManUserName" jdbcType="VARCHAR" property="salesManUserName" />
+		<result column="creatorUserName" jdbcType="VARCHAR" property="creatorUserName" />
+	</resultMap>
+	<resultMap id="QuotationBoResultMap" type="com.jy.entity.bo.QuotationBo"
+		extends="QuotationVoResultMap">
+		<collection property="quotationDevices" column="quotation_Id"
+			select="selectQuotationDevices">
+			<id column="quodevice_Id" jdbcType="VARCHAR" property="quodevice_Id" />
+			<result column="quotationId" jdbcType="VARCHAR" property="quotationId" />
+			<result column="deviceModelId" jdbcType="VARCHAR" property="deviceModelId" />
+			<result column="quantity" jdbcType="INTEGER" property="quantity" />
+			<result column="rentPerDay" jdbcType="DECIMAL" property="rentPerDay" />
+			<result column="rentPerWeek" jdbcType="DECIMAL" property="rentPerWeek" />
+			<result column="rentPerMonth" jdbcType="DECIMAL" property="rentPerMonth" />
+			<result column="modelName" jdbcType="VARCHAR" property="modelName" />
+			<result column="typeName" jdbcType="VARCHAR" property="typeName" />
+			<result column="attributeValue" jdbcType="VARCHAR" property="attributeValue" />
+			<result column="dTKeyAttributeSpecName" jdbcType="VARCHAR"
+				property="dTKeyAttributeSpecName" />
+			<result column="unit" jdbcType="VARCHAR" property="unit" />
+		</collection>
+	</resultMap>
+	<parameterMap type="com.jy.entity.po.Quotation" id="QuotationParameterMap">
+		<parameter property="quotation_Id" resultMap="BaseResultMap" />
+	</parameterMap>
+	<sql id="Base_Column_List">
+		quotation_Id,quotationNum, busFreeItemId, remark, creator, salesMan, createTime, status,
+		lessorId, lesLinkman,lesTelphone,
+		lesEmail, customerId, includeInvoice, includeShippingFee, shippingFee,
+		includeJiShou, includeFue,
+		includeInsurance, otherExpense, otherExpenseComment, payMethod, prepayFee
+	</sql>
+	<select id="selectQuotationDevices" resultType="com.jy.entity.vo.QuotationDeviceVo">
+		select qDevice.* ,
+		dModel.modelName as modelName,dType.typeName as typeName,dtkav.attributeValue as
+		attributeValue,dtkas.dTKeyAttributeSpecName as
+		dTKeyAttributeSpecName,dtkas.unit as unit
+		from t_quotationdevice qDevice
+		LEFT JOIN b_devicemodel dModel on qDevice.deviceModelId =
+		dModel.deviceModel_Id
+		LEFT JOIN b_devicetype dType on dModel.deviceTypeId = dType.deviceType_Id
+		LEFT JOIN b_dtkeyattributevalue dtkav on dtkav.dTKeyAttributeValue_Id
+		= dModel.keyAttributeValueId
+		LEFT JOIN b_dtkeyattributespecification dtkas on
+		dtkas.dTKeyAttributeSpec_Id = dtkav.dTKeyAttributeSpecId
+		where qDevice.quotationId =#{quotation_Id}
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="QuotationVoResultMap">
+		select quotation.*, customer.customerName as
+		customerName,customer.cusLinkman as cusLinkman,customer.address as
+		cusAddress,customer.telephone as cusTelephone,
+		customer.email as cusEmail,company.companyName as companyName,company.address as
+		comAddress,salesUser.userName as salesManUserName,creatorUser.userName
+		as creatorUserName
+		from t_quotation quotation
+		LEFT JOIN u_customer customer on quotation.customerId =
+		customer.customer_Id
+		LEFT JOIN u_company company on quotation.lessorId = company.company_Id
+		LEFT JOIN sys_useraccount creatorUser on quotation.creator =
+		creatorUser.userAccount_Id
+		LEFT JOIN sys_useraccount salesUser on quotation.salesMan =
+		salesUser.userAccount_Id
+		where quotation.quotation_Id = #{quotation_Id,jdbcType=VARCHAR}
+	</select>
+	<select id="selectQuotationAndDeviceById" parameterMap="QuotationParameterMap"
+		resultMap="QuotationBoResultMap">
+			select quotation.*, customer.customerName as
+		customerName,customer.cusLinkman as cusLinkman,customer.address as
+		cusAddress,customer.telephone as cusTelephone,
+		customer.email as cusEmail,company.companyName as companyName,company.address as
+		comAddress,salesUser.userName as salesManUserName,creatorUser.userName
+		as creatorUserName
+		from t_quotation quotation
+		LEFT JOIN u_customer customer on quotation.customerId =
+		customer.customer_Id
+		LEFT JOIN u_company company on quotation.lessorId = company.company_Id
+		LEFT JOIN sys_useraccount creatorUser on quotation.creator =
+		creatorUser.userAccount_Id
+		LEFT JOIN sys_useraccount salesUser on quotation.salesMan =
+		salesUser.userAccount_Id
+		where quotation.quotation_Id = #{quotation_Id,jdbcType=VARCHAR}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_quotation
+		where quotation_Id = #{quotation_Id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.jy.entity.po.Quotation">
+		insert into t_quotation (quotation_Id,quotationNum, busFreeItemId, remark,creator,
+		salesMan, createTime,
+		status, lessorId, lesLinkman,lesTelphone,lesEmail,customerId,
+		includeInvoice, includeShippingFee, shippingFee,
+		includeJiShou, includeFue, includeInsurance,
+		otherExpense, otherExpenseComment, payMethod,
+		prepayFee)
+		values (#{quotation_Id,jdbcType=VARCHAR}, #{quotationNum,jdbcType=VARCHAR},#{busFreeItemId,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR},
+		#{creator,jdbcType=VARCHAR}, #{salesMan,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+		#{status,jdbcType=VARCHAR}, #{lessorId,jdbcType=VARCHAR},
+		#{lesLinkman,jdbcType=VARCHAR}, #{lesTelphone,jdbcType=VARCHAR},
+		#{lesEmail,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR},
+		#{includeInvoice,jdbcType=BIT}, #{includeShippingFee,jdbcType=BIT},
+		#{shippingFee,jdbcType=DECIMAL},
+		#{includeJiShou,jdbcType=BIT}, #{includeFue,jdbcType=BIT}, #{includeInsurance,jdbcType=BIT},
+		#{otherExpense,jdbcType=DECIMAL},
+		#{otherExpenseComment,jdbcType=VARCHAR},
+		#{payMethod,jdbcType=VARCHAR},
+		#{prepayFee,jdbcType=DECIMAL})
+	</insert>
+	<insert id="insertSelective" parameterType="com.jy.entity.po.Quotation"
+		keyProperty="quotation_Id">
+		<selectKey keyProperty="quotation_Id" resultType="String"
+			order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into t_quotation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="quotation_Id != null">
+				quotation_Id,
+			</if>
+			<if test="quotationNum != null">
+				quotationNum,
+			</if>
+			<if test="busFreeItemId != null">
+				busFreeItemId,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="salesMan != null">
+				salesMan,
+			</if>
+			<if test="createTime != null">
+				createTime,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="lessorId != null">
+				lessorId,
+			</if>
+			<if test="lesLinkman != null">
+				lesLinkman,
+			</if>
+			<if test="lesTelphone != null">
+				lesTelphone,
+			</if>
+			<if test="lesEmail != null">
+				lesEmail,
+			</if>
+			<if test="customerId != null">
+				customerId,
+			</if>
+			<if test="includeInvoice != null">
+				includeInvoice,
+			</if>
+			<if test="includeShippingFee != null">
+				includeShippingFee,
+			</if>
+			<if test="shippingFee != null">
+				shippingFee,
+			</if>
+			<if test="includeJiShou != null">
+				includeJiShou,
+			</if>
+			<if test="includeFue != null">
+				includeFue,
+			</if>
+			<if test="includeInsurance != null">
+				includeInsurance,
+			</if>
+			<if test="otherExpense != null">
+				otherExpense,
+			</if>
+			<if test="otherExpenseComment != null">
+				otherExpenseComment,
+			</if>
+			<if test="payMethod != null">
+				payMethod,
+			</if>
+			<if test="prepayFee != null">
+				prepayFee,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="quotation_Id != null">
+				#{quotation_Id,jdbcType=VARCHAR},
+			</if>
+			<if test="quotationNum != null">
+				#{quotationNum,jdbcType=VARCHAR},
+			</if>
+			<if test="busFreeItemId != null">
+				#{busFreeItemId,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="salesMan != null">
+				#{salesMan,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="lessorId != null">
+				#{lessorId,jdbcType=VARCHAR},
+			</if>
+			<if test="lesLinkman != null">
+				#{lesLinkman,jdbcType=VARCHAR},
+			</if>
+			<if test="lesTelphone != null">
+				#{lesTelphone,jdbcType=VARCHAR},
+			</if>
+			<if test="lesEmail != null">
+				#{lesEmail,jdbcType=VARCHAR},
+			</if>
+			<if test="customerId != null">
+				#{customerId,jdbcType=VARCHAR},
+			</if>
+			<if test="includeInvoice != null">
+				#{includeInvoice,jdbcType=BIT},
+			</if>
+			<if test="includeShippingFee != null">
+				#{includeShippingFee,jdbcType=BIT},
+			</if>
+			<if test="shippingFee != null">
+				#{shippingFee,jdbcType=DECIMAL},
+			</if>
+			<if test="includeJiShou != null">
+				#{includeJiShou,jdbcType=BIT},
+			</if>
+			<if test="includeFue != null">
+				#{includeFue,jdbcType=BIT},
+			</if>
+			<if test="includeInsurance != null">
+				#{includeInsurance,jdbcType=BIT},
+			</if>
+			<if test="otherExpense != null">
+				#{otherExpense,jdbcType=DECIMAL},
+			</if>
+			<if test="otherExpenseComment != null">
+				#{otherExpenseComment,jdbcType=VARCHAR},
+			</if>
+			<if test="payMethod != null">
+				#{payMethod,jdbcType=VARCHAR},
+			</if>
+			<if test="prepayFee != null">
+				#{prepayFee,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.Quotation">
+		update t_quotation
+		<set>
+			<if test="quotationNum != null">
+				quotationNum = #{quotationNum,jdbcType=VARCHAR},
+			</if>
+			<if test="busFreeItemId != null">
+				busFreeItemId = #{busFreeItemId,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="salesMan != null">
+				salesMan = #{salesMan,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				createTime = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="lessorId != null">
+				lessorId = #{lessorId,jdbcType=VARCHAR},
+			</if>
+			<if test="lesLinkman != null">
+				lesLinkman = #{lesLinkman,jdbcType=VARCHAR},
+			</if>
+			<if test="lesTelphone != null">
+				lesTelphone = #{lesTelphone,jdbcType=VARCHAR},
+			</if>
+			<if test="lesEmail != null">
+				lesEmail = #{lesEmail,jdbcType=VARCHAR},
+			</if>
+			<if test="customerId != null">
+				customerId = #{customerId,jdbcType=VARCHAR},
+			</if>
+			<if test="includeInvoice != null">
+				includeInvoice = #{includeInvoice,jdbcType=BIT},
+			</if>
+			<if test="includeShippingFee != null">
+				includeShippingFee = #{includeShippingFee,jdbcType=BIT},
+			</if>
+			<if test="shippingFee != null">
+				shippingFee = #{shippingFee,jdbcType=DECIMAL},
+			</if>
+			<if test="includeJiShou != null">
+				includeJiShou = #{includeJiShou,jdbcType=BIT},
+			</if>
+			<if test="includeFue != null">
+				includeFue = #{includeFue,jdbcType=BIT},
+			</if>
+			<if test="includeInsurance != null">
+				includeInsurance = #{includeInsurance,jdbcType=BIT},
+			</if>
+			<if test="otherExpense != null">
+				otherExpense = #{otherExpense,jdbcType=DECIMAL},
+			</if>
+			<if test="otherExpenseComment != null">
+				otherExpenseComment = #{otherExpenseComment,jdbcType=VARCHAR},
+			</if>
+			<if test="payMethod != null">
+				payMethod = #{payMethod,jdbcType=VARCHAR},
+			</if>
+			<if test="prepayFee != null">
+				prepayFee = #{prepayFee,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where quotation_Id = #{quotation_Id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.jy.entity.po.Quotation">
+		update t_quotation
+		set quotationNum = #{quotationNum,jdbcType=VARCHAR},
+		 busFreeItemId = #{busFreeItemId,jdbcType=VARCHAR},
+		remark = #{remark,jdbcType=VARCHAR},
+		creator = #{creator,jdbcType=VARCHAR},
+		salesMan = #{salesMan,jdbcType=VARCHAR},
+		createTime = #{createTime,jdbcType=TIMESTAMP},
+		status = #{status,jdbcType=VARCHAR},
+		lessorId = #{lessorId,jdbcType=VARCHAR},
+		lesLinkman = #{lesLinkman,jdbcType=VARCHAR},
+		lesTelphone = #{lesTelphone,jdbcType=VARCHAR},
+		lesEmail = #{lesEmail,jdbcType=VARCHAR},
+		customerId = #{customerId,jdbcType=VARCHAR},
+		includeInvoice = #{includeInvoice,jdbcType=BIT},
+		includeShippingFee = #{includeShippingFee,jdbcType=BIT},
+		shippingFee = #{shippingFee,jdbcType=DECIMAL},
+		includeJiShou = #{includeJiShou,jdbcType=BIT},
+		includeFue = #{includeFue,jdbcType=BIT},
+		includeInsurance = #{includeInsurance,jdbcType=BIT},
+		otherExpense = #{otherExpense,jdbcType=DECIMAL},
+		otherExpenseComment = #{otherExpenseComment,jdbcType=VARCHAR},
+		payMethod = #{payMethod,jdbcType=VARCHAR},
+		prepayFee = #{prepayFee,jdbcType=DECIMAL}
+		where quotation_Id = #{quotation_Id,jdbcType=VARCHAR}
+	</update>
+	<select id="getQuotationPageList" parameterType="com.jy.entity.form.QuotationQueryForm"
+		resultMap="QuotationVoResultMap">
+		select quotation.quotation_Id as quotation_Id, quotation.quotationNum as quotationNum,customer.customerName
+		as customerName,customer.cusLinkman as cusLinkman,customer.address as
+		cusAddress,customer.telephone as cusTelephone,
+		customer.email as cusEmail,company.companyName as companyName,company.address as
+		comAddress,salesUser.userName as salesManUserName,creatorUser.userName
+		as creatorUserName
+		from t_quotation quotation
+		LEFT JOIN u_customer customer on quotation.customerId =
+		customer.customer_Id
+		LEFT JOIN u_company company on quotation.lessorId = company.company_Id
+		LEFT JOIN sys_useraccount creatorUser on quotation.creator =
+		creatorUser.userAccount_Id
+		LEFT JOIN sys_useraccount salesUser on quotation.salesMan =
+		salesUser.userAccount_Id
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="creator!=null">
+				AND quotation.creator = #{creator}
+			</if>
+			 <if test="lessorIdArray!=null and lessorIdArray.length>0">
+		        AND quotation.lessorId IN
+		       <foreach collection="lessorIdArray" item="item" index="index"  open="(" close=")" separator=",">
+		          '${item}'
+		        </foreach>
+			</if>
+			<if test="salesMan!=null">
+				AND quotation.salesMan = #{salesMan}
+			</if>
+			<if test="startTime!=null">
+				AND quotation.createTime &gt;= #{startTime}
+			</if>
+			<if test="endTime!=null">
+				AND quotation.createTime &lt;= #{endTime}
+			</if>
+			<if test="quotationId!=null">
+				AND quotation.quotation_Id = #{quotationId}
+			</if>
+			<if test="quotationNum!=null">
+				AND quotation.quotationNum like CONCAT('%','${quotationNum}', '%')
+			</if>
+			<if test="customerName!=null">
+				AND customer.customerName like CONCAT('%',
+				'${customerName}', '%')
+			</if>
+			<if test="status!=null">
+				AND quotation.status = #{status}
+			</if>
+		</trim>
+	</select>
+</mapper>

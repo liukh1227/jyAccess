@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.CompanyDeviceModelMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.CompanyDeviceModel">
+    <id column="companyDeviveModel_Id" jdbcType="VARCHAR" property="companyDeviveModel_Id" />
+    <result column="deviceModelId" jdbcType="VARCHAR" property="deviceModelId" />
+    <result column="companyId" jdbcType="VARCHAR" property="companyId" />
+    <result column="cdmPicture" jdbcType="VARCHAR" property="cdmPicture" />
+    <result column="rentPerDay" jdbcType="DECIMAL" property="rentPerDay" />
+    <result column="rentPerWeek" jdbcType="DECIMAL" property="rentPerWeek" />
+    <result column="rentPerMonth" jdbcType="DECIMAL" property="rentPerMonth" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="orderSeq" jdbcType="INTEGER" property="orderSeq" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  <resultMap id="CDMVoResultMap" type="com.jy.entity.vo.CompanyDeviceModelVo" extends="BaseResultMap">
+   <result column="deviceBrandId" jdbcType="VARCHAR" property="deviceBrandId" />
+   <result column="brandName" jdbcType="VARCHAR" property="brandName" />
+   <result column="deviceTypeId" jdbcType="VARCHAR" property="deviceTypeId" />
+   <result column="typeName" jdbcType="VARCHAR" property="typeName" />
+   <result column="modelName" jdbcType="VARCHAR" property="modelName" />
+   <result column="companyName" jdbcType="VARCHAR" property="companyName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    companyDeviveModel_Id, deviceModelId, companyId, cdmPicture, rentPerDay, rentPerWeek, 
+    rentPerMonth, creator, orderSeq, createTime, status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="CDMVoResultMap">
+    select cdm.* ,company.companyName as companyName,dModel.modelName as modelName,dModel.deviceBrandId as deviceBrandId,dModel.deviceTypeId as deviceTypeId,dBrand.brandName as brandName,dType.typeName as typeName
+    from d_companydevicemodel cdm 
+    LEFT JOIN u_company company on cdm.companyId = company.company_Id
+    LEFT JOIN b_devicemodel dModel on cdm.deviceModelId = dModel.deviceModel_Id
+    LEFT JOIN b_devicetype dType on dModel.deviceTypeId = dType.deviceType_Id
+    LEFT JOIN b_devicebrand dBrand on dModel.deviceBrandId = dBrand.deviceBrand_Id
+    where companyDeviveModel_Id = #{companyDeviveModel_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from d_companydevicemodel
+    where companyDeviveModel_Id = #{companyDeviveModel_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.CompanyDeviceModel">
+    insert into d_companydevicemodel (companyDeviveModel_Id, deviceModelId, 
+      companyId, cdmPicture, rentPerDay, 
+      rentPerWeek, rentPerMonth, creator, 
+      orderSeq, createTime, status
+      )
+    values (#{companyDeviveModel_Id,jdbcType=VARCHAR}, #{deviceModelId,jdbcType=VARCHAR}, 
+      #{companyId,jdbcType=VARCHAR}, #{cdmPicture,jdbcType=VARCHAR}, #{rentPerDay,jdbcType=DECIMAL}, 
+      #{rentPerWeek,jdbcType=DECIMAL}, #{rentPerMonth,jdbcType=DECIMAL}, #{creator,jdbcType=VARCHAR}, 
+      #{orderSeq,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.CompanyDeviceModel" keyProperty="companyDeviveModel_Id">
+		<selectKey keyProperty="companyDeviveModel_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into d_companydevicemodel
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="companyDeviveModel_Id != null">
+        companyDeviveModel_Id,
+      </if>
+      <if test="deviceModelId != null">
+        deviceModelId,
+      </if>
+      <if test="companyId != null">
+        companyId,
+      </if>
+      <if test="cdmPicture != null">
+        cdmPicture,
+      </if>
+      <if test="rentPerDay != null">
+        rentPerDay,
+      </if>
+      <if test="rentPerWeek != null">
+        rentPerWeek,
+      </if>
+      <if test="rentPerMonth != null">
+        rentPerMonth,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="orderSeq != null">
+        orderSeq,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="companyDeviveModel_Id != null">
+        #{companyDeviveModel_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceModelId != null">
+        #{deviceModelId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="cdmPicture != null">
+        #{cdmPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="rentPerDay != null">
+        #{rentPerDay,jdbcType=DECIMAL},
+      </if>
+      <if test="rentPerWeek != null">
+        #{rentPerWeek,jdbcType=DECIMAL},
+      </if>
+      <if test="rentPerMonth != null">
+        #{rentPerMonth,jdbcType=DECIMAL},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSeq != null">
+        #{orderSeq,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.CompanyDeviceModel">
+    update d_companydevicemodel
+    <set>
+      <if test="deviceModelId != null">
+        deviceModelId = #{deviceModelId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        companyId = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="cdmPicture != null">
+        cdmPicture = #{cdmPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="rentPerDay != null">
+        rentPerDay = #{rentPerDay,jdbcType=DECIMAL},
+      </if>
+      <if test="rentPerWeek != null">
+        rentPerWeek = #{rentPerWeek,jdbcType=DECIMAL},
+      </if>
+      <if test="rentPerMonth != null">
+        rentPerMonth = #{rentPerMonth,jdbcType=DECIMAL},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSeq != null">
+        orderSeq = #{orderSeq,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where companyDeviveModel_Id = #{companyDeviveModel_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.CompanyDeviceModel">
+    update d_companydevicemodel
+    set deviceModelId = #{deviceModelId,jdbcType=VARCHAR},
+      companyId = #{companyId,jdbcType=VARCHAR},
+      cdmPicture = #{cdmPicture,jdbcType=VARCHAR},
+      rentPerDay = #{rentPerDay,jdbcType=DECIMAL},
+      rentPerWeek = #{rentPerWeek,jdbcType=DECIMAL},
+      rentPerMonth = #{rentPerMonth,jdbcType=DECIMAL},
+      creator = #{creator,jdbcType=VARCHAR},
+      orderSeq = #{orderSeq,jdbcType=INTEGER},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR}
+    where companyDeviveModel_Id = #{companyDeviveModel_Id,jdbcType=VARCHAR}
+  </update>
+    <select id="getCompanyDeviceModelPageList" parameterType="com.jy.entity.form.CompanyDeviceModelQueryForm"
+			resultMap="CDMVoResultMap">
+	select cdm.* ,company.companyName as companyName,dModel.modelName as modelName,dModel.deviceBrandId as deviceBrandId,dModel.deviceTypeId as deviceTypeId,dBrand.brandName as brandName,dType.typeName as typeName
+    from d_companydevicemodel cdm 
+    LEFT JOIN u_company company on cdm.companyId = company.company_Id
+    LEFT JOIN b_devicemodel dModel on cdm.deviceModelId = dModel.deviceModel_Id
+    LEFT JOIN b_devicetype dType on dModel.deviceTypeId = dType.deviceType_Id
+    LEFT JOIN b_devicebrand dBrand on dModel.deviceBrandId = dBrand.deviceBrand_Id
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="modelName!=null">
+				AND dModel.modelName like CONCAT('%', '${modelName}', '%')
+			</if>
+			<if test="deviceModelId!=null">
+				AND cdm.deviceModelId = #{deviceModelId}
+			</if>
+			 <if test="companyIdArray!=null and companyIdArray.length>0">
+		      AND cdm.companyId IN
+		       <foreach collection="companyIdArray" item="item" index="index"  open="(" close=")" separator=",">
+		          '${item}'
+		        </foreach>
+			</if>
+			<if test="deviceBrandId!=null">
+				AND dBrand.deviceBrand_Id = #{deviceBrandId}
+			</if>
+			<if test="deviceTypeId!=null">
+				AND dType.deviceType_Id = #{deviceTypeId}
+			</if>
+			<if test="status!=null">
+				AND cdm.status = #{status}
+			</if>
+		</trim>
+	</select>
+	<select id="getAllCompanyDeviceModelList" parameterType="com.jy.entity.form.CompanyDeviceModelQueryForm"
+		resultMap="CDMVoResultMap">
+	select cdm.* ,company.companyName as companyName,dModel.modelName as modelName,dModel.deviceBrandId as deviceBrandId,dModel.deviceTypeId as deviceTypeId,dBrand.brandName as brandName,dType.typeName as typeName
+    from d_companydevicemodel cdm 
+    LEFT JOIN u_company company on cdm.companyId = company.company_Id
+    LEFT JOIN b_devicemodel dModel on cdm.deviceModelId = dModel.deviceModel_Id
+    LEFT JOIN b_devicetype dType on dModel.deviceTypeId = dType.deviceType_Id
+    LEFT JOIN b_devicebrand dBrand on dModel.deviceBrandId = dBrand.deviceBrand_Id
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="modelName!=null">
+				AND dModel.modelName like CONCAT('%', '${modelName}', '%')
+			</if>
+			<if test="deviceModelId!=null">
+				AND cdm.deviceModelId = #{deviceModelId}
+			</if>
+			<if test="companyIdArray!=null and companyIdArray.length>0">
+		         AND cdm.companyId IN
+		       <foreach collection="companyIdArray" item="item" index="index"  open="(" close=")" separator=",">
+		          '${item}'
+		        </foreach>
+			</if>
+			<if test="deviceBrandId!=null">
+				AND dBrand.deviceBrand_Id = #{deviceBrandId}
+			</if>
+			<if test="deviceTypeId!=null">
+				AND dType.deviceType_Id = #{deviceTypeId}
+			</if>
+			<if test="status!=null">
+				AND cdm.status = #{status}
+			</if>
+		</trim>
+	</select>
+</mapper>

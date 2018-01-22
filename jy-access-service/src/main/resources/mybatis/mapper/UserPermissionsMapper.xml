@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.UserPermissionsMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.UserPermissions">
+    <id column="userPermissions_Id" jdbcType="VARCHAR" property="userPermissions_Id" />
+    <id column="userAccountId" jdbcType="VARCHAR" property="userAccountId" />
+    <id column="permissionId" jdbcType="INTEGER" property="permissionId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from sys_userpermissions
+    where userPermissions_Id = #{userPermissions_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.UserPermissions">
+    insert into sys_userpermissions (userPermissions_Id,userAccountId, permissionId)
+    values (#{userPermissions_Id,jdbcType=VARCHAR},#{userAccountId,jdbcType=VARCHAR}, #{permissionId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.UserPermissions" keyProperty="userPermissions_Id">
+		<selectKey keyProperty="userPermissions_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into sys_userpermissions
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userPermissions_Id != null">
+        userPermissions_Id,
+      </if>
+      <if test="userAccountId != null">
+        userAccountId,
+      </if>
+      <if test="permissionId != null">
+        permissionId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userPermissions_Id != null">
+        #{userPermissions_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="userAccountId != null">
+        #{userAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionId != null">
+        #{permissionId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

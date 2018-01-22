@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.DeviceWorktraceMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.DeviceWorktrace">
+    <id column="dWorkTrace_Id" jdbcType="VARCHAR" property="dWorkTrace_Id" />
+    <result column="contractOrderId" jdbcType="VARCHAR" property="contractOrderId" />
+    <result column="dInMakeSureId" jdbcType="VARCHAR" property="dInMakeSureId" />
+    <result column="dOutMakeSureId" jdbcType="VARCHAR" property="dOutMakeSureId" />
+    <result column="deviceId" jdbcType="VARCHAR" property="deviceId" />
+    <result column="deviceModelId" jdbcType="VARCHAR" property="deviceModelId" />
+    <result column="modelAvaliableDeviceCount" jdbcType="INTEGER" property="modelAvaliableDeviceCount" />
+    <result column="deviceTypeId" jdbcType="VARCHAR" property="deviceTypeId" />
+    <result column="typeAvaliableDeviceCount" jdbcType="INTEGER" property="typeAvaliableDeviceCount" />
+    <result column="companyId" jdbcType="VARCHAR" property="companyId" />
+    <result column="avaliableDeviceCount" jdbcType="INTEGER" property="avaliableDeviceCount" />
+    <result column="workDay" jdbcType="INTEGER" property="workDay" />
+    <result column="inMonth" jdbcType="INTEGER" property="inMonth" />
+    <result column="inYear" jdbcType="INTEGER" property="inYear" />
+    <result column="monthStartDate" jdbcType="TIMESTAMP" property="monthStartDate" />
+    <result column="monthEndDate" jdbcType="TIMESTAMP" property="monthEndDate" />
+    <result column="dEnterTime" jdbcType="TIMESTAMP" property="dEnterTime" />
+    <result column="dExitTime" jdbcType="TIMESTAMP" property="dExitTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    dWorkTrace_Id, contractOrderId,dInMakeSureId, dOutMakeSureId,deviceId,deviceModelId,modelAvaliableDeviceCount,deviceTypeId,typeAvaliableDeviceCount,companyId, avaliableDeviceCount, workDay, inMonth, 
+    inYear,monthStartDate, monthEndDate,dEnterTime,dExitTime, status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from d_deviceworktrace
+    where dWorkTrace_Id = #{dWorkTrace_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from d_deviceworktrace
+    where dWorkTrace_Id = #{dWorkTrace_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.DeviceWorktrace">
+    insert into d_deviceworktrace (dWorkTrace_Id,contractOrderId, dInMakeSureId, dOutMakeSureId, 
+    deviceModelId,modelAvaliableDeviceCount,deviceTypeId,typeAvaliableDeviceCount,companyId,
+      avaliableDeviceCount, workDay, inMonth, inYear,
+      monthStartDate, monthEndDate,dEnterTime ,dExitTime,status
+      )
+    values (#{dWorkTrace_Id,jdbcType=VARCHAR},#{contractOrderId,jdbcType=VARCHAR}, #{dInMakeSureId,jdbcType=VARCHAR}, #{dOutMakeSureId,jdbcType=VARCHAR},
+     #{deviceModelId,jdbcType=VARCHAR}, #{modelAvaliableDeviceCount,jdbcType=INTEGER},  #{deviceTypeId,jdbcType=VARCHAR}, #{typeAvaliableDeviceCount,jdbcType=INTEGER},
+     #{companyId,jdbcType=VARCHAR}, #{avaliableDeviceCount,jdbcType=INTEGER}, #{workDay,jdbcType=INTEGER}, #{inMonth,jdbcType=INTEGER}, #{inYear,jdbcType=INTEGER}, 
+      #{monthStartDate,jdbcType=TIMESTAMP}, #{monthEndDate,jdbcType=TIMESTAMP}, #{monthEndDate,jdbcType=TIMESTAMP}, #{dExitTime,jdbcType=TIMESTAMP},#{status,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.DeviceWorktrace" keyProperty="dWorkTrace_Id">
+		<selectKey keyProperty="dWorkTrace_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into d_deviceworktrace
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dWorkTrace_Id != null">
+        dWorkTrace_Id,
+      </if>
+      <if test="dInMakeSureId != null">
+        dInMakeSureId,
+      </if>
+      <if test="dOutMakeSureId != null">
+        dOutMakeSureId,
+      </if>
+      <if test="contractOrderId != null">
+        contractOrderId,
+      </if>
+      <if test="deviceId != null">
+        deviceId,
+      </if>
+      <if test="deviceModelId != null">
+        deviceModelId,
+      </if>
+      <if test="modelAvaliableDeviceCount != null">
+        modelAvaliableDeviceCount,
+      </if>
+      <if test="deviceTypeId != null">
+        deviceTypeId,
+      </if>
+      <if test="typeAvaliableDeviceCount != null">
+        typeAvaliableDeviceCount,
+      </if>
+      <if test="companyId != null">
+        companyId,
+      </if>
+      <if test="avaliableDeviceCount != null">
+        avaliableDeviceCount,
+      </if>
+      <if test="workDay != null">
+        workDay,
+      </if>
+      <if test="inMonth != null">
+        inMonth,
+      </if>
+      <if test="inYear != null">
+        inYear,
+      </if>
+      <if test="monthStartDate != null">
+        monthStartDate,
+      </if>
+      <if test="monthEndDate != null">
+        monthEndDate,
+      </if>
+      <if test="dEnterTime != null">
+        dEnterTime,
+      </if>
+      <if test="dExitTime != null">
+        dExitTime,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dWorkTrace_Id != null">
+        #{dWorkTrace_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="contractOrderId != null">
+        #{contractOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="dInMakeSureId != null">
+        #{dInMakeSureId,jdbcType=VARCHAR},
+      </if>
+      <if test="dOutMakeSureId != null">
+        #{dOutMakeSureId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceModelId != null">
+        #{deviceModelId,jdbcType=VARCHAR},
+      </if>
+       <if test="modelAvaliableDeviceCount != null">
+        #{modelAvaliableDeviceCount,jdbcType=INTEGER},
+      </if>
+      <if test="deviceTypeId != null">
+        #{deviceTypeId,jdbcType=VARCHAR},
+      </if>
+       <if test="typeAvaliableDeviceCount != null">
+        #{typeAvaliableDeviceCount,jdbcType=INTEGER},
+      </if>
+        <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="avaliableDeviceCount != null">
+        #{avaliableDeviceCount,jdbcType=INTEGER},
+      </if>
+      <if test="workDay != null">
+        #{workDay,jdbcType=INTEGER},
+      </if>
+      <if test="inMonth != null">
+        #{inMonth,jdbcType=INTEGER},
+      </if>
+      <if test="inYear != null">
+        #{inYear,jdbcType=INTEGER},
+      </if>
+      <if test="monthStartDate != null">
+        #{monthStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="monthEndDate != null">
+        #{monthEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dEnterTime != null">
+        #{dEnterTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dExitTime != null">
+        #{dExitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.DeviceWorktrace">
+    update d_deviceworktrace
+    <set>
+      <if test="dInMakeSureId != null">
+        dInMakeSureId = #{dInMakeSureId,jdbcType=VARCHAR},
+      </if>
+      <if test="contractOrderId != null">
+        contractOrderId = #{contractOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="dOutMakeSureId != null">
+        dOutMakeSureId = #{dOutMakeSureId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        deviceId = #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceModelId != null">
+        deviceId = #{deviceModelId,jdbcType=VARCHAR},
+      </if>
+      <if test="modelAvaliableDeviceCount != null">
+        modelAvaliableDeviceCount = #{modelAvaliableDeviceCount,jdbcType=INTEGER},
+      </if>
+      <if test="deviceTypeId != null">
+        deviceId = #{deviceTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="typeAvaliableDeviceCount != null">
+        typeAvaliableDeviceCount = #{typeAvaliableDeviceCount,jdbcType=INTEGER},
+      </if>
+         <if test="companyId != null">
+        companyId = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="avaliableDeviceCount != null">
+        avaliableDeviceCount = #{avaliableDeviceCount,jdbcType=INTEGER},
+      </if>
+      <if test="workDay != null">
+        workDay = #{workDay,jdbcType=INTEGER},
+      </if>
+      <if test="inMonth != null">
+        inMonth = #{inMonth,jdbcType=INTEGER},
+      </if>
+      <if test="inYear != null">
+        inYear = #{inYear,jdbcType=INTEGER},
+      </if>
+      <if test="monthStartDate != null">
+        monthStartDate = #{monthStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="monthEndDate != null">
+        monthEndDate = #{monthEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dEnterTime != null">
+        dEnterTime = #{dEnterTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dExitTime != null">
+        dExitTime = #{dExitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where dWorkTrace_Id = #{dWorkTrace_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.DeviceWorktrace">
+    update d_deviceworktrace
+    set dInMakeSureId = #{dInMakeSureId,jdbcType=VARCHAR},
+     contractOrderId = #{contractOrderId,jdbcType=VARCHAR},
+      dOutMakeSureId = #{dOutMakeSureId,jdbcType=VARCHAR},
+      deviceId = #{deviceId,jdbcType=VARCHAR},
+     deviceModelId = #{deviceModelId,jdbcType=VARCHAR},
+      modelAvaliableDeviceCount = #{modelAvaliableDeviceCount,jdbcType=INTEGER},
+     deviceTypeId = #{deviceTypeId,jdbcType=VARCHAR},
+      typeAvaliableDeviceCount = #{typeAvaliableDeviceCount,jdbcType=INTEGER},
+         companyId = #{companyId,jdbcType=VARCHAR},
+      avaliableDeviceCount = #{avaliableDeviceCount,jdbcType=INTEGER},
+      workDay = #{workDay,jdbcType=INTEGER},
+      inMonth = #{inMonth,jdbcType=INTEGER},
+      inYear = #{inYear,jdbcType=INTEGER},
+      monthStartDate = #{monthStartDate,jdbcType=TIMESTAMP},
+      monthEndDate = #{monthEndDate,jdbcType=TIMESTAMP},
+      dEnterTime = #{dEnterTime,jdbcType=TIMESTAMP},
+      dExitTime = #{dExitTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR}
+    where dWorkTrace_Id = #{dWorkTrace_Id,jdbcType=VARCHAR}
+  </update>
+</mapper>

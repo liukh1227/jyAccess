@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.DtypeSpecificationMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.DtypeSpecification">
+   <id column="dTSpec_Id" jdbcType="VARCHAR" property="dTSpec_Id" />
+    <id column="deviceTypeId" jdbcType="VARCHAR" property="deviceTypeId" />
+    <id column="dSpecificationId" jdbcType="VARCHAR" property="dSpecificationId" />
+  </resultMap>
+   <sql id="Base_Column_List">
+    dTSpec_Id,deviceTypeId, dSpecificationId
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="com.jy.entity.po.DtypeSpecification">
+    delete from b_dtypespecification
+    where deviceTypeId = #{deviceTypeId,jdbcType=VARCHAR}
+      and dSpecificationId = #{dSpecificationId,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.jy.entity.po.DtypeSpecification">
+    insert into b_dtypespecification (dTSpec_Id,deviceTypeId, dSpecificationId)
+    values (#{dTSpec_Id,jdbcType=VARCHAR},#{deviceTypeId,jdbcType=VARCHAR}, #{dSpecificationId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.DtypeSpecification"
+    keyProperty="dTSpec_Id">
+		<selectKey keyProperty="dTSpec_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into b_dtypespecification
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+     <if test="dTSpec_Id != null">
+        dTSpec_Id,
+      </if>
+      <if test="deviceTypeId != null">
+        deviceTypeId,
+      </if>
+      <if test="dSpecificationId != null">
+        dSpecificationId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dTSpec_Id != null">
+        #{dTSpec_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceTypeId != null">
+        #{deviceTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="dSpecificationId != null">
+        #{dSpecificationId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+   <select id="getDtypeSpecificationPageList" parameterType="com.jy.entity.form.DtypeSpecificationQueryForm"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from b_dtypespecification
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="deviceTypeId!=null">
+				AND deviceTypeId = #{deviceTypeId}
+			</if>
+			<if test="dSpecificationId!=null">
+				AND dSpecificationId = #{dSpecificationId}
+			</if>
+		</trim>
+	</select>
+</mapper>

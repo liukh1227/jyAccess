@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.DatamappingMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.Datamapping">
+    <id column="catalogs" jdbcType="VARCHAR" property="catalogs" />
+    <id column="keyString" jdbcType="VARCHAR" property="keyString" />
+    <result column="valueString" jdbcType="VARCHAR" property="valueString" />
+    <result column="enabled" jdbcType="BIT" property="enabled" />
+    <result column="orderSeq" jdbcType="INTEGER" property="orderSeq" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    catalogs, keyString, valueString, enabled, orderSeq
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.jy.entity.po.DatamappingKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_datamapping
+    where catalogs = #{catalogs,jdbcType=VARCHAR}
+      and keyString = #{keyString,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.jy.entity.po.DatamappingKey">
+    delete from sys_datamapping
+    where catalogs = #{catalogs,jdbcType=VARCHAR}
+      and keyString = #{keyString,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.Datamapping">
+    insert into sys_datamapping (catalogs, keyString, valueString, 
+      enabled, orderSeq)
+    values (#{catalogs,jdbcType=VARCHAR}, #{keyString,jdbcType=VARCHAR}, #{valueString,jdbcType=VARCHAR}, 
+      #{enabled,jdbcType=BIT}, #{orderSeq,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.Datamapping">
+    insert into sys_datamapping
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="catalogs != null">
+        catalogs,
+      </if>
+      <if test="keyString != null">
+        keyString,
+      </if>
+      <if test="valueString != null">
+        valueString,
+      </if>
+      <if test="enabled != null">
+        enabled,
+      </if>
+      <if test="orderSeq != null">
+        orderSeq,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="catalogs != null">
+        #{catalogs,jdbcType=VARCHAR},
+      </if>
+      <if test="keyString != null">
+        #{keyString,jdbcType=VARCHAR},
+      </if>
+      <if test="valueString != null">
+        #{valueString,jdbcType=VARCHAR},
+      </if>
+      <if test="enabled != null">
+        #{enabled,jdbcType=BIT},
+      </if>
+      <if test="orderSeq != null">
+        #{orderSeq,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.Datamapping">
+    update sys_datamapping
+    <set>
+      <if test="valueString != null">
+        valueString = #{valueString,jdbcType=VARCHAR},
+      </if>
+      <if test="enabled != null">
+        enabled = #{enabled,jdbcType=BIT},
+      </if>
+      <if test="orderSeq != null">
+        orderSeq = #{orderSeq,jdbcType=INTEGER},
+      </if>
+    </set>
+    where catalogs = #{catalogs,jdbcType=VARCHAR}
+      and keyString = #{keyString,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.Datamapping">
+    update sys_datamapping
+    set valueString = #{valueString,jdbcType=VARCHAR},
+      enabled = #{enabled,jdbcType=BIT},
+      orderSeq = #{orderSeq,jdbcType=INTEGER}
+    where catalogs = #{catalogs,jdbcType=VARCHAR}
+      and keyString = #{keyString,jdbcType=VARCHAR}
+  </update>
+</mapper>

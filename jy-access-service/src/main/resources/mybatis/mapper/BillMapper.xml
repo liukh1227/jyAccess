@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.BillMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.Bill">
+    <id column="bill_Id" jdbcType="VARCHAR" property="bill_Id" />
+    <result column="contractOrderId" jdbcType="VARCHAR" property="contractOrderId" />
+    <result column="lessorId" jdbcType="VARCHAR" property="lessorId" />
+    <result column="customerId" jdbcType="VARCHAR" property="customerId" />
+    <result column="bankAccountId" jdbcType="VARCHAR" property="bankAccountId" />
+    <result column="bankName" jdbcType="VARCHAR" property="bankName" />
+    <result column="bankAccountNum" jdbcType="VARCHAR" property="bankAccountNum" />
+    <result column="billAmount" jdbcType="DECIMAL" property="billAmount" />
+    <result column="earnestAmount" jdbcType="DECIMAL" property="earnestAmount" />
+    <result column="receivedAmount" jdbcType="DECIMAL" property="receivedAmount" />
+    <result column="backedAmount" jdbcType="DECIMAL" property="backedAmount" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="salesMan" jdbcType="VARCHAR" property="salesMan" />
+    <result column="checker" jdbcType="VARCHAR" property="checker" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    bill_Id, contractOrderId, lessorId, customerId, bankAccountId, bankName, bankAccountNum, 
+    billAmount, earnestAmount, receivedAmount, backedAmount, creator, createTime, salesMan, 
+    checker, status, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from f_bill
+    where bill_Id = #{bill_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from f_bill
+    where bill_Id = #{bill_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.Bill">
+    insert into f_bill (bill_Id, contractOrderId, lessorId, 
+      customerId, bankAccountId, bankName, 
+      bankAccountNum, billAmount, earnestAmount, 
+      receivedAmount, backedAmount, creator, 
+      createTime, salesMan, checker, 
+      status, remark)
+    values (#{bill_Id,jdbcType=VARCHAR}, #{contractOrderId,jdbcType=VARCHAR}, #{lessorId,jdbcType=VARCHAR}, 
+      #{customerId,jdbcType=VARCHAR}, #{bankAccountId,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, 
+      #{bankAccountNum,jdbcType=VARCHAR}, #{billAmount,jdbcType=DECIMAL}, #{earnestAmount,jdbcType=DECIMAL}, 
+      #{receivedAmount,jdbcType=DECIMAL}, #{backedAmount,jdbcType=DECIMAL}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{salesMan,jdbcType=VARCHAR}, #{checker,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.Bill" keyProperty="bill_Id">
+		<selectKey keyProperty="bill_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into f_bill
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bill_Id != null">
+        bill_Id,
+      </if>
+      <if test="contractOrderId != null">
+        contractOrderId,
+      </if>
+      <if test="lessorId != null">
+        lessorId,
+      </if>
+      <if test="customerId != null">
+        customerId,
+      </if>
+      <if test="bankAccountId != null">
+        bankAccountId,
+      </if>
+      <if test="bankName != null">
+        bankName,
+      </if>
+      <if test="bankAccountNum != null">
+        bankAccountNum,
+      </if>
+      <if test="billAmount != null">
+        billAmount,
+      </if>
+      <if test="earnestAmount != null">
+        earnestAmount,
+      </if>
+      <if test="receivedAmount != null">
+        receivedAmount,
+      </if>
+      <if test="backedAmount != null">
+        backedAmount,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="salesMan != null">
+        salesMan,
+      </if>
+      <if test="checker != null">
+        checker,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bill_Id != null">
+        #{bill_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="contractOrderId != null">
+        #{contractOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="lessorId != null">
+        #{lessorId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountId != null">
+        #{bankAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountNum != null">
+        #{bankAccountNum,jdbcType=VARCHAR},
+      </if>
+      <if test="billAmount != null">
+        #{billAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="earnestAmount != null">
+        #{earnestAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receivedAmount != null">
+        #{receivedAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="backedAmount != null">
+        #{backedAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="salesMan != null">
+        #{salesMan,jdbcType=VARCHAR},
+      </if>
+      <if test="checker != null">
+        #{checker,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.Bill">
+    update f_bill
+    <set>
+      <if test="contractOrderId != null">
+        contractOrderId = #{contractOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="lessorId != null">
+        lessorId = #{lessorId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        customerId = #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountId != null">
+        bankAccountId = #{bankAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        bankName = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountNum != null">
+        bankAccountNum = #{bankAccountNum,jdbcType=VARCHAR},
+      </if>
+      <if test="billAmount != null">
+        billAmount = #{billAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="earnestAmount != null">
+        earnestAmount = #{earnestAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receivedAmount != null">
+        receivedAmount = #{receivedAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="backedAmount != null">
+        backedAmount = #{backedAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="salesMan != null">
+        salesMan = #{salesMan,jdbcType=VARCHAR},
+      </if>
+      <if test="checker != null">
+        checker = #{checker,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where bill_Id = #{bill_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.Bill">
+    update f_bill
+    set contractOrderId = #{contractOrderId,jdbcType=VARCHAR},
+      lessorId = #{lessorId,jdbcType=VARCHAR},
+      customerId = #{customerId,jdbcType=VARCHAR},
+      bankAccountId = #{bankAccountId,jdbcType=VARCHAR},
+      bankName = #{bankName,jdbcType=VARCHAR},
+      bankAccountNum = #{bankAccountNum,jdbcType=VARCHAR},
+      billAmount = #{billAmount,jdbcType=DECIMAL},
+      earnestAmount = #{earnestAmount,jdbcType=DECIMAL},
+      receivedAmount = #{receivedAmount,jdbcType=DECIMAL},
+      backedAmount = #{backedAmount,jdbcType=DECIMAL},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      salesMan = #{salesMan,jdbcType=VARCHAR},
+      checker = #{checker,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where bill_Id = #{bill_Id,jdbcType=VARCHAR}
+  </update>
+</mapper>

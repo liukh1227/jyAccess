@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.ReceivableAccountMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.ReceivableAccount">
+    <id column="receableAccount_Id" jdbcType="VARCHAR" property="receableAccount_Id" />
+    <result column="staAccountId" jdbcType="VARCHAR" property="staAccountId" />
+    <result column="fAccountNO" jdbcType="VARCHAR" property="fAccountNO" />
+    <result column="receableAmount" jdbcType="DECIMAL" property="receableAmount" />
+    <result column="receableAccountType" jdbcType="VARCHAR" property="receableAccountType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    receableAccount_Id, staAccountId, fAccountNO, receableAmount, receableAccountType
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from f_receivableaccount
+    where receableAccount_Id = #{receableAccount_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from f_receivableaccount
+    where receableAccount_Id = #{receableAccount_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.ReceivableAccount">
+    insert into f_receivableaccount (receableAccount_Id, staAccountId, 
+      fAccountNO, receableAmount, receableAccountType
+      )
+    values (#{receableAccount_Id,jdbcType=VARCHAR}, #{staAccountId,jdbcType=VARCHAR}, 
+      #{fAccountNO,jdbcType=VARCHAR}, #{receableAmount,jdbcType=DECIMAL}, #{receableAccountType,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.ReceivableAccount"  keyProperty="receableAccount_Id">
+		<selectKey keyProperty="receableAccount_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into f_receivableaccount
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="receableAccount_Id != null">
+        receableAccount_Id,
+      </if>
+      <if test="staAccountId != null">
+        staAccountId,
+      </if>
+      <if test="fAccountNO != null">
+        fAccountNO,
+      </if>
+      <if test="receableAmount != null">
+        receableAmount,
+      </if>
+      <if test="receableAccountType != null">
+        receableAccountType,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="receableAccount_Id != null">
+        #{receableAccount_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="staAccountId != null">
+        #{staAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="fAccountNO != null">
+        #{fAccountNO,jdbcType=VARCHAR},
+      </if>
+      <if test="receableAmount != null">
+        #{receableAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receableAccountType != null">
+        #{receableAccountType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.ReceivableAccount">
+    update f_receivableaccount
+    <set>
+      <if test="staAccountId != null">
+        staAccountId = #{staAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="fAccountNO != null">
+        fAccountNO = #{fAccountNO,jdbcType=VARCHAR},
+      </if>
+      <if test="receableAmount != null">
+        receableAmount = #{receableAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receableAccountType != null">
+        receableAccountType = #{receableAccountType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where receableAccount_Id = #{receableAccount_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.ReceivableAccount">
+    update f_receivableaccount
+    set staAccountId = #{staAccountId,jdbcType=VARCHAR},
+      fAccountNO = #{fAccountNO,jdbcType=VARCHAR},
+      receableAmount = #{receableAmount,jdbcType=DECIMAL},
+      receableAccountType = #{receableAccountType,jdbcType=VARCHAR}
+    where receableAccount_Id = #{receableAccount_Id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.ContractDeviceModelMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.ContractDeviceModel">
+    <id column="contractDeviceModel_Id" jdbcType="VARCHAR" property="contractDeviceModel_Id" />
+    <result column="contractOrderId" jdbcType="VARCHAR" property="contractOrderId" />
+    <result column="deviceModelId" jdbcType="VARCHAR" property="deviceModelId" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="billingType" jdbcType="VARCHAR" property="billingType" />
+    <result column="leaseTerm" jdbcType="VARCHAR" property="leaseTerm" />
+    <result column="planStartTime" jdbcType="TIMESTAMP" property="planStartTime" />
+    <result column="plantEndTime" jdbcType="TIMESTAMP" property="plantEndTime" />
+    <result column="unitPrice" jdbcType="DECIMAL" property="unitPrice" />
+    <result column="deviceTotalPrice" jdbcType="DECIMAL" property="deviceTotalPrice" />
+    <result column="changeTye" jdbcType="VARCHAR" property="changeTye" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  <resultMap id="ContractDeviceVoResultMap"   type="com.jy.entity.vo.ContractDeviceModelVo" extends="BaseResultMap">
+      <result column="typeName" jdbcType="VARCHAR" property="typeName" />
+      <result column="modelName" jdbcType="VARCHAR" property="modelName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    contractDeviceModel_Id, contractOrderId, deviceModelId, quantity, billingType, leaseTerm, 
+    planStartTime, plantEndTime, unitPrice, deviceTotalPrice, changeTye, status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ContractDeviceVoResultMap">
+    select cDeviceModel.* ,dModel.modelName as modelName,dType.typeName as typeName
+     from t_contractdevicemodel cDeviceModel 
+     LEFT JOIN b_devicemodel dModel on cDeviceModel.deviceModelId = dModel.deviceModel_Id
+     LEFT JOIN b_devicetype dType on dModel.deviceTypeId = dType.deviceType_Id
+     where cDeviceModel.contractDeviceModel_Id = #{contractDeviceModel_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_contractdevicemodel
+    where contractDeviceModel_Id = #{contractDeviceModel_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.ContractDeviceModel">
+    insert into t_contractdevicemodel (contractDeviceModel_Id, contractOrderId, 
+      deviceModelId, quantity, billingType, 
+      leaseTerm, planStartTime, plantEndTime, 
+      unitPrice, deviceTotalPrice, changeTye, 
+      status)
+    values (#{contractDeviceModel_Id,jdbcType=VARCHAR}, #{contractOrderId,jdbcType=VARCHAR}, 
+      #{deviceModelId,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{billingType,jdbcType=VARCHAR}, 
+      #{leaseTerm,jdbcType=VARCHAR}, #{planStartTime,jdbcType=TIMESTAMP}, #{plantEndTime,jdbcType=TIMESTAMP}, 
+      #{unitPrice,jdbcType=DECIMAL}, #{deviceTotalPrice,jdbcType=DECIMAL}, #{changeTye,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.ContractDeviceModel" keyProperty="contractDeviceModel_Id">
+		<selectKey keyProperty="contractDeviceModel_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into t_contractdevicemodel
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="contractDeviceModel_Id != null">
+        contractDeviceModel_Id,
+      </if>
+      <if test="contractOrderId != null">
+        contractOrderId,
+      </if>
+      <if test="deviceModelId != null">
+        deviceModelId,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+      <if test="billingType != null">
+        billingType,
+      </if>
+      <if test="leaseTerm != null">
+        leaseTerm,
+      </if>
+      <if test="planStartTime != null">
+        planStartTime,
+      </if>
+      <if test="plantEndTime != null">
+        plantEndTime,
+      </if>
+      <if test="unitPrice != null">
+        unitPrice,
+      </if>
+      <if test="deviceTotalPrice != null">
+        deviceTotalPrice,
+      </if>
+      <if test="changeTye != null">
+        changeTye,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="contractDeviceModel_Id != null">
+        #{contractDeviceModel_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="contractOrderId != null">
+        #{contractOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceModelId != null">
+        #{deviceModelId,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="billingType != null">
+        #{billingType,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseTerm != null">
+        #{leaseTerm,jdbcType=VARCHAR},
+      </if>
+      <if test="planStartTime != null">
+        #{planStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="plantEndTime != null">
+        #{plantEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unitPrice != null">
+        #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="deviceTotalPrice != null">
+        #{deviceTotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="changeTye != null">
+        #{changeTye,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.ContractDeviceModel">
+    update t_contractdevicemodel
+    <set>
+      <if test="contractOrderId != null">
+        contractOrderId = #{contractOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceModelId != null">
+        deviceModelId = #{deviceModelId,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="billingType != null">
+        billingType = #{billingType,jdbcType=VARCHAR},
+      </if>
+      <if test="leaseTerm != null">
+        leaseTerm = #{leaseTerm,jdbcType=VARCHAR},
+      </if>
+      <if test="planStartTime != null">
+        planStartTime = #{planStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="plantEndTime != null">
+        plantEndTime = #{plantEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unitPrice != null">
+        unitPrice = #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="deviceTotalPrice != null">
+        deviceTotalPrice = #{deviceTotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="changeTye != null">
+        changeTye = #{changeTye,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where contractDeviceModel_Id = #{contractDeviceModel_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.ContractDeviceModel">
+    update t_contractdevicemodel
+    set contractOrderId = #{contractOrderId,jdbcType=VARCHAR},
+      deviceModelId = #{deviceModelId,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=INTEGER},
+      billingType = #{billingType,jdbcType=VARCHAR},
+      leaseTerm = #{leaseTerm,jdbcType=VARCHAR},
+      planStartTime = #{planStartTime,jdbcType=TIMESTAMP},
+      plantEndTime = #{plantEndTime,jdbcType=TIMESTAMP},
+      unitPrice = #{unitPrice,jdbcType=DECIMAL},
+      deviceTotalPrice = #{deviceTotalPrice,jdbcType=DECIMAL},
+      changeTye = #{changeTye,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where contractDeviceModel_Id = #{contractDeviceModel_Id,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="getContractDeviceModelPageList" parameterType="com.jy.entity.form.ContractDeviceModelQueryForm"
+		resultMap="ContractDeviceVoResultMap">
+  select cDeviceModel.* ,dModel.modelName as modelName,dType.typeName as typeName
+     from t_contractdevicemodel cDeviceModel 
+     LEFT JOIN b_devicemodel dModel on cDeviceModel.deviceModelId = dModel.deviceModel_Id
+     LEFT JOIN b_devicetype dType on dModel.deviceTypeId = dType.deviceType_Id
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+		   <if test="contractOrderId!=null">
+				AND cDeviceModel.contractOrderId = #{contractOrderId}
+			</if>
+		</trim>
+	</select>
+  <select id="getContractDeviceModelAllList" parameterType="com.jy.entity.form.ContractDeviceModelQueryForm"
+		resultMap="ContractDeviceVoResultMap">
+  select cDeviceModel.* ,dModel.modelName as modelName,dType.typeName as typeName
+     from t_contractdevicemodel cDeviceModel 
+     LEFT JOIN b_devicemodel dModel on cDeviceModel.deviceModelId = dModel.deviceModel_Id
+     LEFT JOIN b_devicetype dType on dModel.deviceTypeId = dType.deviceType_Id
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+		   <if test="contractOrderId!=null">
+				AND cDeviceModel.contractOrderId = #{contractOrderId}
+			</if>
+		</trim>
+	</select>
+</mapper>

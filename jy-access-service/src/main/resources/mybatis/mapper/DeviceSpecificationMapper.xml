@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.DeviceSpecificationMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.DeviceSpecification">
+    <id column="dSpecification_Id" jdbcType="VARCHAR" property="dSpecification_Id" />
+    <result column="dSpecificationName" jdbcType="VARCHAR" property="dSpecificationName" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="orderSeq" jdbcType="INTEGER" property="orderSeq" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    dSpecification_Id, dSpecificationName, unit, status, orderSeq, creator, createTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from b_devicespecification
+    where dSpecification_Id = #{dSpecification_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from b_devicespecification
+    where dSpecification_Id = #{dSpecification_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.DeviceSpecification">
+    insert into b_devicespecification (dSpecification_Id, dSpecificationName, 
+      unit, status, orderSeq, 
+      creator, createTime)
+    values (#{dSpecification_Id,jdbcType=VARCHAR}, #{dSpecificationName,jdbcType=VARCHAR}, 
+      #{unit,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{orderSeq,jdbcType=INTEGER}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.DeviceSpecification"  keyProperty="dSpecification_Id">
+		<selectKey keyProperty="dSpecification_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into b_devicespecification
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dSpecification_Id != null">
+        dSpecification_Id,
+      </if>
+      <if test="dSpecificationName != null">
+        dSpecificationName,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="orderSeq != null">
+        orderSeq,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dSpecification_Id != null">
+        #{dSpecification_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="dSpecificationName != null">
+        #{dSpecificationName,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSeq != null">
+        #{orderSeq,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.DeviceSpecification">
+    update b_devicespecification
+    <set>
+      <if test="dSpecificationName != null">
+        dSpecificationName = #{dSpecificationName,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSeq != null">
+        orderSeq = #{orderSeq,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where dSpecification_Id = #{dSpecification_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.DeviceSpecification">
+    update b_devicespecification
+    set dSpecificationName = #{dSpecificationName,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      orderSeq = #{orderSeq,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP}
+    where dSpecification_Id = #{dSpecification_Id,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="getDeviceSpecificationPageList" parameterType="com.jy.entity.form.DeviceSpecificationQueryForm"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from b_devicespecification
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="dSpecificationName!=null">
+				AND dSpecificationName like CONCAT('%', '${dSpecificationName}', '%')
+			</if>
+			<if test="isDisplay!=null">
+				AND status = #{status}
+			</if>
+		</trim>
+	</select>
+	<select id="getAllDeviceSpecificationList" parameterType="com.jy.entity.form.DeviceSpecificationQueryForm"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from b_devicespecification
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="dSpecificationName!=null">
+				AND dSpecificationName like CONCAT('%', '${dSpecificationName}', '%')
+			</if>
+			<if test="status!=null">
+				AND status = #{status}
+			</if>
+		</trim>
+	</select>
+	<select id="getAllDeviceSpecificationListByDeviceTypeId" parameterType="com.jy.entity.form.DeviceSpecificationQueryForm"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from b_devicespecification bds left join b_dtypespecification bdts on bds.dSpecification_Id = bdts.dSpecificationId
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="deviceTypeId!=null">
+				AND bdts.deviceTypeId = #{deviceTypeId}
+			</if>
+		</trim>
+	</select>
+</mapper>

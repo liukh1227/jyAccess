@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.DeviceInMakesureOrderMapper">
+	<resultMap id="BaseResultMap" type="com.jy.entity.po.DeviceInMakesureOrder">
+		<id column="dInMakeSure_Id" jdbcType="VARCHAR" property="dInMakeSure_Id" />
+		<result column="contractOrderId" jdbcType="VARCHAR" property="contractOrderId" />
+		<result column="customerId" jdbcType="VARCHAR" property="customerId" />
+		<result column="lessorId" jdbcType="VARCHAR" property="lessorId" />
+		<result column="customerName" jdbcType="VARCHAR" property="customerName" />
+		<result column="leasePhone" jdbcType="VARCHAR" property="leasePhone" />
+		<result column="billingType" jdbcType="VARCHAR" property="billingType" />
+		<result column="leaseTerm" jdbcType="VARCHAR" property="leaseTerm" />
+		<result column="enterTime" jdbcType="TIMESTAMP" property="enterTime" />
+		<result column="workSite" jdbcType="VARCHAR" property="workSite" />
+		<result column="deviceId" jdbcType="VARCHAR" property="deviceId" />
+		<result column="operators" jdbcType="VARCHAR" property="operators" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="repairPhone" jdbcType="VARCHAR" property="repairPhone" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="businessTye" jdbcType="VARCHAR" property="businessTye" />
+	</resultMap>
+	<resultMap id="DInMakesureOrderVoResultMap" type="com.jy.entity.vo.DeviceInMakesureOrderVo"
+		extends="BaseResultMap">
+		<result column="contractOrderNum" jdbcType="VARCHAR" property="contractOrderNum" />
+		<result column="operatorsUserName" jdbcType="VARCHAR" property="operatorsUserName" />
+		<result column="creatorUserName" jdbcType="VARCHAR" property="creatorUserName" />
+		<result column="typeName" jdbcType="VARCHAR" property="typeName" />
+		<result column="modelName" jdbcType="VARCHAR" property="modelName" />
+		<result column="deviceNum" jdbcType="VARCHAR" property="deviceNum" />
+		<result column="sequenceNum" jdbcType="VARCHAR" property="sequenceNum" />
+	</resultMap>
+	<resultMap id="DInMakesureOrder4PdfPojoResultMap"
+		type="com.jy.entity.pojo.DeviceInMakesureOrder4PdfPojo" extends="DInMakesureOrderVoResultMap">
+		<result column="companyName" jdbcType="VARCHAR" property="companyName" />
+		<result column="companyPhone" jdbcType="VARCHAR" property="companyPhone" />
+		<result column="companyAddress" jdbcType="VARCHAR" property="companyAddress" />
+	</resultMap>
+	<parameterMap type="com.jy.entity.po.DeviceInMakesureOrder"
+		id="DInMakesureOrderParameterMap">
+		<parameter property="dInMakeSure_Id" resultMap="BaseResultMap" />
+	</parameterMap>
+	<sql id="Base_Column_List">
+		dInMakeSure_Id, contractOrderId, customerId, lessorId,
+		customerName, leasePhone,
+		billingType, leaseTerm, enterTime, workSite,
+		deviceId, operators,
+		creator, createTime,
+		remark, repairPhone, status,
+		businessTye
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="DInMakesureOrderVoResultMap">
+		select dInOrder.*,contractorder.contractOrderNum as contractOrderNum,device.deviceNum as
+		deviceNum,device.sequenceNum as
+		sequenceNum,dmodel.modelName as
+		modelName,dtype.typeName as typeName,
+		creatorUser.userName as
+		creatorUserName,
+		operatorsUser.userName as operatorsUserName
+		from
+		t_deviceinmakesureorder dInOrder
+		LEFT JOIN t_contractorder  contractorder on contractorder.contractOrder_Id = dInOrder.contractOrderId
+		LEFT JOIN
+		d_device device on
+		dInOrder.deviceId = device.device_Id
+		LEFT JOIN
+		b_devicemodel dmodel on
+		dmodel.deviceModel_Id =
+		device.deviceModelId
+		LEFT JOIN b_devicetype
+		dtype on dtype.deviceType_Id =
+		dmodel.deviceTypeId
+		LEFT JOIN
+		sys_useraccount creatorUser
+		on dInOrder.creator =
+		creatorUser.userAccount_Id
+		LEFT JOIN sys_useraccount operatorsUser on
+		operatorsUser.userAccount_Id =
+		dInOrder.operators
+		where
+		dInOrder.dInMakeSure_Id =
+		#{dInMakeSure_Id,jdbcType=VARCHAR}
+	</select>
+	<select id="getDInMakesureOrderDetailById" parameterMap="DInMakesureOrderParameterMap"
+		resultMap="DInMakesureOrder4PdfPojoResultMap">
+		select dInOrder.*,contractorder.contractOrderNum as contractOrderNum,device.deviceNum as
+		deviceNum,device.sequenceNum as
+		sequenceNum,dmodel.modelName as
+		modelName,dtype.typeName as typeName,
+		creatorUser.userName as
+		creatorUserName,
+		operatorsUser.userName as operatorsUserName,
+		company.companyName as companyName,company.telephone as
+		companyPhone,company.address as companyAddress
+		from
+		t_deviceinmakesureorder dInOrder
+		LEFT JOIN t_contractorder  contractorder on contractorder.contractOrder_Id = dInOrder.contractOrderId
+		LEFT JOIN
+		d_device device on
+		dInOrder.deviceId = device.device_Id
+		LEFT JOIN
+		b_devicemodel dmodel on
+		dmodel.deviceModel_Id =
+		device.deviceModelId
+		LEFT JOIN b_devicetype
+		dtype on dtype.deviceType_Id =
+		dmodel.deviceTypeId
+		LEFT JOIN
+		sys_useraccount creatorUser
+		on dInOrder.creator =
+		creatorUser.userAccount_Id
+		LEFT JOIN sys_useraccount operatorsUser on
+		operatorsUser.userAccount_Id =
+		dInOrder.operators
+		LEFT JOIN u_company company on company.company_Id = dInOrder.lessorId
+		where dInOrder.dInMakeSure_Id =
+		#{dInMakeSure_Id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		t_deviceinmakesureorder
+		where dInMakeSure_Id =
+		#{dInMakeSure_Id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.jy.entity.po.DeviceInMakesureOrder">
+		insert into
+		t_deviceinmakesureorder (dInMakeSure_Id, contractOrderId,
+		customerId,
+		lessorId, customerName,
+		leasePhone, billingType, leaseTerm,
+		enterTime,
+		workSite, deviceId,
+		operators, creator, createTime,
+		remark, repairPhone,
+		status,
+		businessTye)
+		values (#{dInMakeSure_Id,jdbcType=VARCHAR},
+		#{contractOrderId,jdbcType=VARCHAR},
+		#{customerId,jdbcType=VARCHAR},
+		#{lessorId,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR},
+		#{leasePhone,jdbcType=VARCHAR}, #{billingType,jdbcType=VARCHAR},
+		#{leaseTerm,jdbcType=VARCHAR},
+		#{enterTime,jdbcType=TIMESTAMP},
+		#{workSite,jdbcType=VARCHAR}, #{deviceId,jdbcType=VARCHAR},
+		#{operators,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{remark,jdbcType=VARCHAR},
+		#{repairPhone,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+		#{businessTye,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.jy.entity.po.DeviceInMakesureOrder"
+		keyProperty="dInMakeSure_Id">
+		<selectKey keyProperty="dInMakeSure_Id" resultType="String"
+			order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into t_deviceinmakesureorder
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dInMakeSure_Id != null">
+				dInMakeSure_Id,
+			</if>
+			<if test="contractOrderId != null">
+				contractOrderId,
+			</if>
+			<if test="customerId != null">
+				customerId,
+			</if>
+			<if test="lessorId != null">
+				lessorId,
+			</if>
+			<if test="customerName != null">
+				customerName,
+			</if>
+			<if test="leasePhone != null">
+				leasePhone,
+			</if>
+			<if test="billingType != null">
+				billingType,
+			</if>
+			<if test="leaseTerm != null">
+				leaseTerm,
+			</if>
+			<if test="enterTime != null">
+				enterTime,
+			</if>
+			<if test="workSite != null">
+				workSite,
+			</if>
+			<if test="deviceId != null">
+				deviceId,
+			</if>
+			<if test="operators != null">
+				operators,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="createTime != null">
+				createTime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="repairPhone != null">
+				repairPhone,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="businessTye != null">
+				businessTye,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="dInMakeSure_Id != null">
+				#{dInMakeSure_Id,jdbcType=VARCHAR},
+			</if>
+			<if test="contractOrderId != null">
+				#{contractOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="customerId != null">
+				#{customerId,jdbcType=VARCHAR},
+			</if>
+			<if test="lessorId != null">
+				#{lessorId,jdbcType=VARCHAR},
+			</if>
+			<if test="customerName != null">
+				#{customerName,jdbcType=VARCHAR},
+			</if>
+			<if test="leasePhone != null">
+				#{leasePhone,jdbcType=VARCHAR},
+			</if>
+			<if test="billingType != null">
+				#{billingType,jdbcType=VARCHAR},
+			</if>
+			<if test="leaseTerm != null">
+				#{leaseTerm,jdbcType=VARCHAR},
+			</if>
+			<if test="enterTime != null">
+				#{enterTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="workSite != null">
+				#{workSite,jdbcType=VARCHAR},
+			</if>
+			<if test="deviceId != null">
+				#{deviceId,jdbcType=VARCHAR},
+			</if>
+			<if test="operators != null">
+				#{operators,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="repairPhone != null">
+				#{repairPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="businessTye != null">
+				#{businessTye,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.DeviceInMakesureOrder">
+		update t_deviceinmakesureorder
+		<set>
+			<if test="contractOrderId != null">
+				contractOrderId = #{contractOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="customerId != null">
+				customerId = #{customerId,jdbcType=VARCHAR},
+			</if>
+			<if test="lessorId != null">
+				lessorId = #{lessorId,jdbcType=VARCHAR},
+			</if>
+			<if test="customerName != null">
+				customerName = #{customerName,jdbcType=VARCHAR},
+			</if>
+			<if test="leasePhone != null">
+				leasePhone = #{leasePhone,jdbcType=VARCHAR},
+			</if>
+			<if test="billingType != null">
+				billingType = #{billingType,jdbcType=VARCHAR},
+			</if>
+			<if test="leaseTerm != null">
+				leaseTerm = #{leaseTerm,jdbcType=VARCHAR},
+			</if>
+			<if test="enterTime != null">
+				enterTime = #{enterTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="workSite != null">
+				workSite = #{workSite,jdbcType=VARCHAR},
+			</if>
+			<if test="deviceId != null">
+				deviceId = #{deviceId,jdbcType=VARCHAR},
+			</if>
+			<if test="operators != null">
+				operators = #{operators,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				createTime = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="repairPhone != null">
+				repairPhone = #{repairPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="businessTye != null">
+				businessTye = #{businessTye,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where dInMakeSure_Id = #{dInMakeSure_Id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.jy.entity.po.DeviceInMakesureOrder">
+		update
+		t_deviceinmakesureorder
+		set contractOrderId =
+		#{contractOrderId,jdbcType=VARCHAR},
+		customerId =
+		#{customerId,jdbcType=VARCHAR},
+		lessorId =
+		#{lessorId,jdbcType=VARCHAR},
+		customerName =
+		#{customerName,jdbcType=VARCHAR},
+		leasePhone =
+		#{leasePhone,jdbcType=VARCHAR},
+		billingType =
+		#{billingType,jdbcType=VARCHAR},
+		leaseTerm =
+		#{leaseTerm,jdbcType=VARCHAR},
+		enterTime =
+		#{enterTime,jdbcType=TIMESTAMP},
+		workSite =
+		#{workSite,jdbcType=VARCHAR},
+		deviceId = #{deviceId,jdbcType=VARCHAR},
+		operators = #{operators,jdbcType=VARCHAR},
+		creator =
+		#{creator,jdbcType=VARCHAR},
+		createTime =
+		#{createTime,jdbcType=TIMESTAMP},
+		remark = #{remark,jdbcType=VARCHAR},
+		repairPhone = #{repairPhone,jdbcType=VARCHAR},
+		status =
+		#{status,jdbcType=VARCHAR},
+		businessTye =
+		#{businessTye,jdbcType=VARCHAR}
+		where dInMakeSure_Id =
+		#{dInMakeSure_Id,jdbcType=VARCHAR}
+	</update>
+	<select id="getDeviceInMakesureOrderPageList" parameterType="com.jy.entity.form.DeviceInMakesureOrderQueryForm"
+		resultMap="DInMakesureOrderVoResultMap">
+		select dInOrder.*,device.deviceNum as deviceNum,device.sequenceNum as
+		sequenceNum,dmodel.modelName as modelName,dtype.typeName as typeName,
+		creatorUser.userName as creatorUserName,
+		operatorsUser.userName as
+		operatorsUserName
+		from t_deviceinmakesureorder dInOrder
+		LEFT JOIN
+		d_device device on dInOrder.deviceId = device.device_Id
+		LEFT JOIN
+		b_devicemodel dmodel on dmodel.deviceModel_Id =
+		device.deviceModelId
+		LEFT JOIN b_devicetype dtype on dtype.deviceType_Id =
+		dmodel.deviceTypeId
+		LEFT JOIN sys_useraccount creatorUser
+		on
+		dInOrder.creator = creatorUser.userAccount_Id
+		LEFT JOIN sys_useraccount
+		operatorsUser on operatorsUser.userAccount_Id =
+		dInOrder.operators
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="contractOrderId !=null">
+				AND dInOrder.contractOrderId = #{contractOrderId}
+			</if>
+			<if test="status !=null">
+				AND dInOrder.status = #{status}
+			</if>
+		</trim>
+	</select>
+	<select id="getAllDeviceInMakesureOrderList" parameterType="com.jy.entity.form.DeviceInMakesureOrderQueryForm"
+		resultMap="DInMakesureOrderVoResultMap">
+		select dInOrder.*,device.deviceNum as deviceNum,device.sequenceNum as
+		sequenceNum,dmodel.modelName as modelName,dtype.typeName as typeName,
+		creatorUser.userName as creatorUserName,
+		operatorsUser.userName as
+		operatorsUserName
+		from t_deviceinmakesureorder dInOrder
+		LEFT JOIN
+		d_device device on dInOrder.deviceId = device.device_Id
+		LEFT JOIN
+		b_devicemodel dmodel on dmodel.deviceModel_Id =
+		device.deviceModelId
+		LEFT JOIN b_devicetype dtype on dtype.deviceType_Id =
+		dmodel.deviceTypeId
+		LEFT JOIN sys_useraccount creatorUser
+		on
+		dInOrder.creator = creatorUser.userAccount_Id
+		LEFT JOIN sys_useraccount
+		operatorsUser on operatorsUser.userAccount_Id =
+		dInOrder.operators
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="contractOrderId !=null">
+				AND dInOrder.contractOrderId = #{contractOrderId}
+			</if>
+			<if test="status !=null">
+				AND dInOrder.status = #{status}
+			</if>
+		</trim>
+	</select>
+	<select id="getDeviceInMakesureOrder4DOutMOrderPageList" parameterType="com.jy.entity.form.DeviceInMakesureOrderQueryForm"
+		resultMap="DInMakesureOrderVoResultMap">
+		select dInOrder.*,device.deviceNum as deviceNum,device.sequenceNum as
+		sequenceNum,dmodel.modelName as modelName,dtype.typeName as typeName,
+		creatorUser.userName as creatorUserName,
+		operatorsUser.userName as
+		operatorsUserName
+		from t_deviceinmakesureorder dInOrder
+		LEFT JOIN
+		d_device device on dInOrder.deviceId = device.device_Id
+		LEFT JOIN
+		b_devicemodel dmodel on dmodel.deviceModel_Id =
+		device.deviceModelId
+		LEFT JOIN b_devicetype dtype on dtype.deviceType_Id =
+		dmodel.deviceTypeId
+		LEFT JOIN sys_useraccount creatorUser
+		on
+		dInOrder.creator = creatorUser.userAccount_Id
+		LEFT JOIN sys_useraccount
+		operatorsUser on operatorsUser.userAccount_Id =
+		dInOrder.operators
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="contractOrderId !=null">
+				AND dInOrder.contractOrderId = #{contractOrderId}
+				AND dInOrder.deviceId not in (select deviceId from t_deviceoutmakesureorder where status='1' AND contractOrderId = #{contractOrderId} )
+			</if>
+			<if test="status !=null">
+				AND dInOrder.status = #{status}
+			</if>
+		</trim>
+	</select>
+	<select id="getAllDeviceInMakesureOrder4DOutMOrderList" parameterType="com.jy.entity.form.DeviceInMakesureOrderQueryForm"
+		resultMap="DInMakesureOrderVoResultMap">
+		select dInOrder.*,device.deviceNum as deviceNum,device.sequenceNum as
+		sequenceNum,dmodel.modelName as modelName,dtype.typeName as typeName,
+		creatorUser.userName as creatorUserName,
+		operatorsUser.userName as
+		operatorsUserName
+		from t_deviceinmakesureorder dInOrder
+		LEFT JOIN
+		d_device device on dInOrder.deviceId = device.device_Id
+		LEFT JOIN
+		b_devicemodel dmodel on dmodel.deviceModel_Id =
+		device.deviceModelId
+		LEFT JOIN b_devicetype dtype on dtype.deviceType_Id =
+		dmodel.deviceTypeId
+		LEFT JOIN sys_useraccount creatorUser
+		on
+		dInOrder.creator = creatorUser.userAccount_Id
+		LEFT JOIN sys_useraccount
+		operatorsUser on operatorsUser.userAccount_Id =
+		dInOrder.operators
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="contractOrderId !=null">
+				AND dInOrder.contractOrderId = #{contractOrderId}
+				AND dInOrder.deviceId not in (select deviceId from t_deviceoutmakesureorder where status='1' AND contractOrderId = #{contractOrderId} )
+			</if>
+			<if test="status !=null">
+				AND dInOrder.status = #{status}
+			</if>
+		</trim>
+	</select>
+</mapper>

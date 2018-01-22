@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.UserRolesMapper">
+	<resultMap id="BaseResultMap" type="com.jy.entity.po.UserRoles">
+		<id column="userRoles_Id" jdbcType="VARCHAR" property="userRoles_Id" />
+		<id column="userAccountId" jdbcType="VARCHAR" property="userAccountId" />
+		<id column="roleId" jdbcType="INTEGER" property="roleId" />
+	</resultMap>
+	<resultMap type="com.jy.entity.vo.UserRolesVo" id="UserRolesVoResultMap">
+		<id column="userName" jdbcType="VARCHAR" property="userName" />
+		<id column="roleName" jdbcType="VARCHAR" property="roleName" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		userRoles_Id, userAccountId, roleId
+	</sql>
+	<sql id="Vo_Column_List">
+		userRoles_Id, userAccountId, roleId,userName,roleName
+	</sql>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from sys_userroles
+		where userRoles_Id = #{userRoles_Id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.jy.entity.po.UserRoles">
+		insert into sys_userroles (userRoles_Id,userAccountId, roleId)
+		values (#{userRoles_Id,jdbcType=VARCHAR},#{userAccountId,jdbcType=VARCHAR},
+		#{roleId,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="com.jy.entity.po.UserRoles"
+		keyProperty="userRoles_Id">
+		<selectKey keyProperty="userRoles_Id" resultType="String"
+			order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into sys_userroles
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userRoles_Id != null">
+				userRoles_Id,
+			</if>
+			<if test="userAccountId != null">
+				userAccountId,
+			</if>
+			<if test="roleId != null">
+				roleId,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userRoles_Id != null">
+				#{userRoles_Id,jdbcType=VARCHAR},
+			</if>
+			<if test="userAccountId != null">
+				#{userAccountId,jdbcType=VARCHAR},
+			</if>
+			<if test="roleId != null">
+				#{roleId,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+		<select id="getUserRolesPageList" parameterType="com.jy.entity.form.UserRolesQueryForm"
+		resultMap="UserRolesVoResultMap">
+		select
+		<include refid="Vo_Column_List" />
+		from sys_userroles userroles LEFT JOIN
+		sys_role role on userroles.roleId = role.role_Id
+		LEFT JOIN sys_useraccount useraccount on useraccount.userAccount_Id =
+		userroles.userAccountId
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="userAccountId!=null">
+				AND userroles.userAccountId = #{userAccountId}
+			</if>
+			<if test="companyId!=null">
+				AND useraccount.companyId = #{companyId}
+			</if>
+			<if test="roleId!=null">
+				AND userroles.roleId = #{roleId}
+			</if>
+
+		</trim>
+	</select>
+	<select id="getAllUserRolesList" parameterType="com.jy.entity.form.UserRolesQueryForm"
+		resultMap="UserRolesVoResultMap">
+		select
+		<include refid="Vo_Column_List" />
+		from sys_userroles userroles LEFT JOIN
+		sys_role role on userroles.roleId = role.role_Id
+		LEFT JOIN sys_useraccount useraccount on useraccount.userAccount_Id =
+		userroles.userAccountId
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="userAccountId!=null">
+				AND userroles.userAccountId = #{userAccountId}
+			</if>
+			<if test="companyId!=null">
+				AND useraccount.companyId = #{companyId}
+			</if>
+			<if test="roleId!=null">
+				AND userroles.roleId = #{roleId}
+			</if>
+
+		</trim>
+	</select>
+	<select id="getUserRolesConfigPageList" parameterType="com.jy.entity.form.UserRolesQueryForm"
+		resultMap="UserRolesVoResultMap">
+		select
+		<include refid="Vo_Column_List" />
+		from sys_userroles userroles LEFT JOIN
+		sys_role role on userroles.roleId = role.role_Id
+		LEFT JOIN sys_useraccount useraccount on useraccount.userAccount_Id =
+		userroles.userAccountId
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="userAccountId!=null">
+				AND userroles.userAccountId = #{userAccountId}
+			</if>
+			<if test="companyId!=null">
+				AND useraccount.companyId = #{companyId}
+			</if>
+			<if test="roleId!=null">
+				AND userroles.roleId = #{roleId}
+			</if>
+
+		</trim>
+	</select>
+	<select id="getAllUserRolesConfigList" parameterType="com.jy.entity.form.UserRolesQueryForm"
+		resultMap="UserRolesVoResultMap">
+		select
+		<include refid="Vo_Column_List" />
+		from sys_userroles userroles LEFT JOIN
+		sys_role role on userroles.roleId = role.role_Id
+		LEFT JOIN sys_useraccount useraccount on useraccount.userAccount_Id =
+		userroles.userAccountId
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="userAccountId!=null">
+				AND userroles.userAccountId = #{userAccountId}
+			</if>
+			<if test="companyId!=null">
+				AND useraccount.companyId = #{companyId}
+			</if>
+			<if test="roleId!=null">
+				AND userroles.roleId = #{roleId}
+			</if>
+
+		</trim>
+	</select>
+</mapper>

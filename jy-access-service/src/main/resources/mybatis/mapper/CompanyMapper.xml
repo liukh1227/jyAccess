@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.CompanyMapper">
+	<resultMap id="BaseResultMap" type="com.jy.entity.po.Company">
+		<id column="company_Id" jdbcType="VARCHAR" property="company_Id" />
+		<result column="parentComanyId" jdbcType="VARCHAR" property="parentComanyId" />
+		<result column="companyName" jdbcType="VARCHAR" property="companyName" />
+		<result column="comLinkman" jdbcType="VARCHAR" property="comLinkman" />
+		<result column="telephone" jdbcType="VARCHAR" property="telephone" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="address" jdbcType="VARCHAR" property="address" />
+		<result column="city" jdbcType="VARCHAR" property="city" />
+		<result column="latitude" jdbcType="VARCHAR" property="latitude" />
+		<result column="longitude" jdbcType="VARCHAR" property="longitude" />
+		<result column="companyBusinessType" jdbcType="VARCHAR"
+			property="companyBusinessType" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+	</resultMap>
+	<resultMap id="CompanyBoResultMap" type="com.jy.entity.bo.CompanyBo"
+		extends="BaseResultMap">
+		<collection property="bankAccountLists" ofType="com.jy.entity.po.BankAccount">
+			<id column="bankAccount_Id" jdbcType="VARCHAR" property="bankAccount_Id" />
+			<result column="bankName" jdbcType="VARCHAR" property="bankName" />
+			<result column="bankAccountNum" jdbcType="VARCHAR" property="bankAccountNum" />
+			<result column="bankAccountName" jdbcType="VARCHAR" property="bankAccountName" />
+			<result column="bankStatus" jdbcType="VARCHAR" property="status" />
+			<result column="bankCreator" jdbcType="VARCHAR" property="creator" />
+			<result column="bankCreateTime" jdbcType="TIMESTAMP" property="createTime" />
+			<result column="isDefault" jdbcType="BIT" property="isDefault" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="CompanyBoBigResultMap" type="com.jy.entity.bo.CompanyBo"
+		extends="BaseResultMap">
+		<collection property="bankAccountLists" column="company_Id"
+			select="selectBankAccounts">
+			<id column="bankAccount_Id" jdbcType="VARCHAR" property="bankAccount_Id" />
+			<result column="bankName" jdbcType="VARCHAR" property="bankName" />
+			<result column="bankAccountNum" jdbcType="VARCHAR" property="bankAccountNum" />
+			<result column="bankAccountName" jdbcType="VARCHAR" property="bankAccountName" />
+			<result column="status" jdbcType="VARCHAR" property="status" />
+			<result column="creator" jdbcType="VARCHAR" property="creator" />
+			<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+			<result column="isDefault" jdbcType="BIT" property="isDefault" />
+		</collection>
+
+	</resultMap>
+	<resultMap id="CompanyBoMoreResultMap" type="com.jy.entity.bo.CompanyBo"
+		extends="CompanyBoBigResultMap">
+		<collection property="customerLists" column="company_Id"
+			select="selectCustomers">
+			<id column="customer_Id" jdbcType="VARCHAR" property="customer_Id" />
+			<result column="customerName" jdbcType="VARCHAR" property="customerName" />
+			<result column="cusLinkman" jdbcType="VARCHAR" property="cusLinkman" />
+			<result column="companyId" jdbcType="VARCHAR" property="companyId" />
+			<result column="telephone" jdbcType="VARCHAR" property="telephone" />
+			<result column="email" jdbcType="VARCHAR" property="email" />
+			<result column="address" jdbcType="VARCHAR" property="address" />
+			<result column="city" jdbcType="VARCHAR" property="city" />
+			<result column="creator" jdbcType="VARCHAR" property="creator" />
+			<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+			<result column="status" jdbcType="VARCHAR" property="status" />
+		</collection>
+	</resultMap>
+	<parameterMap type="com.jy.entity.po.Company" id="CompanyParameterMap">
+		<parameter property="company_Id" resultMap="BaseResultMap" />
+	</parameterMap>
+	<sql id="Base_Column_List">
+		company_Id, parentComanyId, companyName, comLinkman,telephone, email, address,
+		city, latitude,
+		longitude, companyBusinessType, creator, createTime, status
+	</sql>
+
+	<select id="selectBankAccounts" resultType="com.jy.entity.po.BankAccount">
+		select bankAccount_Id, companyId, customerId, bankName, bankAccountNum,
+		bankAccountName, status, creator, createTime, isDefault
+		from u_bankaccount
+		where companyId =#{company_Id} order by isDefault desc
+	</select>
+	<select id="selectCustomers" resultType="com.jy.entity.po.Customer">
+		select customer_Id, customerName, companyId, cusLinkman,telephone, email,
+		address, city, creator, createTime, status
+		from u_customer
+		where companyId =#{company_Id}
+	</select>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from u_company
+		where company_Id = #{company_Id,jdbcType=VARCHAR}
+	</select>
+	<select id="selectCompanyAndBankAccountById" parameterMap="CompanyParameterMap"
+		resultMap="CompanyBoResultMap">
+		select company.*,bankaccount.bankAccount_Id as
+		bankAccount_Id,bankaccount.bankName as
+		bankName,bankaccount.bankAccountNum as
+		bankAccountNum,bankaccount.bankAccountName as bankAccountName,
+		bankaccount.status as bankStatus,bankaccount.creator as
+		bankCreator,bankaccount.createTime as
+		bankCreateTime,bankaccount.isDefault as isDefault
+		from u_company company
+		LEFT JOIN u_bankaccount bankaccount on company.company_Id =
+		bankaccount.companyId
+		where company.company_Id = #{company_Id,jdbcType=VARCHAR} order by
+		bankaccount.isDefault desc
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from u_company
+		where company_Id = #{company_Id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.jy.entity.po.Company">
+		insert into u_company (company_Id, parentComanyId, companyName, comLinkman,
+		telephone, email, address,
+		city, latitude, longitude,
+		companyBusinessType, creator, createTime,
+		status)
+		values (#{company_Id,jdbcType=VARCHAR}, #{parentComanyId,jdbcType=VARCHAR},
+		#{companyName,jdbcType=VARCHAR}, #{comLinkman,jdbcType=VARCHAR},
+		#{telephone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+		#{address,jdbcType=VARCHAR},
+		#{city,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR},
+		#{companyBusinessType,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{status,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.jy.entity.po.Company"
+		keyProperty="company_Id">
+		<selectKey keyProperty="company_Id" resultType="String"
+			order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into u_company
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="company_Id != null">
+				company_Id,
+			</if>
+			<if test="parentComanyId != null">
+				parentComanyId,
+			</if>
+			<if test="companyName != null">
+				companyName,
+			</if>
+			<if test="comLinkman != null">
+				comLinkman,
+			</if>
+			<if test="telephone != null">
+				telephone,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="city != null">
+				city,
+			</if>
+			<if test="latitude != null">
+				latitude,
+			</if>
+			<if test="longitude != null">
+				longitude,
+			</if>
+			<if test="companyBusinessType != null">
+				companyBusinessType,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="createTime != null">
+				createTime,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="company_Id != null">
+				#{company_Id,jdbcType=VARCHAR},
+			</if>
+			<if test="parentComanyId != null">
+				#{parentComanyId,jdbcType=VARCHAR},
+			</if>
+			<if test="companyName != null">
+				#{companyName,jdbcType=VARCHAR},
+			</if>
+			<if test="comLinkman != null">
+				#{comLinkman,jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null">
+				#{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="city != null">
+				#{city,jdbcType=VARCHAR},
+			</if>
+			<if test="latitude != null">
+				#{latitude,jdbcType=VARCHAR},
+			</if>
+			<if test="longitude != null">
+				#{longitude,jdbcType=VARCHAR},
+			</if>
+			<if test="companyBusinessType != null">
+				#{companyBusinessType,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.Company">
+		update u_company
+		<set>
+			<if test="parentComanyId != null">
+				parentComanyId = #{parentComanyId,jdbcType=VARCHAR},
+			</if>
+			<if test="companyName != null">
+				companyName = #{companyName,jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null">
+				telephone = #{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="city != null">
+				city = #{city,jdbcType=VARCHAR},
+			</if>
+			<if test="latitude != null">
+				latitude = #{latitude,jdbcType=VARCHAR},
+			</if>
+			<if test="longitude != null">
+				longitude = #{longitude,jdbcType=VARCHAR},
+			</if>
+			<if test="companyBusinessType != null">
+				companyBusinessType = #{companyBusinessType,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				createTime = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where company_Id = #{company_Id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.jy.entity.po.Company">
+		update u_company
+		set parentComanyId = #{parentComanyId,jdbcType=VARCHAR},
+		companyName = #{companyName,jdbcType=VARCHAR},
+		telephone = #{telephone,jdbcType=VARCHAR},
+		email = #{email,jdbcType=VARCHAR},
+		address = #{address,jdbcType=VARCHAR},
+		city = #{city,jdbcType=VARCHAR},
+		latitude = #{latitude,jdbcType=VARCHAR},
+		longitude = #{longitude,jdbcType=VARCHAR},
+		companyBusinessType = #{companyBusinessType,jdbcType=VARCHAR},
+		creator = #{creator,jdbcType=VARCHAR},
+		createTime = #{createTime,jdbcType=TIMESTAMP},
+		status = #{status,jdbcType=VARCHAR}
+		where company_Id = #{company_Id,jdbcType=VARCHAR}
+	</update>
+	<select id="getCompanyPageList" parameterType="com.jy.entity.form.CompanyQueryForm"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from u_company
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="companyIdArray!=null and companyIdArray.length>0">
+				AND company_Id IN
+				<foreach collection="companyIdArray" item="item" index="index"
+					open="(" close=")" separator=",">
+					'${item}'
+				</foreach>
+			</if>
+			<if test="companyName!=null">
+				AND companyName like CONCAT('%', '${companyName}', '%')
+			</if>
+			<if test="city!=null">
+				AND city like CONCAT('%', '${city}', '%')
+			</if>
+			<if test="parentComanyId!=null">
+				AND parentComanyId = #{parentComanyId}
+			</if>
+			<if test="companyBusinessType!=null">
+				AND companyBusinessType = #{companyBusinessType}
+			</if>
+			<if test="status!=null">
+				AND status = #{status}
+			</if>
+		</trim>
+		ORDER BY parentComanyId ASC
+	</select>
+	<select id="getCompanyAndBankAccountPageList" parameterType="com.jy.entity.form.CompanyQueryForm"
+		resultMap="CompanyBoBigResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from u_company
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="companyIdArray!=null and companyIdArray.length>0">
+				AND company_Id IN
+				<foreach collection="companyIdArray" item="item" index="index"
+					open="(" close=")" separator=",">
+					'${item}'
+				</foreach>
+			</if>
+			<if test="companyName!=null">
+				AND companyName like CONCAT('%', '${companyName}', '%')
+			</if>
+			<if test="city!=null">
+				AND city like CONCAT('%', '${city}', '%')
+			</if>
+			<if test="parentComanyId!=null">
+				AND parentComanyId = #{parentComanyId}
+			</if>
+			<if test="companyBusinessType!=null">
+				AND companyBusinessType = #{companyBusinessType}
+			</if>
+			<if test="status!=null">
+				AND status = #{status}
+			</if>
+		</trim>
+		ORDER BY parentComanyId ASC
+	</select>
+	<select id="getCompanyAndBankAccountAndCustomerPageList"
+		parameterType="com.jy.entity.form.CompanyQueryForm" resultMap="CompanyBoMoreResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from u_company
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="companyIdArray!=null and companyIdArray.length>0">
+				AND company_Id IN
+				<foreach collection="companyIdArray" item="item" index="index"
+					open="(" close=")" separator=",">
+					'${item}'
+				</foreach>
+			</if>
+			<if test="companyName!=null">
+				AND companyName like CONCAT('%', '${companyName}', '%')
+			</if>
+			<if test="city!=null">
+				AND city like CONCAT('%', '${city}', '%')
+			</if>
+			<if test="parentComanyId!=null">
+				AND parentComanyId = #{parentComanyId}
+			</if>
+			<if test="companyBusinessType!=null">
+				AND companyBusinessType = #{companyBusinessType}
+			</if>
+			<if test="status!=null">
+				AND status = #{status}
+			</if>
+		</trim>
+		ORDER BY parentComanyId ASC
+	</select>
+
+	<select id="getAllCompanyList" parameterType="com.jy.entity.form.CompanyQueryForm"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from u_company
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="companyIdArray!=null and companyIdArray.length>0">
+				AND company_Id IN
+				<foreach collection="companyIdArray" item="item" index="index"
+					open="(" close=")" separator=",">
+					'${item}'
+				</foreach>
+			</if>
+			<if test="companyName!=null">
+				AND companyName like CONCAT('%', '${companyName}', '%')
+			</if>
+			<if test="city!=null">
+				AND city like CONCAT('%', '${city}', '%')
+			</if>
+			<if test="parentComanyId!=null">
+				AND parentComanyId = #{parentComanyId}
+			</if>
+			<if test="companyBusinessType!=null">
+				AND companyBusinessType = #{companyBusinessType}
+			</if>
+			<if test="status!=null">
+				AND status = #{status}
+			</if>
+		</trim>
+		ORDER BY parentComanyId ASC
+	</select>
+
+
+</mapper>

@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.RepairsOrderMapper">
+	<resultMap id="BaseResultMap" type="com.jy.entity.po.RepairsOrder">
+		<id column="repairsOrder_Id" jdbcType="VARCHAR" property="repairsOrder_Id" />
+		<result column="contractOrderId" jdbcType="VARCHAR" property="contractOrderId" />
+		<result column="customerId" jdbcType="VARCHAR" property="customerId" />
+		<result column="customerName" jdbcType="VARCHAR" property="customerName" />
+		<result column="workSite" jdbcType="VARCHAR" property="workSite" />
+		<result column="leaserPhone" jdbcType="VARCHAR" property="leaserPhone" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="salesMan" jdbcType="VARCHAR" property="salesMan" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="lessorId" jdbcType="VARCHAR" property="lessorId" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="deviceId" jdbcType="VARCHAR" property="deviceId" />
+		<result column="repairsType" jdbcType="VARCHAR" property="repairsType" />
+		<result column="replaceDeviceId" jdbcType="VARCHAR" property="replaceDeviceId" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+	</resultMap>
+	<resultMap id="RepairsOrderVoResultMap" type="com.jy.entity.vo.RepairsOrderVo"
+		extends="BaseResultMap">
+		<result column="contractOrderNum" jdbcType="VARCHAR" property="contractOrderNum" />
+		<result column="salesManUserName" jdbcType="VARCHAR" property="salesManUserName" />
+		<result column="creatorUserName" jdbcType="VARCHAR" property="creatorUserName" />
+		<result column="typeName" jdbcType="VARCHAR" property="typeName" />
+		<result column="modelName" jdbcType="VARCHAR" property="modelName" />
+		<result column="deviceNum" jdbcType="VARCHAR" property="deviceNum" />
+		<result column="sequenceNum" jdbcType="VARCHAR" property="sequenceNum" />
+		<result column="replaceDeviceTypeName" jdbcType="VARCHAR"
+			property="replaceDeviceTypeName" />
+		<result column="replaceDeviceModelName" jdbcType="VARCHAR"
+			property="replaceDeviceModelName" />
+		<result column="replaceDeviceNum" jdbcType="VARCHAR" property="replaceDeviceNum" />
+		<result column="replaceDeviceSequenceNum" jdbcType="VARCHAR"
+			property="replaceDeviceSequenceNum" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		repairsOrder_Id, contractOrderId, customerId, customerName,
+		workSite, leaserPhone,
+		remark, salesMan, creator, lessorId, createTime,
+		deviceId,
+		repairsType, replaceDeviceId,
+		status
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="RepairsOrderVoResultMap">
+		select repairsorder.*,contractorder.contractOrderNum as contractOrderNum ,dmodel.modelName as modelName,dtype.typeName as
+		typeName,device.deviceNum as deviceNum,device.sequenceNum as
+		sequenceNum,
+		rdmodel.modelName as
+		replaceDeviceModelName,rdtype.typeName as
+		replaceDeviceTypeName,replaceDevice.deviceNum as
+		replaceDeviceNum,replaceDevice.sequenceNum as
+		replaceDeviceSequenceNum,
+		creatorUser.userName as creatorUserName,salesManUser.userName as salesManUserName
+		from
+		t_repairsorder repairsorder
+		LEFT JOIN t_contractorder  contractorder on contractorder.contractOrder_Id = repairsorder.contractOrderId
+		LEFT JOIN d_device device on
+		device.device_Id = repairsorder.deviceId
+		LEFT JOIN b_devicemodel dmodel
+		on dmodel.deviceModel_Id =
+		device.deviceModelId
+		LEFT JOIN b_devicetype
+		dtype on dtype.deviceType_Id = dmodel.deviceTypeId
+		LEFT JOIN d_device
+		replaceDevice on replaceDevice.device_Id =
+		repairsorder.replaceDeviceId
+		LEFT JOIN b_devicemodel rdmodel on
+		rdmodel.deviceModel_Id =
+		replaceDevice.deviceModelId
+		LEFT JOIN
+		b_devicetype rdtype on rdtype.deviceType_Id =
+		rdmodel.deviceTypeId
+		LEFT JOIN sys_useraccount creatorUser on repairsorder.creator =
+		creatorUser.userAccount_Id
+		LEFT JOIN sys_useraccount salesManUser on salesManUser.userAccount_Id =
+		repairsorder.salesMan
+		where repairsorder.repairsOrder_Id =
+		#{repairsOrder_Id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		t_repairsorder
+		where repairsOrder_Id =
+		#{repairsOrder_Id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.jy.entity.po.RepairsOrder">
+		insert into t_repairsorder
+		(repairsOrder_Id, contractOrderId,
+		customerId, customerName, workSite,
+		leaserPhone, remark, salesMan,
+		creator, lessorId, createTime,
+		deviceId,
+		repairsType, replaceDeviceId,
+		status)
+		values
+		(#{repairsOrder_Id,jdbcType=VARCHAR},
+		#{contractOrderId,jdbcType=VARCHAR},
+		#{customerId,jdbcType=VARCHAR},
+		#{customerName,jdbcType=VARCHAR}, #{workSite,jdbcType=VARCHAR},
+		#{leaserPhone,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+		#{salesMan,jdbcType=VARCHAR},
+		#{creator,jdbcType=VARCHAR},
+		#{lessorId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+		#{deviceId,jdbcType=VARCHAR}, #{repairsType,jdbcType=VARCHAR},
+		#{replaceDeviceId,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.jy.entity.po.RepairsOrder"
+		keyProperty="repairsOrder_Id">
+		<selectKey keyProperty="repairsOrder_Id" resultType="String"
+			order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into t_repairsorder
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="repairsOrder_Id != null">
+				repairsOrder_Id,
+			</if>
+			<if test="contractOrderId != null">
+				contractOrderId,
+			</if>
+			<if test="customerId != null">
+				customerId,
+			</if>
+			<if test="customerName != null">
+				customerName,
+			</if>
+			<if test="workSite != null">
+				workSite,
+			</if>
+			<if test="leaserPhone != null">
+				leaserPhone,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="salesMan != null">
+				salesMan,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="lessorId != null">
+				lessorId,
+			</if>
+			<if test="createTime != null">
+				createTime,
+			</if>
+			<if test="deviceId != null">
+				deviceId,
+			</if>
+			<if test="repairsType != null">
+				repairsType,
+			</if>
+			<if test="replaceDeviceId != null">
+				replaceDeviceId,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="repairsOrder_Id != null">
+				#{repairsOrder_Id,jdbcType=VARCHAR},
+			</if>
+			<if test="contractOrderId != null">
+				#{contractOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="customerId != null">
+				#{customerId,jdbcType=VARCHAR},
+			</if>
+			<if test="customerName != null">
+				#{customerName,jdbcType=VARCHAR},
+			</if>
+			<if test="workSite != null">
+				#{workSite,jdbcType=VARCHAR},
+			</if>
+			<if test="leaserPhone != null">
+				#{leaserPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="salesMan != null">
+				#{salesMan,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="lessorId != null">
+				#{lessorId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deviceId != null">
+				#{deviceId,jdbcType=VARCHAR},
+			</if>
+			<if test="repairsType != null">
+				#{repairsType,jdbcType=VARCHAR},
+			</if>
+			<if test="replaceDeviceId != null">
+				#{replaceDeviceId,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.RepairsOrder">
+		update t_repairsorder
+		<set>
+			<if test="contractOrderId != null">
+				contractOrderId = #{contractOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="customerId != null">
+				customerId = #{customerId,jdbcType=VARCHAR},
+			</if>
+			<if test="customerName != null">
+				customerName = #{customerName,jdbcType=VARCHAR},
+			</if>
+			<if test="workSite != null">
+				workSite = #{workSite,jdbcType=VARCHAR},
+			</if>
+			<if test="leaserPhone != null">
+				leaserPhone = #{leaserPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="salesMan != null">
+				salesMan = #{salesMan,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="lessorId != null">
+				lessorId = #{lessorId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				createTime = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deviceId != null">
+				deviceId = #{deviceId,jdbcType=VARCHAR},
+			</if>
+			<if test="repairsType != null">
+				repairsType = #{repairsType,jdbcType=VARCHAR},
+			</if>
+			<if test="replaceDeviceId != null">
+				replaceDeviceId = #{replaceDeviceId,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where repairsOrder_Id = #{repairsOrder_Id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.jy.entity.po.RepairsOrder">
+		update
+		t_repairsorder
+		set contractOrderId =
+		#{contractOrderId,jdbcType=VARCHAR},
+		customerId =
+		#{customerId,jdbcType=VARCHAR},
+		customerName =
+		#{customerName,jdbcType=VARCHAR},
+		workSite =
+		#{workSite,jdbcType=VARCHAR},
+		leaserPhone =
+		#{leaserPhone,jdbcType=VARCHAR},
+		remark = #{remark,jdbcType=VARCHAR},
+		salesMan = #{salesMan,jdbcType=VARCHAR},
+		creator =
+		#{creator,jdbcType=VARCHAR},
+		lessorId = #{lessorId,jdbcType=VARCHAR},
+		createTime = #{createTime,jdbcType=TIMESTAMP},
+		deviceId =
+		#{deviceId,jdbcType=VARCHAR},
+		repairsType =
+		#{repairsType,jdbcType=VARCHAR},
+		replaceDeviceId =
+		#{replaceDeviceId,jdbcType=VARCHAR},
+		status =
+		#{status,jdbcType=VARCHAR}
+		where repairsOrder_Id =
+		#{repairsOrder_Id,jdbcType=VARCHAR}
+	</update>
+	<select id="getRepairsOrderPageList" parameterType="com.jy.entity.form.RepairsOrderQueryForm"
+		resultMap="RepairsOrderVoResultMap">
+		select repairsorder.* ,
+		creatorUser.userName as creatorUserName,salesManUser.userName as salesManUserName
+		from
+		t_repairsorder repairsorder
+		LEFT JOIN sys_useraccount creatorUser on repairsorder.creator =
+		creatorUser.userAccount_Id
+		LEFT JOIN sys_useraccount salesManUser on salesManUser.userAccount_Id =
+		repairsorder.salesMan
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+
+			<if test="contractOrderId!=null">
+				AND repairsorder.contractOrderId = #{contractOrderId}
+			</if>
+			<if test="repairsType!=null">
+				AND repairsorder.repairsType = #{repairsType}
+			</if>
+			<if test="status!=null">
+				AND repairsorder.status = #{status}
+			</if>
+			<if test="salesMan!=null">
+				AND repairsorder.salesMan = #{salesMan}
+			</if>
+			<if test="creator!=null">
+				AND repairsorder.creator = #{creator}
+			</if>
+				<if test="contractOrderNum!=null">
+				AND repairsorder.contractOrderId in (select contractOrder_Id from t_contractorder where contractOrderNum like CONCAT('%', '${contractOrderNum}', '%'))
+			</if>
+			   <if test="lessorIdArray!=null and lessorIdArray.length>0">
+		      AND repairsorder.contractOrderId in (select contractOrder_Id from t_contractorder where lessorId IN
+		       <foreach collection="lessorIdArray" item="item" index="index"  open="(" close=")" separator=",">
+		          '${item}'
+		        </foreach>
+		        )
+			</if>
+			<if test="customerName!=null">
+				AND repairsorder.customerName like CONCAT('%', '${customerName}', '%')
+			</if>
+		</trim>
+	</select>
+	<select id="getAllRepairsOrderList" parameterType="com.jy.entity.form.RepairsOrderQueryForm"
+		resultMap="RepairsOrderVoResultMap">
+		select repairsorder.* ,
+		creatorUser.userName as creatorUserName,salesManUser.userName as salesManUserName
+		from
+		t_repairsorder repairsorder
+		LEFT JOIN sys_useraccount creatorUser on repairsorder.creator =
+		creatorUser.userAccount_Id
+		LEFT JOIN sys_useraccount salesManUser on salesManUser.userAccount_Id =
+		repairsorder.salesMan
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+
+			<if test="contractOrderId!=null">
+				AND repairsorder.contractOrderId = #{contractOrderId}
+			</if>
+			<if test="repairsType!=null">
+				AND repairsorder.repairsType = #{repairsType}
+			</if>
+			<if test="status!=null">
+				AND repairsorder.status = #{status}
+			</if>
+			<if test="salesMan!=null">
+				AND repairsorder.salesMan = #{salesMan}
+			</if>
+			<if test="creator!=null">
+				AND repairsorder.creator = #{creator}
+			</if>
+				<if test="contractOrderNum!=null">
+				AND repairsorder.contractOrderId in (select contractOrder_Id from t_contractorder where contractOrderNum like CONCAT('%', '${contractOrderNum}', '%'))
+			</if>
+			  <if test="lessorIdArray!=null and lessorIdArray.length>0">
+		      AND repairsorder.contractOrderId in (select contractOrder_Id from t_contractorder where lessorId IN
+		       <foreach collection="lessorIdArray" item="item" index="index"  open="(" close=")" separator=",">
+		          '${item}'
+		        </foreach>
+		        )
+			</if>
+			<if test="customerName!=null">
+				AND repairsorder.customerName like CONCAT('%', '${customerName}', '%')
+			</if>
+		</trim>
+	</select>
+</mapper>

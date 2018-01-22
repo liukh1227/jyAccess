@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.QuotationDeviceMapper">
+	<resultMap id="BaseResultMap" type="com.jy.entity.po.QuotationDevice">
+		<id column="quodevice_Id" jdbcType="VARCHAR" property="quodevice_Id" />
+		<result column="quotationId" jdbcType="VARCHAR" property="quotationId" />
+		<result column="deviceModelId" jdbcType="VARCHAR" property="deviceModelId" />
+		<result column="quantity" jdbcType="INTEGER" property="quantity" />
+		<result column="rentPerDay" jdbcType="DECIMAL" property="rentPerDay" />
+		<result column="rentPerWeek" jdbcType="DECIMAL" property="rentPerWeek" />
+		<result column="rentPerMonth" jdbcType="DECIMAL" property="rentPerMonth" />
+	</resultMap>
+	<resultMap id="QuotationDeviceVoResultMap" type="com.jy.entity.vo.QuotationDeviceVo"
+		extends="BaseResultMap">
+		<result column="modelName" jdbcType="VARCHAR" property="modelName" />
+		<result column="typeName" jdbcType="VARCHAR" property="typeName" />
+		<result column="attributeValue" jdbcType="VARCHAR" property="attributeValue" />
+		<result column="dTKeyAttributeSpecName" jdbcType="VARCHAR"
+			property="dTKeyAttributeSpecName" />
+		<result column="unit" jdbcType="VARCHAR" property="unit" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		quodevice_Id, quotationId, deviceModelId, quantity, rentPerDay, rentPerWeek,
+		rentPerMonth
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="QuotationDeviceVoResultMap">
+		select qDevice.* ,
+		dModel.modelName as modelName,dType.typeName as typeName,dtkav.attributeValue as
+		attributeValue,dtkas.dTKeyAttributeSpecName as
+		dTKeyAttributeSpecName,dtkas.unit as unit
+		from t_quotationdevice qDevice
+		LEFT JOIN b_devicemodel dModel on qDevice.deviceModelId =
+		dModel.deviceModel_Id
+		LEFT JOIN b_devicetype dType on dModel.deviceTypeId = dType.deviceType_Id
+		LEFT JOIN b_dtkeyattributevalue dtkav on dtkav.dTKeyAttributeValue_Id
+		= dModel.keyAttributeValueId
+		LEFT JOIN b_dtkeyattributespecification dtkas on
+		dtkas.dTKeyAttributeSpec_Id = dtkav.dTKeyAttributeSpecId
+		where qDevice.quodevice_Id = #{quodevice_Id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_quotationdevice
+		where quodevice_Id = #{quodevice_Id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.jy.entity.po.QuotationDevice">
+		insert into t_quotationdevice (quodevice_Id, quotationId, deviceModelId,
+		quantity, rentPerDay, rentPerWeek,
+		rentPerMonth)
+		values (#{quodevice_Id,jdbcType=VARCHAR}, #{quotationId,jdbcType=VARCHAR},
+		#{deviceModelId,jdbcType=VARCHAR},
+		#{quantity,jdbcType=INTEGER}, #{rentPerDay,jdbcType=DECIMAL}, #{rentPerWeek,jdbcType=DECIMAL},
+		#{rentPerMonth,jdbcType=DECIMAL})
+	</insert>
+	<insert id="insertSelective" parameterType="com.jy.entity.po.QuotationDevice"
+		keyProperty="quodevice_Id">
+		<selectKey keyProperty="quodevice_Id" resultType="String"
+			order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into t_quotationdevice
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="quodevice_Id != null">
+				quodevice_Id,
+			</if>
+			<if test="quotationId != null">
+				quotationId,
+			</if>
+			<if test="deviceModelId != null">
+				deviceModelId,
+			</if>
+			<if test="quantity != null">
+				quantity,
+			</if>
+			<if test="rentPerDay != null">
+				rentPerDay,
+			</if>
+			<if test="rentPerWeek != null">
+				rentPerWeek,
+			</if>
+			<if test="rentPerMonth != null">
+				rentPerMonth,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="quodevice_Id != null">
+				#{quodevice_Id,jdbcType=VARCHAR},
+			</if>
+			<if test="quotationId != null">
+				#{quotationId,jdbcType=VARCHAR},
+			</if>
+			<if test="deviceModelId != null">
+				#{deviceModelId,jdbcType=VARCHAR},
+			</if>
+			<if test="quantity != null">
+				#{quantity,jdbcType=INTEGER},
+			</if>
+			<if test="rentPerDay != null">
+				#{rentPerDay,jdbcType=DECIMAL},
+			</if>
+			<if test="rentPerWeek != null">
+				#{rentPerWeek,jdbcType=DECIMAL},
+			</if>
+			<if test="rentPerMonth != null">
+				#{rentPerMonth,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.QuotationDevice">
+		update t_quotationdevice
+		<set>
+			<if test="quotationId != null">
+				quotationId = #{quotationId,jdbcType=VARCHAR},
+			</if>
+			<if test="deviceModelId != null">
+				deviceModelId = #{deviceModelId,jdbcType=VARCHAR},
+			</if>
+			<if test="quantity != null">
+				quantity = #{quantity,jdbcType=INTEGER},
+			</if>
+			<if test="rentPerDay != null">
+				rentPerDay = #{rentPerDay,jdbcType=DECIMAL},
+			</if>
+			<if test="rentPerWeek != null">
+				rentPerWeek = #{rentPerWeek,jdbcType=DECIMAL},
+			</if>
+			<if test="rentPerMonth != null">
+				rentPerMonth = #{rentPerMonth,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where quodevice_Id = #{quodevice_Id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.jy.entity.po.QuotationDevice">
+		update t_quotationdevice
+		set quotationId = #{quotationId,jdbcType=VARCHAR},
+		deviceModelId = #{deviceModelId,jdbcType=VARCHAR},
+		quantity = #{quantity,jdbcType=INTEGER},
+		rentPerDay = #{rentPerDay,jdbcType=DECIMAL},
+		rentPerWeek = #{rentPerWeek,jdbcType=DECIMAL},
+		rentPerMonth = #{rentPerMonth,jdbcType=DECIMAL}
+		where quodevice_Id = #{quodevice_Id,jdbcType=VARCHAR}
+	</update>
+	<select id="getAllQuotationDeviceList" parameterType="com.jy.entity.form.QuotationDeviceQueryForm"
+		resultMap="QuotationDeviceVoResultMap">
+		select qDevice.* ,
+		dModel.modelName as modelName,dType.typeName as typeName,dtkav.attributeValue as
+		attributeValue,dtkas.dTKeyAttributeSpecName as
+		dTKeyAttributeSpecName,dtkas.unit as unit
+		from t_quotationdevice qDevice
+		LEFT JOIN b_devicemodel dModel on qDevice.deviceModelId =
+		dModel.deviceModel_Id
+		LEFT JOIN b_devicetype dType on dModel.deviceTypeId = dType.deviceType_Id
+		LEFT JOIN b_dtkeyattributevalue dtkav on dtkav.dTKeyAttributeValue_Id
+		= dModel.keyAttributeValueId
+		LEFT JOIN b_dtkeyattributespecification dtkas on
+		dtkas.dTKeyAttributeSpec_Id = dtkav.dTKeyAttributeSpecId
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="quotationId!=null">
+				AND qDevice.quotationId = #{quotationId}
+			</if>
+			<if test="deviceModelId!=null">
+				AND qDevice.deviceModelId = #{deviceModelId}
+			</if>
+		</trim>
+	</select>
+	<select id="getQuotationDevicePageList" parameterType="com.jy.entity.form.QuotationDeviceQueryForm"
+		resultMap="QuotationDeviceVoResultMap">
+		select qDevice.* ,
+		dModel.modelName as modelName,dType.typeName as typeName,dtkav.attributeValue as
+		attributeValue,dtkas.dTKeyAttributeSpecName as
+		dTKeyAttributeSpecName,dtkas.unit as unit
+		from t_quotationdevice qDevice
+		LEFT JOIN b_devicemodel dModel on qDevice.deviceModelId =
+		dModel.deviceModel_Id
+		LEFT JOIN b_devicetype dType on dModel.deviceTypeId = dType.deviceType_Id
+		LEFT JOIN b_dtkeyattributevalue dtkav on dtkav.dTKeyAttributeValue_Id
+		= dModel.keyAttributeValueId
+		LEFT JOIN b_dtkeyattributespecification dtkas on
+		dtkas.dTKeyAttributeSpec_Id = dtkav.dTKeyAttributeSpecId
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="quotationId!=null">
+				AND qDevice.quotationId = #{quotationId}
+			</if>
+			<if test="deviceModelId!=null">
+				AND qDevice.deviceModelId = #{deviceModelId}
+			</if>
+		</trim>
+	</select>
+</mapper>

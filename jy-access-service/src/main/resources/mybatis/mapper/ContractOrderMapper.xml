@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.ContractOrderMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.ContractOrder">
+    <id column="contractOrder_Id" jdbcType="VARCHAR" property="contractOrder_Id" />
+    <result column="contractOrderNum" jdbcType="VARCHAR" property="contractOrderNum" />
+    <result column="sourceId" jdbcType="VARCHAR" property="sourceId" />
+    <result column="projectId" jdbcType="VARCHAR" property="projectId" />
+    <result column="projectName" jdbcType="VARCHAR" property="projectName" />
+    <result column="jobNature" jdbcType="VARCHAR" property="jobNature" />
+    <result column="workSite" jdbcType="VARCHAR" property="workSite" />
+    <result column="totalPrice" jdbcType="DECIMAL" property="totalPrice" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="salesMan" jdbcType="VARCHAR" property="salesMan" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="sourceType" jdbcType="VARCHAR" property="sourceType" />
+    <result column="lessorId" jdbcType="VARCHAR" property="lessorId" />
+    <result column="lesBankAccountId" jdbcType="VARCHAR" property="lesBankAccountId" />
+    <result column="customerId" jdbcType="VARCHAR" property="customerId" />
+    <result column="cusBankAccountId" jdbcType="VARCHAR" property="cusBankAccountId" />
+    <result column="includeInvoice" jdbcType="BIT" property="includeInvoice" />
+    <result column="includeShippingFee" jdbcType="BIT" property="includeShippingFee" />
+    <result column="shippingFee" jdbcType="DECIMAL" property="shippingFee" />
+    <result column="includeJiShou" jdbcType="BIT" property="includeJiShou" />
+    <result column="includeFue" jdbcType="BIT" property="includeFue" />
+    <result column="includeInsurance" jdbcType="BIT" property="includeInsurance" />
+    <result column="otherExpense" jdbcType="DECIMAL" property="otherExpense" />
+    <result column="otherExpenseComment" jdbcType="VARCHAR" property="otherExpenseComment" />
+    <result column="payMethod" jdbcType="VARCHAR" property="payMethod" />
+    <result column="prepayFee" jdbcType="DECIMAL" property="prepayFee" />
+  </resultMap>
+  <resultMap id="ContractOrderVoResultMap" type="com.jy.entity.vo.ContractOrderVo"  extends="BaseResultMap">
+    <result column="customerName" jdbcType="VARCHAR" property="customerName" />
+    <result column="cusLinkman" jdbcType="VARCHAR" property="cusLinkman" />
+    <result column="cusTelephone" jdbcType="VARCHAR" property="cusTelephone" />
+    <result column="companyName" jdbcType="VARCHAR" property="companyName" />
+    <result column="salesManUserName" jdbcType="VARCHAR" property="salesManUserName" />
+    <result column="creatorUserName" jdbcType="VARCHAR" property="creatorUserName" />
+  </resultMap>
+  <resultMap id="ContractOrderBoResultMap" type="com.jy.entity.bo.ContractOrderBo" extends="ContractOrderVoResultMap">
+    <result column="cusAddress" jdbcType="VARCHAR" property="cusAddress" />
+    <result column="cusEmail" jdbcType="VARCHAR" property="cusEmail" />
+    <result column="cusBankName" jdbcType="VARCHAR" property="cusBankName" />
+    <result column="cusBankAccountNum" jdbcType="VARCHAR" property="cusBankAccountNum" />
+    <result column="comAddress" jdbcType="VARCHAR" property="comAddress" />
+    <result column="comEmail" jdbcType="VARCHAR" property="comEmail" />
+    <result column="comTelephone" jdbcType="VARCHAR" property="comTelephone" />
+    <result column="comBankName" jdbcType="VARCHAR" property="comBankName" />
+    <result column="comBankAccountNum" jdbcType="VARCHAR" property="comBankAccountNum" />
+    <collection property="contractDeviceModels" column="contractOrder_Id" select="selectContractDeviceModels">
+         <id column="contractDeviceModel_Id" jdbcType="VARCHAR" property="contractDeviceModel_Id" />
+         <result column="deviceModelId" jdbcType="VARCHAR" property="deviceModelId" />
+         <result column="quantity" jdbcType="INTEGER" property="quantity" />
+         <result column="billingType" jdbcType="VARCHAR" property="billingType" />
+         <result column="leaseTerm" jdbcType="VARCHAR" property="leaseTerm" />
+         <result column="planStartTime" jdbcType="TIMESTAMP" property="planStartTime" />
+         <result column="plantEndTime" jdbcType="TIMESTAMP" property="plantEndTime" />
+         <result column="unitPrice" jdbcType="DECIMAL" property="unitPrice" />
+         <result column="deviceTotalPrice" jdbcType="DECIMAL" property="deviceTotalPrice" />
+         <result column="changeTye" jdbcType="VARCHAR" property="changeTye" />
+         <result column="status" jdbcType="VARCHAR" property="status" />
+         <result column="typeName" jdbcType="VARCHAR" property="typeName" />
+         <result column="modelName" jdbcType="VARCHAR" property="modelName" />
+  </collection>
+  </resultMap>
+    <parameterMap type="com.jy.entity.po.ContractOrder" id="ContractOrderParameterMap">
+		<parameter property="contractOrder_Id" resultMap="BaseResultMap" />
+	</parameterMap>
+  <sql id="Base_Column_List">
+    contractOrder_Id,contractOrderNum, sourceId, projectId, projectName, jobNature, workSite, totalPrice, 
+    remark, salesMan, createTime, creator, status, sourceType, lessorId,lesBankAccountId, customerId,cusBankAccountId, 
+    includeInvoice, includeShippingFee, shippingFee, includeJiShou, includeFue, includeInsurance, 
+    otherExpense, otherExpenseComment, payMethod, prepayFee
+  </sql>
+    <select id="selectContractDeviceModels" resultType="com.jy.entity.vo.ContractDeviceModelVo">
+     select cDeviceModel.* ,dModel.modelName as modelName,dType.typeName as typeName
+     from t_contractdevicemodel cDeviceModel 
+     LEFT JOIN b_devicemodel dModel on cDeviceModel.deviceModelId = dModel.deviceModel_Id
+     LEFT JOIN b_devicetype dType on dModel.deviceTypeId = dType.deviceType_Id
+     where cDeviceModel.contractOrderId =#{contractDeviceModel_Id}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_contractorder
+    where contractOrder_Id = #{contractOrder_Id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectContractOrderAndCDModelById" parameterMap="ContractOrderParameterMap" resultMap="ContractOrderBoResultMap">
+	select contractorder.*, 
+customer.customerName as customerName,customer.address as cusAddress,customer.telephone as cusTelephone,customer.email as cusEmail,cusBankaccount.bankName as cusBankName,cusBankaccount.bankAccountNum as cusBankAccountNum,
+company.companyName as companyName,company.address as comAddress,company.telephone as comTelephone,company.email as comEmail,comBankAccount.bankName as comBankName,comBankAccount.bankAccountNum as comBankAccountNum
+    from t_contractorder contractorder 
+    LEFT JOIN u_customer  customer on contractorder.customerId = customer.customer_Id
+    LEFT JOIN u_bankaccount cusBankaccount on contractorder.cusBankAccountId = cusBankaccount.bankAccount_Id
+    LEFT JOIN u_company company on contractorder.lessorId = company.company_Id
+    LEFT JOIN u_bankaccount comBankAccount on contractorder.lesBankAccountId = comBankAccount.bankAccount_Id
+    where contractorder.contractOrder_Id = #{contractOrder_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_contractorder
+    where contractOrder_Id = #{contractOrder_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.ContractOrder">
+    insert into t_contractorder (contractOrder_Id, contractOrderNum,sourceId, projectId, 
+      projectName, jobNature, workSite,  totalPrice, remark, salesMan, 
+      createTime, creator, status, 
+      sourceType, lessorId, lesBankAccountId,customerId,cusBankAccountId,
+      includeInvoice, includeShippingFee, shippingFee, 
+      includeJiShou, includeFue, includeInsurance, 
+      otherExpense, otherExpenseComment, payMethod, 
+      prepayFee)
+    values (#{contractOrder_Id,jdbcType=VARCHAR},#{contractOrderNum,jdbcType=VARCHAR}, ,#{sourceId,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR}, 
+      #{projectName,jdbcType=VARCHAR}, #{jobNature,jdbcType=VARCHAR}, #{workSite,jdbcType=VARCHAR}, 
+      #{totalPrice,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{salesMan,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{sourceType,jdbcType=VARCHAR}, #{lessorId,jdbcType=VARCHAR}, #{lesBankAccountId,jdbcType=VARCHAR}, 
+      #{customerId,jdbcType=VARCHAR}, #{cusBankAccountId,jdbcType=VARCHAR},
+      #{includeInvoice,jdbcType=BIT}, #{includeShippingFee,jdbcType=BIT}, #{shippingFee,jdbcType=DECIMAL}, 
+      #{includeJiShou,jdbcType=BIT}, #{includeFue,jdbcType=BIT}, #{includeInsurance,jdbcType=BIT}, 
+      #{otherExpense,jdbcType=DECIMAL}, #{otherExpenseComment,jdbcType=VARCHAR}, #{payMethod,jdbcType=VARCHAR}, 
+      #{prepayFee,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.ContractOrder" keyProperty="contractOrder_Id">
+		<selectKey keyProperty="contractOrder_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into t_contractorder
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="contractOrder_Id != null">
+        contractOrder_Id,
+      </if>
+      <if test="contractOrderNum != null">
+        contractOrderNum,
+      </if>
+      <if test="sourceId != null">
+        sourceId,
+      </if>
+      <if test="projectId != null">
+        projectId,
+      </if>
+      <if test="projectName != null">
+        projectName,
+      </if>
+      <if test="jobNature != null">
+        jobNature,
+      </if>
+      <if test="workSite != null">
+        workSite,
+      </if>
+      <if test="totalPrice != null">
+        totalPrice,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="salesMan != null">
+        salesMan,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="sourceType != null">
+        sourceType,
+      </if>
+      <if test="lessorId != null">
+        lessorId,
+      </if>
+      <if test="lesBankAccountId != null">
+        lesBankAccountId,
+      </if>
+      <if test="customerId != null">
+        customerId,
+      </if>
+      <if test="cusBankAccountId != null">
+        cusBankAccountId,
+      </if>
+      <if test="includeInvoice != null">
+        includeInvoice,
+      </if>
+      <if test="includeShippingFee != null">
+        includeShippingFee,
+      </if>
+      <if test="shippingFee != null">
+        shippingFee,
+      </if>
+      <if test="includeJiShou != null">
+        includeJiShou,
+      </if>
+      <if test="includeFue != null">
+        includeFue,
+      </if>
+      <if test="includeInsurance != null">
+        includeInsurance,
+      </if>
+      <if test="otherExpense != null">
+        otherExpense,
+      </if>
+      <if test="otherExpenseComment != null">
+        otherExpenseComment,
+      </if>
+      <if test="payMethod != null">
+        payMethod,
+      </if>
+      <if test="prepayFee != null">
+        prepayFee,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="contractOrder_Id != null">
+        #{contractOrder_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="contractOrderNum != null">
+        #{contractOrderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceId != null">
+        #{sourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="jobNature != null">
+        #{jobNature,jdbcType=VARCHAR},
+      </if>
+      <if test="workSite != null">
+        #{workSite,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="salesMan != null">
+        #{salesMan,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceType != null">
+        #{sourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="lessorId != null">
+        #{lessorId,jdbcType=VARCHAR},
+      </if>
+      <if test="lesBankAccountId != null">
+        #{lesBankAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="cusBankAccountId != null">
+        #{cusBankAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="includeInvoice != null">
+        #{includeInvoice,jdbcType=BIT},
+      </if>
+      <if test="includeShippingFee != null">
+        #{includeShippingFee,jdbcType=BIT},
+      </if>
+      <if test="shippingFee != null">
+        #{shippingFee,jdbcType=DECIMAL},
+      </if>
+      <if test="includeJiShou != null">
+        #{includeJiShou,jdbcType=BIT},
+      </if>
+      <if test="includeFue != null">
+        #{includeFue,jdbcType=BIT},
+      </if>
+      <if test="includeInsurance != null">
+        #{includeInsurance,jdbcType=BIT},
+      </if>
+      <if test="otherExpense != null">
+        #{otherExpense,jdbcType=DECIMAL},
+      </if>
+      <if test="otherExpenseComment != null">
+        #{otherExpenseComment,jdbcType=VARCHAR},
+      </if>
+      <if test="payMethod != null">
+        #{payMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="prepayFee != null">
+        #{prepayFee,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.ContractOrder">
+    update t_contractorder
+    <set>
+      <if test="contractOrderNum != null">
+        contractOrderNum = #{contractOrderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceId != null">
+        sourceId = #{sourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null">
+        projectId = #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        projectName = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="jobNature != null">
+        jobNature = #{jobNature,jdbcType=VARCHAR},
+      </if>
+      <if test="workSite != null">
+        workSite = #{workSite,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPrice != null">
+        totalPrice = #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="salesMan != null">
+        salesMan = #{salesMan,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceType != null">
+        sourceType = #{sourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="lessorId != null">
+        lessorId = #{lessorId,jdbcType=VARCHAR},
+      </if>
+      <if test="lesBankAccountId != null">
+        lesBankAccountId = #{lesBankAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        customerId = #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="cusBankAccountId != null">
+        cusBankAccountId = #{cusBankAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="includeInvoice != null">
+        includeInvoice = #{includeInvoice,jdbcType=BIT},
+      </if>
+      <if test="includeShippingFee != null">
+        includeShippingFee = #{includeShippingFee,jdbcType=BIT},
+      </if>
+      <if test="shippingFee != null">
+        shippingFee = #{shippingFee,jdbcType=DECIMAL},
+      </if>
+      <if test="includeJiShou != null">
+        includeJiShou = #{includeJiShou,jdbcType=BIT},
+      </if>
+      <if test="includeFue != null">
+        includeFue = #{includeFue,jdbcType=BIT},
+      </if>
+      <if test="includeInsurance != null">
+        includeInsurance = #{includeInsurance,jdbcType=BIT},
+      </if>
+      <if test="otherExpense != null">
+        otherExpense = #{otherExpense,jdbcType=DECIMAL},
+      </if>
+      <if test="otherExpenseComment != null">
+        otherExpenseComment = #{otherExpenseComment,jdbcType=VARCHAR},
+      </if>
+      <if test="payMethod != null">
+        payMethod = #{payMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="prepayFee != null">
+        prepayFee = #{prepayFee,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where contractOrder_Id = #{contractOrder_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.ContractOrder">
+    update t_contractorder
+    set contractOrderNum = #{contractOrderNum,jdbcType=VARCHAR},
+     sourceId = #{sourceId,jdbcType=VARCHAR},
+      projectId = #{projectId,jdbcType=VARCHAR},
+      projectName = #{projectName,jdbcType=VARCHAR},
+      jobNature = #{jobNature,jdbcType=VARCHAR},
+      workSite = #{workSite,jdbcType=VARCHAR},
+      totalPrice = #{totalPrice,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      salesMan = #{salesMan,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      sourceType = #{sourceType,jdbcType=VARCHAR},
+      lessorId = #{lessorId,jdbcType=VARCHAR},
+      lesBankAccountId = #{lesBankAccountId,jdbcType=VARCHAR},
+      customerId = #{customerId,jdbcType=VARCHAR},
+      cusBankAccountId = #{cusBankAccountId,jdbcType=VARCHAR},
+      includeInvoice = #{includeInvoice,jdbcType=BIT},
+      includeShippingFee = #{includeShippingFee,jdbcType=BIT},
+      shippingFee = #{shippingFee,jdbcType=DECIMAL},
+      includeJiShou = #{includeJiShou,jdbcType=BIT},
+      includeFue = #{includeFue,jdbcType=BIT},
+      includeInsurance = #{includeInsurance,jdbcType=BIT},
+      otherExpense = #{otherExpense,jdbcType=DECIMAL},
+      otherExpenseComment = #{otherExpenseComment,jdbcType=VARCHAR},
+      payMethod = #{payMethod,jdbcType=VARCHAR},
+      prepayFee = #{prepayFee,jdbcType=DECIMAL}
+    where contractOrder_Id = #{contractOrder_Id,jdbcType=VARCHAR}
+  </update>
+    <select id="getContractOrderPageList" parameterType="com.jy.entity.form.ContractOrderQueryForm"
+		resultMap="ContractOrderVoResultMap">
+	select contractorder.contractOrder_Id as contractOrder_Id,contractorder.contractOrderNum as contractOrderNum ,customer.customerName as customerName,customer.cusLinkman as cusLinkman,customer.telephone as cusTelephone,
+    company.companyName as companyName,salesUser.userName as salesManUserName,creatorUser.userName as creatorUserName,contractorder.lessorId as lessorId,contractorder.status as status
+    from t_contractorder contractorder 
+    LEFT JOIN u_customer  customer on contractorder.customerId = customer.customer_Id
+    LEFT JOIN u_company company on contractorder.lessorId = company.company_Id
+    LEFT JOIN sys_useraccount creatorUser on contractorder.creator = creatorUser.userAccount_Id
+    LEFT JOIN sys_useraccount salesUser on contractorder.salesMan = salesUser.userAccount_Id
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+		   <if test="lessorIdArray!=null and lessorIdArray.length>0">
+		   AND contractorder.lessorId IN
+		       <foreach collection="lessorIdArray" item="item" index="index"  open="(" close=")" separator=",">
+		          '${item}'
+		        </foreach>
+			</if>
+			  <if test="creator!=null">
+				AND contractorder.creator = #{creator}
+			</if>
+		   <if test="salesMan!=null">
+				AND contractorder.salesMan = #{salesMan}
+			</if>
+		   <if test="startTime!=null">
+				AND contractorder.createTime &gt;= #{startTime}
+			</if>
+		   <if test="endTime!=null">
+				AND contractorder.createTime &lt;= #{endTime}
+			</if>
+		   <if test="status!=null">
+				AND contractorder.status = #{status}
+			</if>
+		   <if test="sourceType!=null">
+				AND contractorder.sourceType = #{sourceType}
+			</if>
+		   <if test="payMethod!=null">
+				AND contractorder.payMethod = #{payMethod}
+			</if>
+		   <if test="projectId!=null">
+				AND contractorder.projectId = #{projectId}
+			</if>
+		   <if test="projectName!=null">
+		        AND contractorder.projectName like CONCAT('%', '${projectName}', '%')
+			</if>
+		   <if test="sourceId!=null">
+				AND contractorder.sourceId = #{sourceId}
+			</if>
+		   <if test="contractOrderNum!=null">
+				AND contractorder.contractOrderNum  like CONCAT('%', '${contractOrderNum}', '%')
+			</if>
+		   <if test="customerId!=null">
+				AND contractorder.customerId = #{customerId}
+			</if>
+			<if test="customerName!=null">
+				AND customer.customerName like CONCAT('%', '${customerName}', '%')
+			</if>
+			<if test="contractOrderId!=null">
+				AND contractorder.contractOrder_Id = #{contractOrderId}
+			</if>
+		</trim>
+		order by contractorder.contractOrderNum
+	</select>
+</mapper>

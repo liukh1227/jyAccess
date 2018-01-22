@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.DeliveryCarMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.DeliveryCar">
+    <id column="deliveryCar_Id" jdbcType="VARCHAR" property="deliveryCar_Id" />
+    <result column="deliveryOrderId" jdbcType="VARCHAR" property="deliveryOrderId" />
+    <result column="plateNumber" jdbcType="VARCHAR" property="plateNumber" />
+    <result column="driver" jdbcType="VARCHAR" property="driver" />
+    <result column="deriverPhone" jdbcType="VARCHAR" property="deriverPhone" />
+    <result column="doorkeeper" jdbcType="VARCHAR" property="doorkeeper" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    deliveryCar_Id, deliveryOrderId, plateNumber, driver, deriverPhone, doorkeeper
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_deliverycar
+    where deliveryCar_Id = #{deliveryCar_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_deliverycar
+    where deliveryCar_Id = #{deliveryCar_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.DeliveryCar">
+    insert into t_deliverycar (deliveryCar_Id, deliveryOrderId, 
+      plateNumber, driver, deriverPhone, 
+      doorkeeper)
+    values (#{deliveryCar_Id,jdbcType=VARCHAR}, #{deliveryOrderId,jdbcType=VARCHAR}, 
+      #{plateNumber,jdbcType=VARCHAR}, #{driver,jdbcType=VARCHAR}, #{deriverPhone,jdbcType=VARCHAR}, 
+      #{doorkeeper,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.DeliveryCar" keyProperty="deliveryCar_Id">
+		<selectKey keyProperty="deliveryCar_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into t_deliverycar
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deliveryCar_Id != null">
+        deliveryCar_Id,
+      </if>
+      <if test="deliveryOrderId != null">
+        deliveryOrderId,
+      </if>
+      <if test="plateNumber != null">
+        plateNumber,
+      </if>
+      <if test="driver != null">
+        driver,
+      </if>
+      <if test="deriverPhone != null">
+        deriverPhone,
+      </if>
+      <if test="doorkeeper != null">
+        doorkeeper,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deliveryCar_Id != null">
+        #{deliveryCar_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryOrderId != null">
+        #{deliveryOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="plateNumber != null">
+        #{plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="driver != null">
+        #{driver,jdbcType=VARCHAR},
+      </if>
+      <if test="deriverPhone != null">
+        #{deriverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="doorkeeper != null">
+        #{doorkeeper,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.DeliveryCar">
+    update t_deliverycar
+    <set>
+      <if test="deliveryOrderId != null">
+        deliveryOrderId = #{deliveryOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="plateNumber != null">
+        plateNumber = #{plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="driver != null">
+        driver = #{driver,jdbcType=VARCHAR},
+      </if>
+      <if test="deriverPhone != null">
+        deriverPhone = #{deriverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="doorkeeper != null">
+        doorkeeper = #{doorkeeper,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where deliveryCar_Id = #{deliveryCar_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.DeliveryCar">
+    update t_deliverycar
+    set deliveryOrderId = #{deliveryOrderId,jdbcType=VARCHAR},
+      plateNumber = #{plateNumber,jdbcType=VARCHAR},
+      driver = #{driver,jdbcType=VARCHAR},
+      deriverPhone = #{deriverPhone,jdbcType=VARCHAR},
+      doorkeeper = #{doorkeeper,jdbcType=VARCHAR}
+    where deliveryCar_Id = #{deliveryCar_Id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.UserAccountMapper">
+	<resultMap id="BaseResultMap" type="com.jy.entity.po.UserAccount">
+		<id column="userAccount_Id" jdbcType="VARCHAR" property="userAccount_Id" />
+		<result column="account" jdbcType="VARCHAR" property="account" />
+		<result column="userName" jdbcType="VARCHAR" property="userName" />
+		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="passwordSalt" jdbcType="VARCHAR" property="passwordSalt" />
+		<result column="cellPhone" jdbcType="VARCHAR" property="cellPhone" />
+		<result column="sysLevel" jdbcType="VARCHAR" property="sysLevel" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="companyId" jdbcType="VARCHAR" property="companyId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="headPortrait" jdbcType="VARCHAR" property="headPortrait" />
+		<result column="dataScope" jdbcType="VARCHAR" property="dataScope" />
+	</resultMap>
+	<resultMap type="com.jy.entity.vo.UserAccountVo" id="UserAccountVoResultMap"
+		extends="BaseResultMap">
+		<result column="companyName" jdbcType="VARCHAR" property="companyName" />
+	</resultMap>
+	<parameterMap type="com.jy.entity.po.UserAccount" id="UserAccountParameterMap">
+		<parameter property="account" resultMap="BaseResultMap" />
+		<parameter property="password" resultMap="BaseResultMap" />
+		<parameter property="userAccount_Id" resultMap="BaseResultMap" />
+	</parameterMap>
+	<sql id="Base_Part_Column_List">
+		userAccount_Id, account, userName, cellPhone, sysLevel, status,
+		companyId, creator, createTime, headPortrait,dataScope
+	</sql>
+	<sql id="Base_Column_List">
+		userAccount_Id, account, userName, password, passwordSalt, cellPhone, sysLevel,
+		status,
+		companyId, creator, createTime, headPortrait,dataScope
+	</sql>
+
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="UserAccountVoResultMap">
+		select userAccount.*,company.companyName as companyName
+		from sys_useraccount userAccount
+		LEFT JOIN u_company company on userAccount.companyId = company.company_Id
+		where userAccount_Id = #{userAccount_Id,jdbcType=VARCHAR}
+	</select>
+
+	<select id="getUserAccountByIdOrAccount" parameterMap="UserAccountParameterMap"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_useraccount
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="account !=null">
+				OR account = #{account}
+			</if>
+			<if test="userAccountId !=null">
+				OR userAccount_Id = #{userAccount_Id}
+			</if>
+		</trim>
+	</select>
+	<select id="isValidUserAccount" parameterMap="UserAccountParameterMap"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_useraccount
+		where account = #{account,jdbcType=VARCHAR}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from sys_useraccount
+		where userAccount_Id = #{userAccount_Id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.jy.entity.po.UserAccount">
+		insert into sys_useraccount (userAccount_Id, account, userName,
+		password, passwordSalt, cellPhone,
+		sysLevel, status, companyId,
+		creator, createTime, headPortrait,dataScope
+		)
+		values (#{userAccount_Id,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR},
+		#{userName,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR}, #{passwordSalt,jdbcType=VARCHAR}, #{cellPhone,jdbcType=VARCHAR},
+		#{sysLevel,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+		#{companyId,jdbcType=VARCHAR},
+		#{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+		#{headPortrait,jdbcType=VARCHAR},#{dataScope,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.jy.entity.po.UserAccount"
+		keyProperty="userAccount_Id">
+		<selectKey keyProperty="userAccount_Id" resultType="String"
+			order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into sys_useraccount
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userAccount_Id != null">
+				userAccount_Id,
+			</if>
+			<if test="account != null">
+				account,
+			</if>
+			<if test="userName != null">
+				userName,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="passwordSalt != null">
+				passwordSalt,
+			</if>
+			<if test="cellPhone != null">
+				cellPhone,
+			</if>
+			<if test="sysLevel != null">
+				sysLevel,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="companyId != null">
+				companyId,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="createTime != null">
+				createTime,
+			</if>
+			<if test="headPortrait != null">
+				headPortrait,
+			</if>
+			<if test="dataScope != null">
+				dataScope,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userAccount_Id != null">
+				#{userAccount_Id,jdbcType=VARCHAR},
+			</if>
+			<if test="account != null">
+				#{account,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="passwordSalt != null">
+				#{passwordSalt,jdbcType=VARCHAR},
+			</if>
+			<if test="cellPhone != null">
+				#{cellPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="sysLevel != null">
+				#{sysLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="companyId != null">
+				#{companyId,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="headPortrait != null">
+				#{headPortrait,jdbcType=VARCHAR},
+			</if>
+			<if test="dataScope != null">
+				#{dataScope,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.UserAccount">
+		update sys_useraccount
+		<set>
+			<if test="account != null">
+				account = #{account,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				userName = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="passwordSalt != null">
+				passwordSalt = #{passwordSalt,jdbcType=VARCHAR},
+			</if>
+			<if test="cellPhone != null">
+				cellPhone = #{cellPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="sysLevel != null">
+				sysLevel = #{sysLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="companyId != null">
+				companyId = #{companyId,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				createTime = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="headPortrait != null">
+				headPortrait = #{headPortrait,jdbcType=VARCHAR},
+			</if>
+			<if test="dataScope != null">
+				dataScope = #{dataScope,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where userAccount_Id = #{userAccount_Id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.jy.entity.po.UserAccount">
+		update sys_useraccount
+		set account = #{account,jdbcType=VARCHAR},
+		userName = #{userName,jdbcType=VARCHAR},
+		password = #{password,jdbcType=VARCHAR},
+		passwordSalt = #{passwordSalt,jdbcType=VARCHAR},
+		cellPhone = #{cellPhone,jdbcType=VARCHAR},
+		sysLevel = #{sysLevel,jdbcType=VARCHAR},
+		status = #{status,jdbcType=VARCHAR},
+		companyId = #{companyId,jdbcType=VARCHAR},
+		creator = #{creator,jdbcType=VARCHAR},
+		createTime = #{createTime,jdbcType=TIMESTAMP},
+		headPortrait = #{headPortrait,jdbcType=VARCHAR},
+		dataScope = #{dataScope,jdbcType=VARCHAR}
+		where userAccount_Id = #{userAccount_Id,jdbcType=VARCHAR}
+	</update>
+	<select id="getUserAccountPageList" parameterType="com.jy.entity.form.UserAccountQueryForm"
+		resultMap="UserAccountVoResultMap">
+		select
+		userAccount.userAccount_Id as userAccount_Id,
+		userAccount.account as account,
+		userAccount.userName as userName,
+		userAccount.cellPhone as cellPhone,
+		userAccount.sysLevel as sysLevel,
+		userAccount.status as status,
+		userAccount.createTime as createTime,
+		userAccount.companyId as companyId,
+		userAccount. headPortrait as headPortrait,
+		userAccount.
+		dataScope as dataScope,
+		company.companyName as companyName
+		from sys_useraccount userAccount
+		LEFT JOIN u_company company on userAccount.companyId = company.company_Id
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="companyIdArray!=null and companyIdArray.length>0">
+				AND userAccount.companyId IN
+				<foreach collection="companyIdArray" item="item" index="index"
+					open="(" close=")" separator=",">
+					'${item}'
+				</foreach>
+			</if>
+			<if test="status!=null">
+				AND userAccount.status = #{status}
+			</if>
+			<if test="userName!=null">
+				AND userAccount.userName like CONCAT('%', '${userName}',
+				'%')
+			</if>
+			<if test="account!=null">
+				AND userAccount.account like CONCAT('%', '${account}',
+				'%')
+			</if>
+			<if test="sysLevel!=null">
+				AND userAccount.sysLevel = #{sysLevel}
+			</if>
+		</trim>
+	</select>
+	<select id="getAllUserAccountList" parameterType="com.jy.entity.form.UserAccountQueryForm"
+		resultMap="UserAccountVoResultMap">
+		select
+		userAccount.userAccount_Id as userAccount_Id,
+		userAccount.account as account,
+		userAccount.userName as userName,
+		userAccount.cellPhone as cellPhone,
+		userAccount.sysLevel as sysLevel,
+		userAccount.status as status,
+		userAccount.createTime as createTime,
+		userAccount.companyId as companyId,
+		userAccount. headPortrait as headPortrait,
+		userAccount.
+		dataScope as dataScope,
+		company.companyName as companyName
+		from sys_useraccount userAccount
+		LEFT JOIN u_company company on userAccount.companyId = company.company_Id
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="companyIdArray!=null and companyIdArray.length>0">
+				AND userAccount.companyId IN
+				<foreach collection="companyIdArray" item="item" index="index"
+					open="(" close=")" separator=",">
+					'${item}'
+				</foreach>
+			</if>
+			<if test="status!=null">
+				AND userAccount.status = #{status}
+			</if>
+			<if test="sysLevel!=null">
+				AND userAccount.sysLevel = #{sysLevel}
+			</if>
+			<if test="userName!=null">
+				AND userAccount.userName like CONCAT('%', '${userName}',
+				'%')
+			</if>
+			<if test="account!=null">
+				AND userAccount.account like CONCAT('%', '${account}',
+				'%')
+			</if>
+		</trim>
+	</select>
+	<select id="getAllNoConfigRoleUserAccountList" parameterType="com.jy.entity.form.UserAccountQueryForm"
+		resultMap="BaseResultMap">
+		select
+		userAccount_Id, account,userName,status
+		from sys_useraccount
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="companyId!=null">
+				AND companyId = #{companyId}
+			</if>
+			<if test="roleId!=null">
+				AND userAccount_Id not in (
+				select userAccountId from
+				sys_userroles where roleId = #{roleId}
+				)
+			</if>
+			<if test="status!=null">
+				AND status = #{status}
+			</if>
+			<if test="sysLevel!=null">
+				AND sysLevel = #{sysLevel}
+			</if>
+			<if test="userName!=null">
+				AND userName like CONCAT('%', '${userName}', '%')
+			</if>
+			<if test="account!=null">
+				AND account like CONCAT('%', '${account}', '%')
+			</if>
+		</trim>
+	</select>
+
+
+</mapper>

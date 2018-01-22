@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.DeviceBrandMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.DeviceBrand">
+    <id column="deviceBrand_Id" jdbcType="VARCHAR" property="deviceBrand_Id" />
+    <result column="isDisplay" jdbcType="BIT" property="isDisplay" />
+    <result column="sequenceOrder" jdbcType="INTEGER" property="sequenceOrder" />
+    <result column="brandName" jdbcType="VARCHAR" property="brandName" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="brandLogo" jdbcType="VARCHAR" property="brandLogo" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="letter" jdbcType="VARCHAR" property="letter" />
+    <result column="isHot" jdbcType="BIT" property="isHot" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    deviceBrand_Id, isDisplay, sequenceOrder, brandName, creator, brandLogo, createTime, 
+    letter, isHot
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from b_devicebrand
+    where deviceBrand_Id = #{deviceBrand_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from b_devicebrand
+    where deviceBrand_Id = #{deviceBrand_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.DeviceBrand">
+    insert into b_devicebrand (deviceBrand_Id, isDisplay, sequenceOrder, 
+      brandName, creator, brandLogo, 
+      createTime, letter, isHot
+      )
+    values (#{deviceBrand_Id,jdbcType=VARCHAR}, #{isDisplay,jdbcType=BIT}, #{sequenceOrder,jdbcType=INTEGER}, 
+      #{brandName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{brandLogo,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{letter,jdbcType=VARCHAR}, #{isHot,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.DeviceBrand"
+  keyProperty="deviceBrand_Id">
+		<selectKey keyProperty="deviceBrand_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into b_devicebrand
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deviceBrand_Id != null">
+        deviceBrand_Id,
+      </if>
+      <if test="isDisplay != null">
+        isDisplay,
+      </if>
+      <if test="sequenceOrder != null">
+        sequenceOrder,
+      </if>
+      <if test="brandName != null">
+        brandName,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="brandLogo != null">
+        brandLogo,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="letter != null">
+        letter,
+      </if>
+      <if test="isHot != null">
+        isHot,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deviceBrand_Id != null">
+        #{deviceBrand_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="isDisplay != null">
+        #{isDisplay,jdbcType=BIT},
+      </if>
+      <if test="sequenceOrder != null">
+        #{sequenceOrder,jdbcType=INTEGER},
+      </if>
+      <if test="brandName != null">
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="brandLogo != null">
+        #{brandLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="letter != null">
+        #{letter,jdbcType=VARCHAR},
+      </if>
+      <if test="isHot != null">
+        #{isHot,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.DeviceBrand">
+    update b_devicebrand
+    <set>
+      <if test="isDisplay != null">
+        isDisplay = #{isDisplay,jdbcType=BIT},
+      </if>
+      <if test="sequenceOrder != null">
+        sequenceOrder = #{sequenceOrder,jdbcType=INTEGER},
+      </if>
+      <if test="brandName != null">
+        brandName = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="brandLogo != null">
+        brandLogo = #{brandLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="letter != null">
+        letter = #{letter,jdbcType=VARCHAR},
+      </if>
+      <if test="isHot != null">
+        isHot = #{isHot,jdbcType=BIT},
+      </if>
+    </set>
+    where deviceBrand_Id = #{deviceBrand_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.DeviceBrand">
+    update b_devicebrand
+    set isDisplay = #{isDisplay,jdbcType=BIT},
+      sequenceOrder = #{sequenceOrder,jdbcType=INTEGER},
+      brandName = #{brandName,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      brandLogo = #{brandLogo,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      letter = #{letter,jdbcType=VARCHAR},
+      isHot = #{isHot,jdbcType=BIT}
+    where deviceBrand_Id = #{deviceBrand_Id,jdbcType=VARCHAR}
+  </update>
+  	<select id="getDeviceBrandPageList" parameterType="com.jy.entity.form.DeviceBrandQueryForm"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from b_devicebrand
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="brandName!=null">
+				AND brandName like CONCAT('%', '${brandName}', '%')
+			</if>
+			<if test="isDisplay!=null">
+				AND isDisplay = #{isDisplay}
+			</if>
+		</trim>
+	</select>
+	<select id="getAllDeviceBrandList" parameterType="com.jy.entity.form.DeviceBrandQueryForm"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from b_devicebrand
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="brandName!=null">
+				AND brandName like CONCAT('%', '${brandName}', '%')
+			</if>
+			<if test="isDisplay!=null">
+				AND isDisplay = #{isDisplay}
+			</if>
+		</trim>
+	</select>
+</mapper>

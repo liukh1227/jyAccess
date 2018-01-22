@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.FinanceAccountMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.FinanceAccount">
+    <id column="fAccountNO" jdbcType="VARCHAR" property="fAccountNO" />
+    <result column="fAccountName" jdbcType="VARCHAR" property="fAccountName" />
+    <result column="fAccountType" jdbcType="VARCHAR" property="fAccountType" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    fAccountNO, fAccountName, fAccountType, status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from f_financeaccount
+    where fAccountNO = #{fAccountNO,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from f_financeaccount
+    where fAccountNO = #{fAccountNO,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.FinanceAccount">
+    insert into f_financeaccount (fAccountNO, fAccountName, fAccountType, 
+      status)
+    values (#{fAccountNO,jdbcType=VARCHAR}, #{fAccountName,jdbcType=VARCHAR}, #{fAccountType,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.FinanceAccount" keyProperty="fAccountNO">
+		<selectKey keyProperty="fAccountNO" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into f_financeaccount
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fAccountNO != null">
+        fAccountNO,
+      </if>
+      <if test="fAccountName != null">
+        fAccountName,
+      </if>
+      <if test="fAccountType != null">
+        fAccountType,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fAccountNO != null">
+        #{fAccountNO,jdbcType=VARCHAR},
+      </if>
+      <if test="fAccountName != null">
+        #{fAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="fAccountType != null">
+        #{fAccountType,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.FinanceAccount">
+    update f_financeaccount
+    <set>
+      <if test="fAccountName != null">
+        fAccountName = #{fAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="fAccountType != null">
+        fAccountType = #{fAccountType,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where fAccountNO = #{fAccountNO,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.FinanceAccount">
+    update f_financeaccount
+    set fAccountName = #{fAccountName,jdbcType=VARCHAR},
+      fAccountType = #{fAccountType,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where fAccountNO = #{fAccountNO,jdbcType=VARCHAR}
+  </update>
+</mapper>

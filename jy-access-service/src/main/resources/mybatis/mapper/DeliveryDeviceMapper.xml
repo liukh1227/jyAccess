@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.DeliveryDeviceMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.DeliveryDevice">
+    <id column="deliveryDevice_Id" jdbcType="VARCHAR" property="deliveryDevice_Id" />
+    <result column="deliveryOrderId" jdbcType="VARCHAR" property="deliveryOrderId" />
+    <result column="deviceId" jdbcType="VARCHAR" property="deviceId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    deliveryDevice_Id, deliveryOrderId, deviceId, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_deliverydevice
+    where deliveryDevice_Id = #{deliveryDevice_Id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_deliverydevice
+    where deliveryDevice_Id = #{deliveryDevice_Id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.DeliveryDevice">
+    insert into t_deliverydevice (deliveryDevice_Id, deliveryOrderId, 
+      deviceId, remark)
+    values (#{deliveryDevice_Id,jdbcType=VARCHAR}, #{deliveryOrderId,jdbcType=VARCHAR}, 
+      #{deviceId,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.DeliveryDevice" keyProperty="deliveryDevice_Id">
+		<selectKey keyProperty="deliveryDevice_Id" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+    insert into t_deliverydevice
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deliveryDevice_Id != null">
+        deliveryDevice_Id,
+      </if>
+      <if test="deliveryOrderId != null">
+        deliveryOrderId,
+      </if>
+      <if test="deviceId != null">
+        deviceId,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deliveryDevice_Id != null">
+        #{deliveryDevice_Id,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryOrderId != null">
+        #{deliveryOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.DeliveryDevice">
+    update t_deliverydevice
+    <set>
+      <if test="deliveryOrderId != null">
+        deliveryOrderId = #{deliveryOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        deviceId = #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where deliveryDevice_Id = #{deliveryDevice_Id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.DeliveryDevice">
+    update t_deliverydevice
+    set deliveryOrderId = #{deliveryOrderId,jdbcType=VARCHAR},
+      deviceId = #{deviceId,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where deliveryDevice_Id = #{deliveryDevice_Id,jdbcType=VARCHAR}
+  </update>
+</mapper>

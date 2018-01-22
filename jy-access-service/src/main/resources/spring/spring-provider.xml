@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd  
+        ">
+
+	<!-- 具体的实现bean-->
+	<bean id="initService" class="com.jy.access.service.InitServiceImpl" />
+	<bean id="smsService" class="com.jy.access.service.SmsServiceImpl" />
+ 	<bean id="deviceBrandService" class="com.jy.access.service.DeviceBrandServiceImpl" />
+ 	<bean id="bankAccountService" class="com.jy.access.service.BankAccountServiceImpl" />
+ 	<bean id="companyDeviceModelService" class="com.jy.access.service.CompanyDeviceModelServiceImpl" />
+ 	<bean id="companyService" class="com.jy.access.service.CompanyServiceImpl" />
+ 	<bean id="customerService" class="com.jy.access.service.CustomerServiceImpl" />
+ 	<bean id="deviceModelService" class="com.jy.access.service.DeviceModelServiceImpl" />
+ 	<bean id="deviceService" class="com.jy.access.service.DeviceServiceImpl" />
+ 	<bean id="deviceSpecificationService" class="com.jy.access.service.DeviceSpecificationServiceImpl" />
+ 	<bean id="deviceTypeService" class="com.jy.access.service.DeviceTypeServiceImpl" />
+ 	<bean id="dmAttributevalueService" class="com.jy.access.service.DmAttributevalueServiceImpl" />
+ 	<bean id="dtKeyAttributespecificationService" class="com.jy.access.service.DtKeyAttributespecificationServiceImpl" />
+ 	<bean id="dtKeyAttributevalueServie" class="com.jy.access.service.DtKeyAttributevalueServieImpl" />
+ 	<bean id="dtypeSpecificationService" class="com.jy.access.service.DtypeSpecificationServiceImpl" />
+ 	<bean id="quotationService" class="com.jy.access.service.QuotationServiceImpl" />
+ 	<bean id="quotationDeviceService" class="com.jy.access.service.QuotationDeviceServiceImpl" />
+ 	<bean id="userAccountServie" class="com.jy.access.service.UserAccountServieImpl" />
+ 	<bean id="contractOrderService" class="com.jy.access.service.ContractOrderServiceImpl" />
+ 	<bean id="contractDeviceModelService" class="com.jy.access.service.ContractDeviceModelServiceImpl" />
+ 	<bean id="deliveryOrderService" class="com.jy.access.service.DeliveryOrderServiceImpl" />
+ 	<bean id="deliveryDeviceService" class="com.jy.access.service.DeliveryDeviceServiceImpl" />
+ 	<bean id="deliveryCarService" class="com.jy.access.service.DeliveryCarServiceImpl" />
+ 	<bean id="deviceInMakesureOrderService" class="com.jy.access.service.DeviceInMakesureOrderServiceImpl" />
+ 	<bean id="deviceOutMakesureOrderService" class="com.jy.access.service.DeviceOutMakesureOrderServiceImpl" />
+ 	<bean id="repairsOrderService" class="com.jy.access.service.RepairsOrderServiceImpl" />
+ 	<bean id="stopOrderService" class="com.jy.access.service.StopOrderServiceImpl" />
+ 	<bean id="deviceWorktraceService" class="com.jy.access.service.DeviceWorktraceServiceImpl" />
+ 	<bean id="changeContractDeviceOrderService" class="com.jy.access.service.ChangeContractDeviceOrderServiceImpl" />
+ 	<bean id="permissionService" class="com.jy.access.service.PermissionServiceImpl" />
+ 	<bean id="roleService" class="com.jy.access.service.RoleServiceImpl" />
+ 	<bean id="rolePermissionsService" class="com.jy.access.service.RolePermissionsServiceImpl" />
+ 	<bean id="userPermissionsService" class="com.jy.access.service.UserPermissionsServiceImpl" />
+ 	<bean id="userRolesService" class="com.jy.access.service.UserRolesServiceImpl" />
+ 	<bean id="districtService" class="com.jy.access.service.DistrictServiceImpl" />
+ 	
+
+
+	<!-- 提供方应用信息，用于计算依赖关系 -->
+ 	<dubbo:application name="app-provider" />
+
+	<!-- 使用multicast广播注册中心暴露服务地址 -->
+	<!--<dubbo:registry address="multicast://224.5.6.7:1234" /> -->
+
+	<!-- 使用zookeeper注册中心暴露服务地址 即zookeeper的所在服务器ip地址和端口号 -->
+     <dubbo:registry address="zookeeper://127.0.0.1:2181"/> 
+    
+	<!-- 用dubbo协议在20880端口暴露服务 -->
+ 	<!--<dubbo:protocol name="dubbo" port="20882" />-->
+ 	<dubbo:protocol name="dubbo" port="20887" />
+
+	<!-- 声明需要暴露的服务接口 -->
+ 	<dubbo:service interface="com.jy.access.service.IInitService" ref="initService" group="jy"/>
+ 	<dubbo:service interface="com.jy.access.service.ISmsService" ref="smsService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.DeviceBrandService" ref="deviceBrandService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.BankAccountService" ref="bankAccountService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.CompanyDeviceModelService" ref="companyDeviceModelService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.CompanyService" ref="companyService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.CustomerService" ref="customerService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.DeviceModelService" ref="deviceModelService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.DeviceService" ref="deviceService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.DeviceSpecificationService" ref="deviceSpecificationService" group="jy" />
+	<dubbo:service interface="com.jy.access.service.DeviceTypeService" ref="deviceTypeService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.DmAttributevalueService" ref="dmAttributevalueService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.DtKeyAttributespecificationService" ref="dtKeyAttributespecificationService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.DtKeyAttributevalueServie" ref="dtKeyAttributevalueServie" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.DtypeSpecificationService" ref="dtypeSpecificationService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.QuotationService" ref="quotationService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.QuotationDeviceService" ref="quotationDeviceService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.UserAccountServie" ref="userAccountServie" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.ContractOrderService" ref="contractOrderService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.ContractDeviceModelService" ref="contractDeviceModelService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.DeliveryOrderService" ref="deliveryOrderService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.DeliveryDeviceService" ref="deliveryDeviceService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.DeliveryCarService" ref="deliveryCarService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.DeviceInMakesureOrderService" ref="deviceInMakesureOrderService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.DeviceOutMakesureOrderService" ref="deviceOutMakesureOrderService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.RepairsOrderService" ref="repairsOrderService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.StopOrderService" ref="stopOrderService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.DeviceWorktraceService" ref="deviceWorktraceService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.ChangeContractDeviceOrderService" ref="changeContractDeviceOrderService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.PermissionService" ref="permissionService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.RoleService" ref="roleService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.RolePermissionsService" ref="rolePermissionsService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.UserPermissionsService" ref="userPermissionsService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.UserRolesService" ref="userRolesService" group="jy"/>
+	<dubbo:service interface="com.jy.access.service.DistrictService" ref="districtService" group="jy"/>
+</beans>

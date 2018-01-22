@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.access.mapper.PermissionMapper">
+  <resultMap id="BaseResultMap" type="com.jy.entity.po.Permission">
+    <id column="permission_Id" jdbcType="INTEGER" property="permission_Id" />
+    <result column="permissionName" jdbcType="VARCHAR" property="permissionName" />
+    <result column="resourceUrl" jdbcType="VARCHAR" property="resourceUrl" />
+    <result column="permissionType" jdbcType="VARCHAR" property="permissionType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    permission_Id, permissionName, resourceUrl, permissionType
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_permission
+    where permission_Id = #{permission_Id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from sys_permission
+    where permission_Id = #{permission_Id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jy.entity.po.Permission">
+    insert into sys_permission (permission_Id, permissionName, resourceUrl, 
+      permissionType)
+    values (#{permission_Id,jdbcType=INTEGER}, #{permissionName,jdbcType=VARCHAR}, #{resourceUrl,jdbcType=VARCHAR}, 
+      #{permissionType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jy.entity.po.Permission" keyProperty="permission_Id">
+		<selectKey keyProperty="permission_Id" resultType="java.lang.Integer"
+			order="AFTER">
+			select LAST_INSERT_ID()
+		</selectKey>
+    insert into sys_permission
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="permissionName != null">
+        permissionName,
+      </if>
+      <if test="resourceUrl != null">
+        resourceUrl,
+      </if>
+      <if test="permissionType != null">
+        permissionType,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+     
+      <if test="permissionName != null">
+        #{permissionName,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceUrl != null">
+        #{resourceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionType != null">
+        #{permissionType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jy.entity.po.Permission">
+    update sys_permission
+    <set>
+      <if test="permissionName != null">
+        permissionName = #{permissionName,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceUrl != null">
+        resourceUrl = #{resourceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionType != null">
+        permissionType = #{permissionType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where permission_Id = #{permission_Id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jy.entity.po.Permission">
+    update sys_permission
+    set permissionName = #{permissionName,jdbcType=VARCHAR},
+      resourceUrl = #{resourceUrl,jdbcType=VARCHAR},
+      permissionType = #{permissionType,jdbcType=VARCHAR}
+    where permission_Id = #{permission_Id,jdbcType=INTEGER}
+  </update>
+    <select id="getPermissionPageList" parameterType="com.jy.entity.form.PermissionQueryForm"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_permission
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="permissionName!=null">
+				AND permissionName like CONCAT('%', '${permissionName}', '%')
+			</if>
+			<if test="permissionType!=null">
+				AND permissionType = #{permissionType}
+			</if>
+		</trim>
+	</select>
+	<select id="getAllPermissionList" parameterType="com.jy.entity.form.PermissionQueryForm"
+		resultMap="BaseResultMap">
+       select
+		<include refid="Base_Column_List" />
+		from sys_permission
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="permissionName!=null">
+				AND permissionName like CONCAT('%', '${permissionName}', '%')
+			</if>
+			<if test="permissionType!=null">
+				AND permissionType = #{permissionType}
+			</if>
+		</trim>
+	</select>
+	<select id="getAllPermissionListByUserAccountId" parameterType="com.jy.entity.form.PermissionQueryForm"
+		resultMap="BaseResultMap">
+       select
+		<include refid="Base_Column_List" />
+		from sys_permission
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="userAccountId!=null">
+				OR  permission_Id in (select  permissionId from sys_userpermissions where userAccountId=#{userAccountId}) 
+			</if>
+			<if test="userAccountId!=null">
+				OR  permission_Id in (select  permissionId from sys_rolepermissions where roleId in (select roleId from sys_userroles where userAccountId=#{userAccountId})) 
+			</if>
+		</trim>
+	</select>
+</mapper>

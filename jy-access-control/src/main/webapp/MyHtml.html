@@ -1,0 +1,319 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style type="text/css">
+div {
+	margin: 0 auto;
+	width: 100%;
+	text-align: center;
+	
+}
+
+table {
+	width: 100%; margin：0 auto;
+	background-color: #FFF;
+	border: none;
+	color: #565;
+	font: 8px SimSun;
+	text-align: center;
+	border-collapse: collapse;
+	font-size: 1em;
+}
+
+.table-one {
+margin：0 auto;
+	
+}
+
+td {
+	height: 30px;
+}
+
+.table-one td {
+	border: 0.5px solid black;
+	margin：0
+	auto;
+}
+
+.table_base {
+	width: 99%;
+	text-align: left;
+	margin-bottom: 8px;
+}
+
+.table_base td {
+	height: 30px;
+}
+
+li {
+	text-align: left;
+	margin-bottom: 4px;
+	list-style: inside none;
+}
+</style>
+</head>
+<body>
+	<div>
+		<table class="table_base">
+			<caption style="text-align: center;">
+				<h3>租赁合同</h3>
+			</caption>
+			<tr style="margin-bottom: 5px;">
+				<td colspan="4" style="text-align: right">合同编号:${contractOrderBo.contractOrder_Id}</td>
+			</tr>
+			<tr>
+				<td style="width:20%;">出租方（甲方）:</td>
+				<td style="border-bottom:1px solid black;width:45%; ">${contractOrderBo.companyName}</td>
+				<td style="width: 10%;text-align: center;">电话:</td>
+				<td style="border-bottom:1px solid black; width: 25%;">${contractOrderBo.comTelephone}</td>
+			</tr>
+			<tr>
+				<td style="width:20%;">地址:</td>
+				<td style="border-bottom:1px solid black;width:45%; ">${contractOrderBo.comAddress}</td>
+				<td style="width: 10%;text-align: center;">邮箱:</td>
+				<td style="border-bottom:1px solid black;width: 25%; ">${contractOrderBo.comEmail}</td>
+			</tr>
+			<tr>
+				<td style="width:20%;">开户行:</td>
+				<td style="border-bottom:1px solid black;width:45%; ">${contractOrderBo.comBankName}</td>
+				<td style="width: 10%;text-align: center;">账号:</td>
+				<td style="border-bottom:1px solid black; width: 25%;">${contractOrderBo.comBankAccountNum}</td>
+			</tr>
+			<tr>
+				<td style="width:20%;">承租方（乙方）:</td>
+				<td style="border-bottom:1px solid black;width:45%; ">${contractOrderBo.customerName}</td>
+				<td style="width: 10%;text-align: center;">电话:</td>
+				<td style="border-bottom:1px solid black; width: 25%;">${contractOrderBo.cusTelephone}</td>
+			</tr>
+			<tr>
+				<td style="width:20%;">地址:</td>
+				<td style="border-bottom:1px solid black;width:45%; ">${contractOrderBo.cusAddress}</td>
+				<td style="width: 10%;text-align: center;">邮箱:</td>
+				<td style="border-bottom:1px solid black;width: 25%; ">${contractOrderBo.cusEmail}</td>
+			</tr>
+			<tr>
+				<td style="width:20%;">开户行:</td>
+				<td style="border-bottom:1px solid black;width:45%; ">${contractOrderBo.cusBankName}</td>
+				<td style="width: 10%;text-align: center;">账号:</td>
+				<td style="border-bottom:1px solid black; width: 25%;">${contractOrderBo.cusBankAccountNum}</td>
+			</tr>
+		</table>
+		<table class="table-one">
+			<caption>
+				<h4>第一部分 合同要件</h4>
+			</caption>
+			<tr>
+				<td style="width: 15%">工程名称</td>
+				<td style="width: 28%" colspan="2">${contractOrderBo.projectName}</td>
+				<td style="width: 28%" colspan="2">施工内容（作业性质）</td>
+				<td style="width: 19%" colspan="2">${contractOrderBo.jobNature}</td>
+			</tr>
+			<tr>
+				<td style="width: 15%">施工地点</td>
+				<td style="width: 85%" colspan="6">${contractOrderBo.workSite}</td>
+			</tr>
+			<tr>
+				<td style="width: 15%">设备名称</td>
+				<td style="width: 14%">设备型号</td>
+				<td style="width: 10%">数量（台）</td>
+				<td style="width: 14%">预计起租日期</td>
+				<td style="width: 14%">预计工期（月/日）</td>
+				<td style="width: 14%">计费模式</td>
+				<td style="width: 19%">价格说明（人民币）</td>
+			</tr>
+			 #foreach($contractDeviceModel in $contractOrderBo.contractDeviceModelPojos )
+			<tr>
+				<td style="width: 15%">${contractDeviceModel.typeName}</td>
+				<td style="width: 14%">${contractDeviceModel.modelName}</td>
+				<td style="width: 10%">${contractDeviceModel.quantity}</td>
+				<td style="width: 14%">${contractDeviceModel.planStartTimeStr}</td>
+				<td style="width: 14%">${contractDeviceModel.leaseTermStr}</td>
+				<td style="width: 14%">${contractDeviceModel.billingTypeStr}</td>
+				<td style="width: 19%">${contractDeviceModel.unitPriceStr}</td>
+			</tr>
+			 #end
+			<tr>
+				<td style="width: 15%">发电机</td>
+				<td style="width: 14%">JLG800s</td>
+				<td style="width: 10%">1</td>
+				<td style="width: 14%">2017-05-15</td>
+				<td style="width: 14%">2/月</td>
+				<td style="width: 14%">月租</td>
+				<td style="width: 19%">3000/月</td>
+			</tr>
+			<tr>
+				<td style="width: 15%" rowspan="2">其他项目</td>
+				<td style="width: 14%">运费</td>
+				<td style="width: 10%">保险</td>
+				<td style="width: 14%">发票</td>
+				<td style="width: 14%">机手</td>
+				<td style="width: 33%" colspan="2">燃油</td>
+			</tr>
+			<tr>
+				<td style="width: 14%">${contractOrderBo.includeShippingFeeStr}</td>
+				<td style="width: 10%">${contractOrderBo.includeInsuranceStr}</td>
+				<td style="width: 14%">${contractOrderBo.includeInvoiceStr}</td>
+				<td style="width: 14%">${contractOrderBo.includeJiShouStr}</td>
+				<td style="width: 33%" colspan="2">${contractOrderBo.includeFueStr}</td>
+			</tr>
+			<tr>
+				<td style="width: 15%">付款方式</td>
+				<td style="width: 14%">${contractOrderBo.payMethodName}</td>
+				<td style="width: 10%">预付款</td>
+				<td style="width: 14%">${contractOrderBo.prepayFee}</td>
+				<td style="width: 14%">运费</td>
+				<td style="width: 33%" colspan="2">${contractOrderBo.shippingFee}</td>
+			</tr>
+			<tr>
+				<td style="width: 15%">总价</td>
+				<td style="width: 85%" colspan="6">以实际使用时间计算</td>
+			</tr>
+			<tr>
+				<td style="width: 15%">乙方授权现场签字有效人员名单</td>
+				<td style="width: 85%" colspan="6"></td>
+			</tr>
+			<tr>
+				<td style="width: 15%">备注</td>
+				<td style="width: 85%" colspan="6" align="left">
+					<ul>
+						<li>1.本合同涉及金额币种均为人民币。</li>
+						<li>2.如设备使用中发生非乙方操作不当造成的故障，由甲方负责派人免费上门维修，反之由乙方操作不当造成的损失甲方则不承担。</li>
+						<li>3.乙方按照以上付款方式按期支付租金，如超期不付，甲方有权将设备撤回，并收取每天0.5％的滞纳金，并追讨由此产生的所有费用及相关损失。</li>
+						<li>4.乙方应妥善保管甲方交付的钥匙，如遗失，乙方应赔偿甲方150元/把。</li>
+						<li>5.甲方负责提供设备进场所必要的资料。</li>
+						<li>6.甲乙双方约定，如果乙方在施工期间需要租赁更多设备或延长租期，则经过乙方指定人员签字（或盖章）的补充协议或设备进出场单可作为此合同不可分割的一部分。</li>
+						<li>7.经甲乙双方签字或盖章的合同复印件具有同等法律效力。</li>
+						<li>8.甲乙双方认可《设备进出场确认单》是计算租金以及损坏赔偿的依据。</li>
+					</ul></td>
+			</tr>
+		</table>
+
+		<table class="table_base">
+			<caption>
+				<h4>第 二 部 分 标 准 条 款</h4>
+			</caption>
+			<tr>
+				<td align="right">合同编号：${contractOrderBo.contractOrder_Id}</td>
+			</tr>
+			<tr>
+				<td>
+					<ul>
+						<li>第一条 服务范围</li>
+						<li>
+							<ul>
+								<li>1.甲方提供的设备服务为：在符合设备使用性能的前提下，于双方约定的施工地点，完成相应的施工内容。乙方自备的操作人员应该是受过相关培训的熟练人员，否则乙方必须提前向甲方提出进行人员培训的要求。</li>
+								<li>2.设备交付乙方使用后，甲方对于乙方的工程质量，进度等非本合同项下之事项，不承担责任。</li>
+							</ul></li>
+						<li>第二条 设备进场（交付）及验收</li>
+						<li>
+							<ul>
+								<li>1.设备的进场（交付）方式由双方协商，可采用由甲方将设备运输至乙方指定施工地点的方式，也可由乙方自行安排运输。</li>
+								<li>2.乙方需要甲方安排设备进场时，应提前通知甲方，以便甲方在合理时间内组织运力。如因政府法律、不可抗力或非甲方所能控制因素等情况而造成设备延迟抵达，甲方不承担延迟交付的责任。</li>
+								<li>3.若设备由乙方自行安排运输，则乙方负责设备在运输过程中的安全。如有设备毁损的，乙方应当承担相应的赔偿责任。</li>
+								<li>4.若甲方负责设备运输，甲乙双方在设备运至乙方指定地点时，应办理设备进场及验收手续。若乙方自行安排设备运输，甲乙双方应在设备起运时，办理设备进场及验收手续。</li>
+								<li>5.设备进场时，须在甲乙双方人员共同参与下对设备情况进行验收。验收完毕，双方代表在《设备进退场确认单》上签字，确认设备交付的日期及设备码表数字。</li>
+							</ul></li>
+						<li>第三条 设备转移及转场</li>
+						<li>
+							<ul>
+								<li>1.设备只允许在合同预先规定的区域、范围内作业。未经甲方同意，乙方不得擅自变更作业地点，作业环境。</li>
+								<li>2.乙方在合同约定的施工地点完成作业后，如须在不同施工地点使用甲方同一设备，应在征得甲方同意后进行设备的转场。</li>
+							</ul></li>
+						<li>第四条 设备的操作规程及施工安全。</li>
+						<li>
+							<ul>
+								<li>1.设备在使用过程中，发生涉及乙方或任何第三方人员的伤亡，地上及地下公共、军事设施的破坏，甲方均不承担任何责任。</li>
+							</ul></li>
+						<li>第五条 设备的安全</li>
+						<li>
+							<ul>
+								<li>1.乙方应选择适当的安全区域用于甲方设备的停放。</li>
+								<li>2.如甲方认为停放于乙方施工地点的设备存在安全隐患，或存在化学侵害、水电威胁等等危险状况的，甲方有权撤离设备，由此产生的各种损失均由乙方承担。</li>
+								<li>3.设备交付乙方使用后，在乙方指定的停放地点丢失，毁损的（包括被盗窃，意外事故，不可抗力等），乙方须按照设备重置价赔偿甲方损失。</li>
+								<li>4.设备因乙方使用不当而造成设备故障，损坏的，乙方除承担设备的修复费用，仍须支付设备修复期间的费用，作为对甲方的赔偿。</li>
+							</ul></li>
+						<li>第六条 设备的退场（归还）</li>
+						<li>
+							<ul>
+								<li>1.乙方在施工任务完成后，应及时通知甲方，在甲乙双方人员共同参加下，对设备的情况确认完好后，由双方代表在《设
+									备进退场确认单》上签字确认。办理退场手续。若乙方无故不履行签字确认手续的，甲方将在《设备进退场确认单》上予以注明，并视为乙方同意甲方的签字。</li>
+								<li>2.若乙方负责设备退场，在乙方告知甲方设备使用完毕后未及时归还设备的，甲方有权主动撤离设备。甲方撤离设备之日视为设备的退场日。</li>
+								<li>3.设备在退场时发现非甲方原因导致的设备故障的，乙方应承担设备的修复费用。</li>
+							</ul></li>
+						<li>第七条 设备使用价格的计算方法及结算时间</li>
+						<li>
+							<ul>
+								<li>1.合同签订时预计使用期。设备的实际使用期以《设备进退场确认单》所标注的“设备托运，开出时间”与“客户通知返场时间”的差额天数为准。</li>
+								<li>2.甲方采用收取预付款抵扣设备使用费的方法，同时，甲方将视具体情况定期通知乙方预付款的使用情况。当预付款抵扣完毕而乙方又未能按期补足的，甲方有权在设备使用费不足之日，撤回设备。</li>
+								<li>3.甲乙双方在设备退场后，依据《设备进退场确认单》和《设备使用费计算方法说明》，进行使用费的结算。计算的具体方法，详见本合同的附件《设备使用费计算方法说明》。</li>
+							</ul></li>
+						<li>第八条 甲方责任</li>
+						<li>
+							<ul>
+								<li>1.甲方保证提供工况完好的设备，施工过程中，如由于设备原因导致的安全事故，则一切相关损失由甲方承担，赔偿。</li>
+								<li>2.甲方负责设备的日常保养和维修。</li>
+								<li>3.严格禁止维修人员向乙方索取小费。</li>
+								<li>4.如乙方要求，甲方可以负责首次培训。</li>
+							</ul></li>
+						<li>第九条 乙方责任</li>
+						<li>
+							<ul>
+								<li>1.设备在合同执行期间的一切安全事宜，包括：灭失，毁损等均由乙方负责。</li>
+								<li>2.乙方负责供应质量良好，标号合格的燃油，如因乙方提供非正规加油站购买的燃油而导致甲方设备损坏，停工，则一切相关损失由乙方承担，赔偿。</li>
+							</ul></li>
+						<li>第十条 合同的提前终止，索赔与争议的解决</li>
+						<li>
+							<ul>
+								<li>1.甲方的设备仅供乙方使用，未经甲方同意，乙方不得向任何第三方提供及使用设备。若发生以上行为，甲方有权解除合同，乙方应赔偿甲方的损失。</li>
+								<li>2.未经甲方同意，乙方擅自变更作业地，作业环境，或者擅自将设备移出合同约定的施工地点的，甲方有权解除合同，乙方应当赔偿甲方的损失。</li>
+								<li>3.甲方设备退出乙方作业现场二十天内，乙方应及时支付所欠甲方的各种款项，从第二十一天起乙方每天需按照欠款总额0．5%支付甲方滞纳金。</li>
+								<li>4.甲乙双方因不可抗力不能履行合同时，根据相关法律的规定进行解决。（不可抗力包括设备性能故障）。</li>
+								<li>5.甲乙双方就本合同的履行发生争议不能协商解决的，双方约定由本合同签署地的人民法院为诉讼管辖法院。</li>
+							</ul></li>
+						<li>第十一条 合同的签署</li>
+						<li>
+							<ul>
+								<li>1.本合同的签署地为甲方公司所在地。</li>
+								<li>2.本合同正本一式两份，甲乙双方各执一份。</li>
+								<li>3.本合同自甲乙双方签订之日起生效。</li>
+							</ul></li>
+						<li>第十二条 其他</li>
+						<li>
+							<ul>
+								<li>1.合同签署时，甲乙双方记载于本合同的通讯地址将作为双方正式，有效的通讯地址。甲乙双方有关本合同一切文件的送达将以上述地址为准。</li>
+								<li>2.甲乙双方任何一方变更通讯地址的，对另一方负有及时以书面形式通知的义务。</li>
+								<li>3.由于一方通讯地址的变更致使另一方的有关文件不能及时送达的，一切后果由变更一方承担。</li>
+							</ul></li>
+						<li>第十三条 合同附件</li>
+						<li>
+							<ul>
+								<li>1.本合同订立后，乙方需要追加设备时，可以以附件形式只签署第一部分合同要件，第二部分标准条款适用本合同。</li>
+								<li>2.《设备进退场确认单》作为本合同的附件。</li>
+								<li>3.合同附件是本合同不可分割的组成部分，与本合同正文具有同等法律效力。</li>
+							</ul></li>
+					</ul></td>
+			</tr>
+		</table>
+		<table class="table_base">
+			<tr>
+				<td style="width:20%;mar">甲 方：（章）</td>
+				<td style="border-bottom:1px solid black;width:30%; ">${contractOrderBo.companyName}</td>
+				<td style="width:20%;text-align: center;">乙 方：（章）</td>
+				<td style="border-bottom:1px solid black;width:30%; "></td>
+			</tr>
+			<tr>
+				<td style="width:20%;">签字：</td>
+				<td style="border-bottom:1px solid black;width:30%; "></td>
+				<td style="width:20%;text-align: center;">签字：</td>
+				<td style="border-bottom:1px solid black;width:30%; "></td>
+			</tr>
+			<tr>
+				<td style="width:20%;">日期：</td>
+				<td style="width:30%; ">_____年_____月_______日</td>
+				<td style="width:20%;text-align: center;">日期：</td>
+				<td style="width:30%; ">_____年_____月_______日</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>
